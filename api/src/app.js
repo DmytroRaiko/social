@@ -1,4 +1,3 @@
 // eslint-disable-next-line no-console
-console.log('hw');
-// eslint-disable-next-line no-console
-console.log(process.env.APP_PORT);
+console.log("hw")
+console.log(process.env.APP_PORT)
