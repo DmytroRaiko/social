@@ -1,0 +1,29 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - ./tmp:/var/lib/postgresql/data
+    ports:
+      - ${DB_PORT}:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - ${ADMINER_PORT}:8080
+
+  app:
+    image: node:${NODE_VERSION}
+    working_dir: /app
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    volumes:
+      - ../api/:/app
+    command: sh -c "npx nodemon -r dotenv/config src/app.js"
