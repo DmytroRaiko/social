@@ -26,9 +26,6 @@
       "react-app/jest"
     ]
   },
-  "lint-staged": {
-    "src/*": "eslint"
-  },
   "browserslist": {
     "production": [
       ">0.2%",

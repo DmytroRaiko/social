@@ -9,7 +9,7 @@ services:
     environment:
       POSTGRES_PASSWORD: ${DB_PASS}
     volumes:
-      - ./tmp:/var/lib/postgresql/data
+      - ./tmp/db_data:/var/lib/postgresql/data
     ports:
       - ${DB_PORT}:5432
 
