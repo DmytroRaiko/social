@@ -1,0 +1,51 @@
+.site-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.post-header h2 {
+  padding-bottom: 2px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid #a9a9a9;
+}
+
+.post-tags {
+  font-size: 15px;
+}
+
+.post-body {
+  width: 70%;
+  background: white;
+  margin-top: 20px;
+  padding: 12px;
+  box-shadow: 0 5px 11px 1px #dedede;
+}
+
+.post-img {
+  margin-top: 10px;
+}
+.post-img img {
+  width: 100%;
+}
+
+.post-text {
+  font-size: 22px;
+  line-height: 30px;
+  margin-top: 10px;
+}
+
+.post-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #a9a9a9;
+}
+
+.post-footer p,
+.post-footer b {
+  font-size: 12px;
+  font-weight: 600;
+}

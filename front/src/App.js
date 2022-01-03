@@ -1,28 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+// import Body from "./containers/Body";
+import SiteHeader from './SiteHeader';
+import Body from './containers/Body';
+
+const blocks = [
+  {
+    title: 'Article',
+    value: 'article',
+  },
+  {
+    title: 'Add article',
+    value: 'articleAdd',
+  },
+  {
+    title: 'Profile',
+    value: 'profile',
+  },
+  {
+    title: 'ProfileD',
+    value: 'krup',
+  },
+];
 
 function App() {
+  const [viewBlock, setViewBlock] = useState(blocks[0].value);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit
-          <code>src/App.js</code>
-          {' '}
-          and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <SiteHeader blocks={blocks} onSetViewBLock={setViewBlock} />
+      <Body viewBLock={viewBlock} />
+    </>
   );
 }
 
