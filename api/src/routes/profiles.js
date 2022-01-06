@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
     try {
       const profiles = await db
         .select('profileid', 'avatarlink', 'name')
-        .from('profile').where;
+        .from('profile');
 
       if (profiles) {
         res.status(200).send({
@@ -86,7 +86,7 @@ router.get('/:profileid', async (req, res) => {
         .from('universitylist')
         .join(
           'university',
-          'universi ty.universityid',
+          'university.universityid',
           '=',
           'universitylist.universityid'
         )
