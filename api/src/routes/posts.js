@@ -215,7 +215,9 @@ router.post('/:postid/comments', async (req, res) => {
           .status(200)
           .send({ message: 'Post adding', data: addComment, success: true });
       } else {
-        res.status(404).send({ message: 'Not found', success: false });
+        res
+          .status(404)
+          .send({ message: 'Not found', countComments: 0, success: true });
       }
     } catch (error) {
       res
@@ -344,7 +346,9 @@ router.post('/:postid/likes', async (req, res) => {
           .status(200)
           .send({ message: 'Like adding', data: likePost, success: true });
       } else {
-        res.status(404).send({ message: 'Not found', success: false });
+        res
+          .status(404)
+          .send({ message: 'Not found', countLikes: 0, success: true });
       }
     } catch (error) {
       res
