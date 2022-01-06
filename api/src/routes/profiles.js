@@ -20,19 +20,19 @@ router.get('/', async (req, res) => {
         .select('profileid', 'avatarlink', 'name')
         .from('profile');
 
-      if (profiles) {
+      if (profiles && Object.keys(profiles).length) {
         res.status(200).send({
           message: 'Fetching profiles',
           data: profiles,
           success: true,
         });
       } else {
-        res.status(404).send({ message: 'Not found', success: true });
+        res.status(404).send({ message: 'Not found', success: false });
       }
     } catch (error) {
       res
         .status(500)
-        .send({ message: 'Data fetching error', error, success: true });
+        .send({ message: 'Data fetching error', error, success: false });
     }
   } else {
     res.status(401).send({ message: 'Access denied', success: false });
@@ -80,7 +80,7 @@ router.get('/:profileid', async (req, res) => {
       )
       .where('profile.profileid', profileId);
 
-    if (profile) {
+    if (profile && Object.keys(profile).length) {
       const universityList = await db
         .select('university.name', 'university.universityid')
         .from('universitylist')
@@ -105,7 +105,7 @@ router.get('/:profileid', async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .send({ message: 'Data fetching error', error, success: true });
+      .send({ message: 'Data fetching error', error, success: false });
   }
 });
 
@@ -115,9 +115,15 @@ router.post('/', async (req, res) => {
   const dataInsertProfile = req.body;
 
   try {
-    await db('profile').insert(dataInsertProfile);
+    const addPofile = await db('profile').insert(dataInsertProfile);
 
-    res.status(200).send({ message: 'Profile adding', success: true });
+    if (addPofile && Object.keys(addPofile).length) {
+      res
+        .status(200)
+        .send({ message: 'Profile adding', data: addPofile, success: true });
+    } else {
+      res.status(404).send({ message: 'Not found', success: false });
+    }
   } catch (error) {
     res
       .status(500)
@@ -136,7 +142,7 @@ router.post('/:profileid', async (req, res) => {
       .update(dataUpdateProfile)
       .where('profileid', profileId);
 
-    if (updateProfile) {
+    if (updateProfile && Object.keys(updateProfile).length) {
       res.status(200).send({
         message: 'Profile updating',
         data: updateProfile,
@@ -163,7 +169,7 @@ router.delete('/:profileid', async (req, res) => {
       .where('profileid', profileId)
       .delete();
 
-    if (deleteProfile) {
+    if (deleteProfile && Object.keys(deleteProfile).length) {
       res.status(200).send({ message: 'Profile deleting', success: true });
     } else {
       res.status(404).send({ message: 'Profile deleting', success: false });
@@ -179,34 +185,25 @@ router.delete('/:profileid', async (req, res) => {
 
 router.get('/:profileid/posts', async (req, res) => {
   const profileId = req.params.profileid;
-  const userProfileId = setGetCookie(req, res);
+  // const userProfileId = setGetCookie(req, res);
 
   try {
     const posts = await db
-      .select()
-      .from(() => {
-        this.select(
-          'profile.profileid',
-          'profile.name',
-          'profile.avatarlink',
-          'post.*',
-          'poststatistic.*',
-          'postlike.postlikeid',
-          'postlike.profileid as profilelike'
-        )
-          .from('profile')
-          .join('post', 'post.profileid', '=', 'profile.profileid')
-          .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
-          .leftJoin('postlike', 'post.postid', '=', 'postlike.postid')
-          .where('profile.profileid', '=', profileId)
-          .orderBy('post.timepost', 'DESC')
-          .as('posts');
-      })
-      .where('posts.profilelike', '=', userProfileId)
-      .orWhereNull('posts.postlikeid')
+      .select(
+        'profile.profileid',
+        'profile.name',
+        'profile.avatarlink',
+        'post.*',
+        'poststatistic.*'
+      )
+      .from('profile')
+      .join('post', 'post.profileid', '=', 'profile.profileid')
+      .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
+      .where('profile.profileid', '=', profileId)
+      .orderBy('post.timepost', 'DESC')
       .limit(10);
 
-    if (posts) {
+    if (posts && Object.keys(posts).length) {
       res.status(200).send({
         message: 'Show all posts for profile',
         data: posts,

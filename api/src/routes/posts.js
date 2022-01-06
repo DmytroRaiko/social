@@ -17,30 +17,21 @@ router.get('/', async (req, res) => {
   if (profileid !== null) {
     try {
       const posts = await db
-        .select()
-        .from(() => {
-          this.select(
-            'profile.profileid',
-            'profile.name',
-            'profile.avatarlink',
-            'post.*',
-            'poststatistic.*',
-            'postlike.postlikeid',
-            'postlike.profileid as profilelike'
-          )
-            .from('profile')
-            .join('post', 'post.profileid', '=', 'profile.profileid')
-            .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
-            .leftJoin('postlike', 'post.postid', '=', 'postlike.postid')
-            // .where('postlike.profileid', '=', profileid)
-            .orderBy('post.timepost', 'DESC')
-            .as('posts');
-        })
-        .where('posts.profilelike', '=', profileid)
-        .orWhereNull('posts.postlikeid')
+        .select(
+          'profile.profileid',
+          'profile.name',
+          'profile.avatarlink',
+          'post.*',
+          'poststatistic.*'
+        )
+        .from('profile')
+        .join('post', 'post.profileid', '=', 'profile.profileid')
+        .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
+
+        .orderBy('post.timepost', 'DESC')
         .limit(10);
 
-      if (Object.keys(posts).length > 0) {
+      if (posts && Object.keys(posts).length) {
         res
           .status(200)
           .send({ message: 'Show posts', data: posts, success: true });
@@ -66,29 +57,22 @@ router.get('/:postid', async (req, res) => {
   if (profileid !== null) {
     try {
       const post = await db
-        .select()
-        .from(() => {
-          this.select(
-            'profile.profileid',
-            'profile.name',
-            'profile.avatarlink',
-            'post.*',
-            'poststatistic.*',
-            'postlike.postlikeid',
-            'postlike.profileid as profilelike'
-          )
-            .from('profile')
-            .join('post', 'post.profileid', '=', 'profile.profileid')
-            .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
-            .leftJoin('postlike', 'post.postid', '=', 'postlike.postid')
-            .where('post.postid', '=', postId)
-            .orderBy('post.timepost', 'DESC')
-            .as('posts');
-        })
-        .where('posts.profilelike', '=', profileid)
-        .orWhereNull('posts.postlikeid')
+        .select(
+          'profile.profileid',
+          'profile.name',
+          'profile.avatarlink',
+          'post.*',
+          'poststatistic.*'
+        )
+        .from('profile')
+        .join('post', 'post.profileid', '=', 'profile.profileid')
+        .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
+        .where('post.postid', '=', postId)
+        .orderBy('post.timepost', 'DESC')
+
         .limit(10);
-      if (Object.keys(post).length > 0) {
+
+      if (post && Object.keys(post).length) {
         res
           .status(200)
           .send({ message: 'Post fetching', data: post, success: true });
@@ -117,9 +101,13 @@ router.post('/', async (req, res) => {
     try {
       const addPost = await db('post').insert(dataInsertPost);
 
-      res
-        .status(200)
-        .send({ message: 'Post adding', data: addPost, success: true });
+      if (addPost && Object.keys(addPost).length) {
+        res
+          .status(200)
+          .send({ message: 'Post adding', data: addPost, success: true });
+      } else {
+        res.status(404).send({ message: 'Not found', success: false });
+      }
     } catch (error) {
       res
         .status(500)
@@ -141,7 +129,7 @@ router.put('/:postid', async (req, res) => {
       .update(dataUpdatePost)
       .where('postid', postId);
 
-    if (updatePost) {
+    if (updatePost && Object.keys(updatePost).length) {
       res.status(200).send({ message: 'Post updating', success: true });
     } else {
       res.status(404).send({ message: 'Not found', success: false });
@@ -160,7 +148,7 @@ router.delete('/:postid', async (req, res) => {
   try {
     const deletePost = await db.from('post').where('postid', postId).delete();
 
-    if (deletePost) {
+    if (deletePost && Object.keys(deletePost).length) {
       res.status(200).send({
         message: 'Post deleting',
         data: deletePost,
@@ -193,7 +181,7 @@ router.get('/:postid/comments', async (req, res) => {
       .join('profile', 'profile.profileid', '=', 'comment.profileid')
       .where('comment.postid', postId);
 
-    if (commentsForPost) {
+    if (commentsForPost && Object.keys(commentsForPost).length) {
       res.status(200).send({
         message: 'Fetching comments',
         data: commentsForPost,
@@ -222,7 +210,7 @@ router.post('/:postid/comments', async (req, res) => {
     try {
       const addComment = await db('comment').insert(dataInsertComment);
 
-      if (addComment) {
+      if (addComment && Object.keys(addComment).length) {
         res
           .status(200)
           .send({ message: 'Post adding', data: addComment, success: true });
@@ -249,14 +237,14 @@ router.put('/:postid/comment/:commentid', async (req, res) => {
     const dataInsertComment = req.body;
 
     try {
-      const addComment = await db('comment')
+      const changeComment = await db('comment')
         .insert(dataInsertComment)
         .where('commentid', commentId);
 
-      if (addComment) {
+      if (changeComment && Object.keys(changeComment).length) {
         res.status(200).send({
           message: 'Comment changing',
-          data: addComment,
+          data: changeComment,
           success: true,
         });
       } else {
@@ -286,7 +274,7 @@ router.delete('/:postid/comment/:commentid', async (req, res) => {
         .andWhere('profileid', author)
         .delete();
 
-      if (deleteComment) {
+      if (deleteComment && Object.keys(deleteComment).length) {
         res.status(200).send({
           message: 'Comment deleting',
           data: deleteComment,
@@ -320,7 +308,7 @@ router.get('/:postid/likes', async (req, res) => {
       .join('profile', 'profile.profileid', '=', 'postlike.profileid')
       .where('postid', postId);
 
-    if (likesForPost) {
+    if (likesForPost && Object.keys(likesForPost).length) {
       res.status(200).send({
         message: 'Fetching likes',
         data: likesForPost,
@@ -351,7 +339,7 @@ router.post('/:postid/likes', async (req, res) => {
     try {
       const likePost = await db('postlike').insert(dataLike);
 
-      if (likePost) {
+      if (likePost && Object.keys(likePost).length) {
         res
           .status(200)
           .send({ message: 'Like adding', data: likePost, success: true });
@@ -382,7 +370,7 @@ router.delete('/:postid/likes', async (req, res) => {
         .andWhere('profileid', profileId)
         .delete();
 
-      if (unlikePost) {
+      if (unlikePost && Object.keys(unlikePost).length) {
         res.status(200).send({
           message: 'Unlike post',
           data: unlikePost,
