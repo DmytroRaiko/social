@@ -27,7 +27,6 @@ router.get('/', async (req, res) => {
         .from('profile')
         .join('post', 'post.profileid', '=', 'profile.profileid')
         .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
-
         .orderBy('post.timepost', 'DESC')
         .limit(10);
 
