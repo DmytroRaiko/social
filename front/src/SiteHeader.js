@@ -1,19 +1,25 @@
 import React from 'react';
+import { Link, Outlet } from 'react-router-dom';
 
-function SiteHeader({ blocks, onSetViewBLock }) {
+function SiteHeader({ blocks }) {
   const headerButton = blocks.map((block) => (
-    <p
-      key={block.value}
-      onClick={() => onSetViewBLock(block.value)}
+    <Link
+      key={block.path}
+      to={`/${block.path}`}
     >
       {block.title}
-    </p>
+    </Link>
   ));
 
   return (
-    <div className="header-button-block">
-      {headerButton}
-    </div>
+    <>
+      <div className="header-button-block">
+        {headerButton}
+      </div>
+      <div className="site-body post">
+        <Outlet />
+      </div>
+    </>
   );
 }
 
