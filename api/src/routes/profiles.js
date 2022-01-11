@@ -50,7 +50,7 @@ router.get('/:profileid', async (req, res) => {
         'profile.*',
         'a1.availability as emailsetting',
         'a2.availability as phonesetting',
-        'a2.availability as universitysetting'
+        'a3.availability as universitysetting'
       )
       .from('profile')
       .join(
@@ -196,8 +196,8 @@ router.get('/:profileid/posts', async (req, res) => {
         'post.*',
         'poststatistic.*'
       )
-      .from('profile')
-      .join('post', 'post.profileid', '=', 'profile.profileid')
+      .from('post')
+      .join('profile', 'profile.profileid', '=', 'post.profileid')
       .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
       .where('profile.profileid', '=', profileId)
       .orderBy('post.timepost', 'DESC')
