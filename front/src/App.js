@@ -1,39 +1,47 @@
-import React, { useState } from 'react';
-// import Body from "./containers/Body";
+import React from 'react';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from 'react-router-dom';
 import SiteHeader from './SiteHeader';
-import Body from './containers/Body';
+import AddArticle from './components/AddArticle';
+import Profile from './components/Profile';
+import Post from './containers/post/Post';
+import PostWithID from './components/PostWithID';
+import DateComponent from './components/DateComponent';
 
 const blocks = [
   {
     title: 'Article',
-    value: 'article',
+    path: 'article',
   },
   {
     title: 'Add article',
-    value: 'articleAdd',
+    path: 'articleAdd',
   },
   {
     title: 'Profile',
-    value: 'profile',
-  },
-  {
-    title: 'ProfileD',
-    value: 'krup',
+    path: 'profile',
   },
 ];
 
 function App() {
-  const [viewBlock, setViewBlock] = useState(blocks[0].value);
-
-  const onSetViewBlock = (element) => {
-    setViewBlock(element);
-  };
-
   return (
-    <>
-      <SiteHeader blocks={blocks} onSetViewBLock={onSetViewBlock} />
-      <Body viewBLock={viewBlock} />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<SiteHeader blocks={blocks} />}>
+          <Route path="article" element={<Post />} />
+          <Route path="article/:id" element={<PostWithID />} />
+          <Route path="articleAdd" element={<AddArticle />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="date/:date" element={<DateComponent />} />
+
+          <Route path="*" element={<div> 404 </div>} />
+
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
