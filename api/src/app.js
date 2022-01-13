@@ -8,7 +8,6 @@ const config = require('./services/config');
 // require route directory
 const profilesRoutes = require('./routes/profiles');
 const postsRoutes = require('./routes/posts');
-const searchRoutes = require('./routes/search');
 
 const portApp = config.appPort;
 
@@ -18,7 +17,6 @@ app.use(express.json());
 
 app.use('/profiles', profilesRoutes);
 app.use('/posts', postsRoutes);
-app.use('/search', searchRoutes);
 
 app.listen(portApp, () => {
   // eslint-disable-next-line no-console
