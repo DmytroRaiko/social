@@ -35,6 +35,7 @@ function App() {
           <Route path="article/:id" element={<PostWithID />} />
           <Route path="articleAdd" element={<AddArticle />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="profile/:id" element={<Profile />} />
           <Route path="date/:date" element={<DateComponent />} />
 
           <Route path="*" element={<div> 404 </div>} />
