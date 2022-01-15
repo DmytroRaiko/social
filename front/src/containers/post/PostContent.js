@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import PostText from '../../components/post/PostText';
 import PostImg from '../../components/post/PostImg';
+import postImgPropsDefault from '../../PropTypes/PostImgPropsDefault';
 
 const PostContent = ({ postText, postImg }) => (
   <div className="post-content">
@@ -21,8 +22,7 @@ PostContent.propTypes = {
 
 PostContent.defaultProps = {
   postImg: {
-    src: null,
-    title: 'Post image',
+    postImgPropsDefault,
   },
 };
 

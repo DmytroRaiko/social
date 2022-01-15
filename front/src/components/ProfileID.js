@@ -1,5 +1,5 @@
 import React from 'react';
-import ProfileProps from '../PropTypes/ProfileProps';
+import UserProps from '../PropTypes/UserProps';
 import ProfilePropsDefault from '../PropTypes/ProfilePropsDefault';
 
 const ProfileID = ({ user }) => (
@@ -9,7 +9,7 @@ const ProfileID = ({ user }) => (
   </h1>
 );
 
-ProfileID.propTypes = ProfileProps;
+ProfileID.propTypes = UserProps;
 
 ProfileID.defaultProps = ProfilePropsDefault;
 

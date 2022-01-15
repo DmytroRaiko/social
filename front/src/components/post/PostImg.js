@@ -1,4 +1,5 @@
-import PropTypes from 'prop-types';
+import postImgProps from '../../PropTypes/PostImgProps';
+import postImgPropsDefault from '../../PropTypes/PostImgPropsDefault';
 
 const PostImg = ({ postImgSrc, postImgTitle }) => {
   if (postImgSrc !== null) {
@@ -6,14 +7,8 @@ const PostImg = ({ postImgSrc, postImgTitle }) => {
   } return ' ';
 };
 
-PostImg.propTypes = {
-  postImgSrc: PropTypes.string,
-  postImgTitle: PropTypes.string,
-};
+PostImg.propTypes = postImgProps;
 
-PostImg.defaultProps = {
-  postImgSrc: null,
-  postImgTitle: 'Post image',
-};
+PostImg.defaultProps = postImgPropsDefault;
 
 export default PostImg;
