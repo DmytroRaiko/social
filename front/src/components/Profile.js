@@ -1,6 +1,6 @@
 import React from 'react';
 
-function AddArticle() {
+function Profile() {
   return (
     <h1>
       Soon you can see your profile here
@@ -8,4 +8,4 @@ function AddArticle() {
   );
 }
 
-export default AddArticle;
+export default Profile;

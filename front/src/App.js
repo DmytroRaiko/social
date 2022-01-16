@@ -10,6 +10,7 @@ import Profile from './components/Profile';
 import Post from './containers/post/Post';
 import PostWithID from './components/PostWithID';
 import DateComponent from './components/DateComponent';
+import ProfileID from './components/ProfileID';
 
 const blocks = [
   {
@@ -35,6 +36,7 @@ function App() {
           <Route path="article/:id" element={<PostWithID />} />
           <Route path="articleAdd" element={<AddArticle />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="profile/:id" element={<ProfileID />} />
           <Route path="date/:date" element={<DateComponent />} />
 
           <Route path="*" element={<div> 404 </div>} />

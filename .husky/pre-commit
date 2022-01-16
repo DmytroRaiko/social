@@ -2,4 +2,4 @@
 . "$(dirname "$0")/_/husky.sh"
 
 cd api && npx lint-staged
-cr ../front && npx lint-staged
+cd ../front && npx lint-staged

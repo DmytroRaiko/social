@@ -1,8 +1,9 @@
-import PostHeader from './PostHeader';
+import PostHeader from '../../components/post/PostHeader';
 import PostFooter from './PostFooter';
 import PostContent from './PostContent';
 
 import '../Post.css';
+import ErrorBoundary from '../../components/ErrorBoundary';
 
 function Post() {
   const post = {
@@ -12,18 +13,20 @@ function Post() {
     author: 'Dmitry Raiko',
     time: '30.10.2001',
     img: {
-      // src: "https://i.ytimg.com/vi/RHBfeKNjcmQ/maxresdefault.jpg",
-      src: 'https://i1.wp.com/css-tricks.com/wp-content/uploads/2018/06/react-ideal-image.png?fit=1200%2C600&ssl=1',
+      // src: 'https://i.ytimg.com/vi/RHBfeKNjcmQ/maxresdefault.jpg',
+      // src: 'https://i1.wp.com/css-tricks.com/wp-content/uploads/2018/06/react-ideal-image.png?fit=1200%2C600&ssl=1',
       // src: logo,
-      title: 'React image',
+      // title: 'React image',
     },
   };
 
   return (
     <main className="post-body">
-      <PostHeader postTitle={post.title} postTags={post.tags} />
-      <PostContent postText={post.text} postImg={post.img} />
-      <PostFooter postAuthor={post.author} postTime={post.time} />
+      <ErrorBoundary>
+        <PostHeader headerText={post.title} />
+        <PostContent postText={post.text} postImg={post.img} />
+        <PostFooter postAuthor={post.author} postTime={post.time} />
+      </ErrorBoundary>
     </main>
   );
 }

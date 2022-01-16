@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Post from './post/Post';
 import AddArticle from '../components/AddArticle';
 import Profile from '../components/Profile';
 
-function Body({ viewBLock }) {
+const Body = ({ viewBLock }) => {
   if (viewBLock === 'article') {
     return (
       <div className="site-body post">
@@ -32,6 +33,10 @@ function Body({ viewBLock }) {
       </h1>
     </div>
   );
-}
+};
+
+Body.propTypes = {
+  viewBLock: PropTypes.string.isRequired,
+};
 
 export default Body;
