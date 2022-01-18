@@ -1,20 +1,35 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { Link, Outlet } from 'react-router-dom';
+import ErrorBoundary from './components/ErrorBoundary';
 
-function SiteHeader({ blocks, onSetViewBLock }) {
+const SiteHeader = ({ blocks }) => {
   const headerButton = blocks.map((block) => (
-    <p
-      key={block.value}
-      onClick={() => onSetViewBLock(block.value)}
+    <Link
+      key={block.path}
+      to={`/${block.path}`}
     >
       {block.title}
-    </p>
+    </Link>
   ));
 
   return (
-    <div className="header-button-block">
-      {headerButton}
-    </div>
+    <ErrorBoundary>
+      <div className="header-button-block">
+        {headerButton}
+      </div>
+      <div className="site-body post">
+        <Outlet />
+      </div>
+    </ErrorBoundary>
   );
-}
+};
+
+SiteHeader.propTypes = {
+  blocks: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+  }).isRequired).isRequired,
+};
 
 export default SiteHeader;
