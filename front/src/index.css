@@ -15,10 +15,23 @@ body {
   justify-content: center;
 }
 
-.header-button-block p {
-  margin-left: 20px;
+.header-button-block a {
+  padding: 6px 8px;
+  margin: 3px 0;
   cursor: pointer;
+  color: #0E0E0E;
+  text-decoration: none;
+  border-left: 1px solid #e4e4e4;
 }
+
+.header-button-block a:hover {
+  background: rgba(227, 227, 227, 0.83);
+}
+
+.header-button-block a:first-child {
+  border-left: none;
+}
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

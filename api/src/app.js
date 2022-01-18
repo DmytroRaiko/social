@@ -9,6 +9,15 @@ const config = require('./services/config');
 const profilesRoutes = require('./routes/profiles');
 const postsRoutes = require('./routes/posts');
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
+
 const portApp = config.appPort;
 
 app.use(bodyParser.urlencoded({ extended: true }));

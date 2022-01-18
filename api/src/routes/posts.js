@@ -5,7 +5,7 @@ const db = require('../services/db');
 // ниже заглушка!
 const setGetCookie = (req, res) => {
   res.cookie('profileid', 1);
-  return req.cookies.profileid || null;
+  return req.cookies.profileid || 1;
 };
 // -- end
 
