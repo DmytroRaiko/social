@@ -12,6 +12,7 @@ import DateComponent from './components/DateComponent';
 import Posts from './containers/post/Posts';
 import Post from './containers/post/Post';
 import Profile from './containers/profiles/Profile';
+import PostComments from './containers/post/PostComments';
 
 const queryClient = new QueryClient();
 const blocks = [
@@ -35,10 +36,11 @@ function App() {
       <BrowserRouter>
 
         <SiteHeader blocks={blocks} />
-        <div className="site-body post">
+        <div className="site-body">
           <Routes>
             <Route path="/articles" element={<Posts />} />
             <Route path="/article/:id" element={<Post />} />
+            <Route path="/articles/:id/comments" element={<PostComments />} />
             <Route path="/articleAdd" element={<AddArticle />} />
             <Route path="/profiles" element={<Profiles />} />
             <Route path="/profile/:id" element={<Profile />} />

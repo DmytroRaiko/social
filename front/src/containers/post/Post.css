@@ -35,6 +35,10 @@
   box-shadow: 0 5px 11px 1px #e4e4e4;
 }
 
+.post-body:last-child {
+  margin-bottom: 40px;
+}
+
 .post-footer-time {
   display: flex;
   justify-content: flex-end;
@@ -52,6 +56,10 @@
 .post-body a {
   color: #0E0E0E;
   text-decoration: none;
+}
+
+.post-body a:first-child .post-text {
+  margin-top: 0;
 }
 
 .post-img {
