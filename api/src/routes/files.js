@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const fs = require('fs');
+const path = require('path');
 const upload = require('../services/multer-avatar');
 const mimetype = require('../services/mimetypeArray');
 const filesServices = require('../services/store/files.services');
@@ -10,7 +11,7 @@ router.get('/avatar/:profileid', async (req, res) => {
   const { profileid } = req.params;
 
   try {
-    const avatar = await filesServices.getProfileAvatar();
+    const avatar = await filesServices.getProfileAvatar(profileid);
 
     if (avatar && Object.keys(avatar).length && avatar[0].avatarlink) {
       fs.stat(
@@ -83,31 +84,44 @@ router.post(
 
 // update profile avatar
 
-router.delete(
-  '/avatar/:profileid',
-  upload.single('profileAvatar'),
-  async (req, res) => {
-    const { profileid } = req.params;
-    try {
-      const avatarDelete = await filesServices.deleteProfileAvatar(profileid);
+router.delete('/avatar/:profileid', async (req, res) => {
+  const { profileid } = req.params;
+  try {
+    const avatarDelete = await filesServices.deleteProfileAvatar(profileid);
 
-      if (avatarDelete) {
-        res.status(200).send({
-          message: 'Drop avatar',
-          data: avatarDelete,
-          success: true,
-        });
-      } else {
-        res.status(200).send({
-          message: 'Drop avatar',
-          data: null,
-          success: false,
-        });
-      }
-    } catch (error) {
-      res.status(500).send({ message: 'Unknown error', error, success: false });
+    if (avatarDelete) {
+      fs.readdir(`./avatars/${profileid}`, (err, files) => {
+        if (err) {
+          res.status(500).send({
+            message: 'Drop avatar',
+            error: err,
+            success: false,
+          });
+        } else {
+          files.forEach((file) => {
+            const fileDir = path.join(`./avatars/${profileid}`, file);
+
+            if (/^((avatar){1})+(\.png|\.jpeg|\.jpg)$/m.exec(file)) {
+              fs.unlinkSync(fileDir);
+            }
+          });
+          res.status(200).send({
+            message: 'Drop avatar',
+            data: avatarDelete,
+            success: true,
+          });
+        }
+      });
+    } else {
+      res.status(200).send({
+        message: 'Drop avatar',
+        data: null,
+        success: false,
+      });
     }
+  } catch (error) {
+    res.status(500).send({ message: 'Unknown error', error, success: false });
   }
-);
+});
 
 module.exports = router;
