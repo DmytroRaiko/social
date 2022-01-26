@@ -8,7 +8,13 @@ function ProfilesComponent({ profiles }) {
     <Link className="profile-card" to={`/profile/${profile.profileid}`} key={`profile-${profile.profileid}`}>
       <div className="profile-card-info">
         <p className="post-img">
-          <img src={profile.avatarlink || avatarIcon} alt="post" />
+          <img
+            src={
+              (profile.avatarlink && `http://localhost:9000/files/avatar/${profile.profileid}`)
+              || avatarIcon
+            }
+            alt="post"
+          />
         </p>
 
         <div className="profile-list-name">

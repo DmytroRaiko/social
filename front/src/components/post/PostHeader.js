@@ -6,7 +6,7 @@ const PostHeader = ({
   profileId, avatar, postAuthor, parentPostId,
 }) => (
   <NavLink to={`/profile/${profileId}`} className={`post-header ${parentPostId}`}>
-    <img src={avatar || avatarIcon} alt="avatar" />
+    <img src={(avatar && `http://localhost:9000/files/avatar/${profileId}`) || avatarIcon} alt="avatar" />
     <div className="author">{postAuthor}</div>
   </NavLink>
 );
