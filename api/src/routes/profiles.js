@@ -5,7 +5,7 @@ const db = require('../services/db');
 // ниже заглушка!
 const setGetCookie = (req, res) => {
   res.cookie('profileid', 1);
-  return req.cookies.profileid || null;
+  return req.cookies.profileid || 1;
 };
 // -- end
 
@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
   if (profileid !== null) {
     try {
       const profiles = await db
-        .select('profileid', 'avatarlink', 'name')
+        .select('profile.profileid', 'profile.avatarlink', 'profile.name')
         .from('profile');
 
       if (profiles && Object.keys(profiles).length) {
@@ -50,7 +50,25 @@ router.get('/:profileid', async (req, res) => {
         'profile.*',
         'a1.availability as emailsetting',
         'a2.availability as phonesetting',
-        'a3.availability as universitysetting'
+        'a3.availability as universitysetting',
+        db
+          .count()
+          .from('friend')
+          .leftJoin(
+            'accessfriend',
+            'friend.accessfriendid',
+            '=',
+            'accessfriend.accessfriendid'
+          )
+          .where('accessfriend.role', '=', 'Friends')
+          .andWhere('friend.requestuserid', '=', profileId)
+          .orWhere('friend.responduserid', '=', profileId)
+          .as('countfriends'),
+        db
+          .count()
+          .from('post')
+          .where('post.profileid', '=', profileId)
+          .as('countposts')
       )
       .from('profile')
       .join(
@@ -190,16 +208,26 @@ router.get('/:profileid/posts', async (req, res) => {
   try {
     const posts = await db
       .select(
-        'profile.profileid',
-        'profile.name',
-        'profile.avatarlink',
         'post.*',
-        'poststatistic.*'
+        'poststatistic.*',
+        'imagelist.fotolink',
+        'mylike.postlikeid'
       )
       .from('post')
-      .join('profile', 'profile.profileid', '=', 'post.profileid')
+      .leftJoin('imagelist', 'post.postid', '=', 'imagelist.postid')
       .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
-      .where('profile.profileid', '=', profileId)
+      .leftJoin(
+        db
+          .select('postlikeid', 'postid', 'profile.profileid')
+          .from('postlike')
+          .leftJoin('profile', 'profile.profileid', '=', 'postlike.profileid')
+          .where('profile.profileid', '=', profileId)
+          .as('mylike'),
+        'post.postid',
+        '=',
+        'mylike.postid'
+      )
+      .where('post.profileid', '=', profileId)
       .orderBy('post.timepost', 'DESC')
       .limit(10);
 
@@ -210,7 +238,9 @@ router.get('/:profileid/posts', async (req, res) => {
         success: true,
       });
     } else {
-      res.status(404).send({ message: 'Not found', success: false });
+      res
+        .status(200)
+        .send({ message: 'Not found', success: false, data: null });
     }
   } catch (error) {
     res

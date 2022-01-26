@@ -1,34 +1,27 @@
-import PostHeader from '../../components/post/PostHeader';
-import PostFooter from './PostFooter';
-import PostContent from './PostContent';
+import './Post.css';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+import { getPost } from './api/crud';
+import PostComponent from './PostComponent';
 
-import '../Post.css';
-import ErrorBoundary from '../../components/ErrorBoundary';
+const Post = () => {
+  const params = useParams();
 
-function Post() {
-  const post = {
-    title: 'React. Hello World!',
-    tags: '#course #react #js #javascript',
-    text: 'There’s a simple pattern I find immensely useful when writing React applications. If you’ve been doing React for a while, you have probably already discovered it. This article explains it well, but I want to add a few more points. You’ll find your components much easier to reuse and reason about if you divide them into two categories. I call them Container and Presentational components* but I also heard Fat and Skinny, Smart and Dumb, Stateful and Pure, Screens and Components, etc. These all are not exactly the same, but the core idea is similar.',
-    author: 'Dmitry Raiko',
-    time: '30.10.2001',
-    img: {
-      // src: 'https://i.ytimg.com/vi/RHBfeKNjcmQ/maxresdefault.jpg',
-      // src: 'https://i1.wp.com/css-tricks.com/wp-content/uploads/2018/06/react-ideal-image.png?fit=1200%2C600&ssl=1',
-      // src: logo,
-      // title: 'React image',
-    },
-  };
+  if (/^[0-9]*$/m.exec(params.id)) {
+    const postId = params.id;
 
-  return (
-    <main className="post-body">
-      <ErrorBoundary>
-        <PostHeader headerText={post.title} />
-        <PostContent postText={post.text} postImg={post.img} />
-        <PostFooter postAuthor={post.author} postTime={post.time} />
-      </ErrorBoundary>
-    </main>
-  );
-}
+    const { isFetching, /* refetch, */ data } = useQuery(`post-${postId}`, () => getPost(postId));
+    const posts = data?.data.data;
+
+    return (
+      <>
+        {isFetching && <div>Loading...</div>}
+        <PostComponent posts={posts} />
+      </>
+    );
+  }
+
+  return <div>Error id</div>;
+};
 
 export default Post;

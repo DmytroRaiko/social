@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, Outlet } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
 
 const SiteHeader = ({ blocks }) => {
@@ -17,9 +17,6 @@ const SiteHeader = ({ blocks }) => {
     <ErrorBoundary>
       <div className="header-button-block">
         {headerButton}
-      </div>
-      <div className="site-body post">
-        <Outlet />
       </div>
     </ErrorBoundary>
   );

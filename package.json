@@ -20,5 +20,8 @@
   "homepage": "https://github.com/DmytroRaiko/social-devcamp#readme",
   "devDependencies": {
     "husky": "^7.0.4"
+  },
+  "dependencies": {
+    "axios": "^0.25.0"
   }
 }

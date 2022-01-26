@@ -5,7 +5,7 @@ const db = require('../services/db');
 // ниже заглушка!
 const setGetCookie = (req, res) => {
   res.cookie('profileid', 1);
-  return req.cookies.profileid || null;
+  return req.cookies.profileid || 1;
 };
 // -- end
 
@@ -22,11 +22,25 @@ router.get('/', async (req, res) => {
           'profile.name',
           'profile.avatarlink',
           'post.*',
-          'poststatistic.*'
+          'poststatistic.*',
+          'imagelist.fotolink',
+          'mylike.postlikeid'
         )
         .from('profile')
         .join('post', 'post.profileid', '=', 'profile.profileid')
+        .leftJoin('imagelist', 'post.postid', '=', 'imagelist.postid')
         .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
+        .leftJoin(
+          db
+            .select('postlikeid', 'postid', 'profile.profileid')
+            .from('postlike')
+            .leftJoin('profile', 'profile.profileid', '=', 'postlike.profileid')
+            .where('profile.profileid', '=', profileid)
+            .as('mylike'),
+          'post.postid',
+          '=',
+          'mylike.postid'
+        )
         .orderBy('post.timepost', 'DESC')
         .limit(10);
 
@@ -61,11 +75,25 @@ router.get('/:postid', async (req, res) => {
           'profile.name',
           'profile.avatarlink',
           'post.*',
-          'poststatistic.*'
+          'poststatistic.*',
+          'imagelist.fotolink',
+          'mylike.postlikeid'
         )
         .from('profile')
         .join('post', 'post.profileid', '=', 'profile.profileid')
+        .leftJoin('imagelist', 'post.postid', '=', 'imagelist.postid')
         .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
+        .leftJoin(
+          db
+            .select('postlikeid', 'postid', 'profile.profileid')
+            .from('postlike')
+            .leftJoin('profile', 'profile.profileid', '=', 'postlike.profileid')
+            .where('profile.profileid', '=', profileid)
+            .as('mylike'),
+          'post.postid',
+          '=',
+          'mylike.postid'
+        )
         .where('post.postid', '=', postId)
         .orderBy('post.timepost', 'DESC')
 
