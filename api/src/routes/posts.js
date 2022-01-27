@@ -1,5 +1,7 @@
 const router = require('express').Router();
-const db = require('../services/db');
+const postsServices = require('../services/store/posts.services');
+const commentsServices = require('../services/store/comments.services');
+const likesServices = require('../services/store/likes.services');
 
 // -- must to be change -- start
 // ниже заглушка!
@@ -14,35 +16,13 @@ const setGetCookie = (req, res) => {
 router.get('/', async (req, res) => {
   const profileid = setGetCookie(req, res);
 
+  const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
+  const limit = page * 10;
+  const offset = (page - 1) * 10;
+
   if (profileid !== null) {
     try {
-      const posts = await db
-        .select(
-          'profile.profileid',
-          'profile.name',
-          'profile.avatarlink',
-          'post.*',
-          'poststatistic.*',
-          'imagelist.fotolink',
-          'mylike.postlikeid'
-        )
-        .from('profile')
-        .join('post', 'post.profileid', '=', 'profile.profileid')
-        .leftJoin('imagelist', 'post.postid', '=', 'imagelist.postid')
-        .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
-        .leftJoin(
-          db
-            .select('postlikeid', 'postid', 'profile.profileid')
-            .from('postlike')
-            .leftJoin('profile', 'profile.profileid', '=', 'postlike.profileid')
-            .where('profile.profileid', '=', profileid)
-            .as('mylike'),
-          'post.postid',
-          '=',
-          'mylike.postid'
-        )
-        .orderBy('post.timepost', 'DESC')
-        .limit(10);
+      const posts = await postsServices.getAllPosts(profileid, offset, limit);
 
       if (posts && Object.keys(posts).length) {
         res
@@ -69,35 +49,7 @@ router.get('/:postid', async (req, res) => {
 
   if (profileid !== null) {
     try {
-      const post = await db
-        .select(
-          'profile.profileid',
-          'profile.name',
-          'profile.avatarlink',
-          'post.*',
-          'poststatistic.*',
-          'imagelist.fotolink',
-          'mylike.postlikeid'
-        )
-        .from('profile')
-        .join('post', 'post.profileid', '=', 'profile.profileid')
-        .leftJoin('imagelist', 'post.postid', '=', 'imagelist.postid')
-        .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
-        .leftJoin(
-          db
-            .select('postlikeid', 'postid', 'profile.profileid')
-            .from('postlike')
-            .leftJoin('profile', 'profile.profileid', '=', 'postlike.profileid')
-            .where('profile.profileid', '=', profileid)
-            .as('mylike'),
-          'post.postid',
-          '=',
-          'mylike.postid'
-        )
-        .where('post.postid', '=', postId)
-        .orderBy('post.timepost', 'DESC')
-
-        .limit(10);
+      const post = await postsServices.getPost(profileid, postId);
 
       if (post && Object.keys(post).length) {
         res
@@ -126,7 +78,7 @@ router.post('/', async (req, res) => {
     dataInsertPost.profileid = author;
 
     try {
-      const addPost = await db('post').insert(dataInsertPost);
+      const addPost = await postsServices.addPost(dataInsertPost);
 
       if (addPost && Object.keys(addPost).length) {
         res
@@ -152,9 +104,7 @@ router.put('/:postid', async (req, res) => {
   const dataUpdatePost = req.body;
 
   try {
-    const updatePost = await db('post')
-      .update(dataUpdatePost)
-      .where('postid', postId);
+    const updatePost = await postsServices.updatePost(dataUpdatePost, postId);
 
     if (updatePost && Object.keys(updatePost).length) {
       res.status(200).send({ message: 'Post updating', success: true });
@@ -173,7 +123,7 @@ router.delete('/:postid', async (req, res) => {
   const postId = req.params.postid;
 
   try {
-    const deletePost = await db.from('post').where('postid', postId).delete();
+    const deletePost = await postsServices.deletePost(postId);
 
     if (deletePost && Object.keys(deletePost).length) {
       res.status(200).send({
@@ -196,17 +146,16 @@ router.delete('/:postid', async (req, res) => {
 router.get('/:postid/comments', async (req, res) => {
   const postId = req.params.postid;
 
+  const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
+  const limit = page * 30;
+  const offset = (page - 1) * 30;
+
   try {
-    const commentsForPost = await db
-      .select(
-        'profile.profileid',
-        'profile.name',
-        'profile.avatarlink',
-        'comment.*'
-      )
-      .from('comment')
-      .join('profile', 'profile.profileid', '=', 'comment.profileid')
-      .where('comment.postid', postId);
+    const commentsForPost = await commentsServices.getComments(
+      postId,
+      offset,
+      limit
+    );
 
     if (commentsForPost && Object.keys(commentsForPost).length) {
       res.status(200).send({
@@ -235,7 +184,7 @@ router.post('/:postid/comments', async (req, res) => {
     dataInsertComment.postid = req.params.postid;
 
     try {
-      const addComment = await db('comment').insert(dataInsertComment);
+      const addComment = await commentsServices.addComment(dataInsertComment);
 
       if (addComment && Object.keys(addComment).length) {
         res
@@ -266,9 +215,10 @@ router.put('/:postid/comment/:commentid', async (req, res) => {
     const dataInsertComment = req.body;
 
     try {
-      const changeComment = await db('comment')
-        .insert(dataInsertComment)
-        .where('commentid', commentId);
+      const changeComment = await commentsServices.updateComment(
+        dataInsertComment,
+        commentId
+      );
 
       if (changeComment && Object.keys(changeComment).length) {
         res.status(200).send({
@@ -297,11 +247,10 @@ router.delete('/:postid/comment/:commentid', async (req, res) => {
 
   if (author !== null) {
     try {
-      const deleteComment = await db
-        .from('comment')
-        .where('commentid', commentId)
-        .andWhere('profileid', author)
-        .delete();
+      const deleteComment = await commentsServices.deleteComment(
+        commentId,
+        author
+      );
 
       if (deleteComment && Object.keys(deleteComment).length) {
         res.status(200).send({
@@ -325,17 +274,12 @@ router.delete('/:postid/comment/:commentid', async (req, res) => {
 router.get('/:postid/likes', async (req, res) => {
   const postId = req.params.postid;
 
+  const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
+  const limit = page * 50;
+  const offset = (page - 1) * 50;
+
   try {
-    const likesForPost = await db
-      .select(
-        'profile.profileid',
-        'profile.name',
-        'profile.avatarlink',
-        'postlike.postlikeid'
-      )
-      .from('postlike')
-      .join('profile', 'profile.profileid', '=', 'postlike.profileid')
-      .where('postid', postId);
+    const likesForPost = await likesServices.getLikes(postId, offset, limit);
 
     if (likesForPost && Object.keys(likesForPost).length) {
       res.status(200).send({
@@ -366,7 +310,7 @@ router.post('/:postid/likes', async (req, res) => {
     };
 
     try {
-      const likePost = await db('postlike').insert(dataLike);
+      const likePost = await likesServices.addLike(dataLike);
 
       if (likePost && Object.keys(likePost).length) {
         res
@@ -395,11 +339,7 @@ router.delete('/:postid/likes', async (req, res) => {
 
   if (profileId !== null) {
     try {
-      const unlikePost = await db
-        .from('postlike')
-        .where('postid', postId)
-        .andWhere('profileid', profileId)
-        .delete();
+      const unlikePost = await likesServices.deleteLike(postId, profileId);
 
       if (unlikePost && Object.keys(unlikePost).length) {
         res.status(200).send({

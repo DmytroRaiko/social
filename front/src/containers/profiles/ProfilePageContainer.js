@@ -11,7 +11,7 @@ function ProfilePageContainer({ profileData }) {
     (profile && (
     <div className="profile-page">
       <div className="profile-avatar profile-left-bar">
-        <ProfileAvatar avatarlink={profile.avatarlink} />
+        <ProfileAvatar avatarlink={profile.avatarlink} profileId={profile.profileid} />
         <div className="profile-left-bar">
           {null}
         </div>
