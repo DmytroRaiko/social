@@ -1,18 +1,14 @@
 const PropTypes = require('prop-types');
-const fileProps = require('./FileProps');
-const addressProps = require('./AddressProps');
+const universities = require('./universitiesProps');
 
 module.exports = {
-  name: PropTypes.string,
-  age: PropTypes.string,
-  avatar: PropTypes.shape({
-    file: PropTypes.shape(fileProps).isRequired,
-  }),
-  files: PropTypes.arrayOf(
-    PropTypes.shape(fileProps).isRequired,
-  ),
-  addrr: PropTypes.shape({
-    main: PropTypes.shape(addressProps).isRequired,
-    alt: PropTypes.shape(addressProps),
-  }),
+  profileid: PropTypes.number.isRequired,
+  avatarlink: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  email: PropTypes.string,
+  phone: PropTypes.string,
+  emailsetting: PropTypes.string.isRequired,
+  phonesetting: PropTypes.string.isRequired,
+  universitysetting: PropTypes.string.isRequired,
+  ...universities,
 };

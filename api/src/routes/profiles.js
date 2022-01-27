@@ -1,11 +1,13 @@
 const router = require('express').Router();
-const db = require('../services/db');
+const profilesServices = require('../services/store/profiles.services');
+const postsServices = require('../services/store/posts.services');
+const universitiesServices = require('../services/store/universities.services');
 
 // -- must to be change -- start
 // ниже заглушка!
 const setGetCookie = (req, res) => {
   res.cookie('profileid', 1);
-  return req.cookies.profileid || null;
+  return req.cookies.profileid || 1;
 };
 // -- end
 
@@ -14,11 +16,13 @@ const setGetCookie = (req, res) => {
 router.get('/', async (req, res) => {
   const profileid = setGetCookie(req, res);
 
+  const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
+  const limit = page * 50;
+  const offset = (page - 1) * 50;
+
   if (profileid !== null) {
     try {
-      const profiles = await db
-        .select('profileid', 'avatarlink', 'name')
-        .from('profile');
+      const profiles = await profilesServices.getProfiles(offset, limit);
 
       if (profiles && Object.keys(profiles).length) {
         res.status(200).send({
@@ -45,52 +49,12 @@ router.get('/:profileid', async (req, res) => {
   const profileId = req.params.profileid;
 
   try {
-    const profile = await db
-      .select(
-        'profile.*',
-        'a1.availability as emailsetting',
-        'a2.availability as phonesetting',
-        'a3.availability as universitysetting'
-      )
-      .from('profile')
-      .join(
-        'profilesetting',
-        'profilesetting.profileid',
-        '=',
-        'profile.profileid'
-      )
-      .as('settingsTable')
-      .join(
-        'availability as a1',
-        'profilesetting.emailsettingid',
-        '=',
-        'a1.availabilityid'
-      )
-      .join(
-        'availability as a2',
-        'profilesetting.phonesettingid',
-        '=',
-        'a2.availabilityid'
-      )
-      .join(
-        'availability as a3',
-        'profilesetting.universitysettingid',
-        '=',
-        'a3.availabilityid'
-      )
-      .where('profile.profileid', profileId);
+    const profile = await profilesServices.getProfile(profileId);
 
     if (profile && Object.keys(profile).length) {
-      const universityList = await db
-        .select('university.name', 'university.universityid')
-        .from('universitylist')
-        .join(
-          'university',
-          'university.universityid',
-          '=',
-          'universitylist.universityid'
-        )
-        .where('profileid', profileId);
+      const universityList = await universitiesServices.getProfileUniversities(
+        profileId
+      );
 
       if (universityList && universityList.length) {
         profile[0].universities = universityList;
@@ -115,7 +79,7 @@ router.post('/', async (req, res) => {
   const dataInsertProfile = req.body;
 
   try {
-    const addPofile = await db('profile').insert(dataInsertProfile);
+    const addPofile = await profilesServices.addProfile(dataInsertProfile);
 
     if (addPofile && Object.keys(addPofile).length) {
       res
@@ -138,9 +102,10 @@ router.post('/:profileid', async (req, res) => {
   const dataUpdateProfile = req.body;
 
   try {
-    const updateProfile = await db('profile')
-      .update(dataUpdateProfile)
-      .where('profileid', profileId);
+    const updateProfile = await profilesServices.updateProfile(
+      dataUpdateProfile,
+      profileId
+    );
 
     if (updateProfile && Object.keys(updateProfile).length) {
       res.status(200).send({
@@ -164,10 +129,7 @@ router.delete('/:profileid', async (req, res) => {
   const profileId = req.params.profileid;
 
   try {
-    const deleteProfile = await db
-      .from('profile')
-      .where('profileid', profileId)
-      .delete();
+    const deleteProfile = await profilesServices.deleteProfile(profileId);
 
     if (deleteProfile && Object.keys(deleteProfile).length) {
       res.status(200).send({ message: 'Profile deleting', success: true });
@@ -185,23 +147,10 @@ router.delete('/:profileid', async (req, res) => {
 
 router.get('/:profileid/posts', async (req, res) => {
   const profileId = req.params.profileid;
-  // const userProfileId = setGetCookie(req, res);
+  const userProfileId = setGetCookie(req, res);
 
   try {
-    const posts = await db
-      .select(
-        'profile.profileid',
-        'profile.name',
-        'profile.avatarlink',
-        'post.*',
-        'poststatistic.*'
-      )
-      .from('post')
-      .join('profile', 'profile.profileid', '=', 'post.profileid')
-      .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
-      .where('profile.profileid', '=', profileId)
-      .orderBy('post.timepost', 'DESC')
-      .limit(10);
+    const posts = await postsServices.getAllUserPosts(profileId, userProfileId);
 
     if (posts && Object.keys(posts).length) {
       res.status(200).send({
@@ -210,7 +159,9 @@ router.get('/:profileid/posts', async (req, res) => {
         success: true,
       });
     } else {
-      res.status(404).send({ message: 'Not found', success: false });
+      res
+        .status(200)
+        .send({ message: 'Not found', success: false, data: null });
     }
   } catch (error) {
     res

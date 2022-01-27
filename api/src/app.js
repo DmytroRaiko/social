@@ -8,6 +8,16 @@ const config = require('./services/config');
 // require route directory
 const profilesRoutes = require('./routes/profiles');
 const postsRoutes = require('./routes/posts');
+const fileRoutes = require('./routes/files');
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
 
 const portApp = config.appPort;
 
@@ -17,6 +27,7 @@ app.use(express.json());
 
 app.use('/profiles', profilesRoutes);
 app.use('/posts', postsRoutes);
+app.use('/files', fileRoutes);
 
 app.listen(portApp, () => {
   // eslint-disable-next-line no-console

@@ -1,0 +1,178 @@
+.site-body a.profile-card {
+  text-decoration: none;
+  color: #0E0E0E;
+  width: 50%;
+  background: white;
+  margin-top: 20px;
+  padding: 12px;
+  box-shadow: 0 5px 11px 1px #e4e4e4;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-body a.profile-card:last-child {
+  margin-bottom: 40px;
+}
+
+.site-body a div.profile-card-info {
+  text-decoration: none;
+  color: #0E0E0E;
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.site-body a.profile-card p {
+  margin: 0;
+}
+
+.site-body a.profile-card p.post-img {
+  margin-right: 20px;
+  padding-right: 10px;
+  border-right: 1px solid #e4e4e4;
+}
+
+.site-body a.profile-card p.post-img img {
+  width: 75px;
+}
+
+.site-body a.profile-card div.profile-list-name {
+  font-size: 30px;
+}
+
+.add-friend-button {
+  background: rgb(29, 155, 240);
+  border-radius: 4px;
+  border: 1px solid #1e458a;
+  height: 40px;
+  width: 88px;
+  color: white;
+  padding: 0 30px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+.add-friend-button:hover::after {
+  content: "+";
+  font-size: 30px;
+  margin-left: 5px;
+}
+
+.add-friend-button:hover {
+  background: #1e458a;
+  font-size: 0;
+}
+
+.profile-main-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-page {
+  width: 1000px;
+  display: grid;
+  grid-column-gap: 30px;
+  grid-template-columns: 250px 1fr;
+}
+
+.profile-page .profile-page-right-colmn {
+  margin-top: 10px;
+}
+
+.profile-page div.block-shadow {
+  padding: 10px;
+  box-shadow: 0 5px 11px 1px #e4e4e4;
+}
+
+.profile-page .profile-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-page .profile-avatar .add-friend-button {
+  margin-bottom: 15px;
+}
+
+.profile-page .profile-left-bar {
+  width: 250px;
+}
+
+.profile-page .profile-avatar img {
+  width: 240px;
+}
+
+.profile-page .profile-page-info .profile-name {
+  border-bottom: 1px solid #e4e4e4;
+  padding-bottom: 10px;
+  text-align: right;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.profile-page .profile-page-right-colmn .post-body {
+  width: calc(100% - 24px);
+}
+
+.profile-page .profile-page-right-colmn .post-body:last-child {
+  margin-bottom: 40px;
+}
+
+.profile-page .profile-page-info .profile-information .profile-statistics {
+  display: flex;
+  justify-content: space-evenly;
+  padding-top: 10px;
+  border-top: 1px solid #e4e4e4;
+}
+
+.profile-page .profile-page-info .profile-information .profile-statistics div {
+  padding: 10px;
+  text-align: center;
+  margin: 0 40px;
+}
+
+.profile-page .profile-page-info .profile-information .profile-statistics .span-hr {
+  border-left: 1px solid #e4e4e4;
+}
+
+.profile-page .profile-page-info .profile-information .item {
+  display: flex;
+  flex-direction: row;
+  margin: 20px 0
+}
+
+.profile-page .profile-page-info .profile-information .item .title,
+.profile-page .profile-page-info .profile-information .item .value {
+  font-size: 17px;
+}
+
+.profile-page .profile-page-info .profile-information .item .title {
+  width: 110px;
+  padding-top: 10px;
+  font-weight: bolder;
+}
+
+.profile-page .profile-page-info .profile-information .item .value {
+  padding: 10px 0;
+}
+
+.profile-page .profile-page-info .profile-information .item .value,
+.profile-page .profile-page-info .profile-information .item .values {
+  border-left: 1px solid #e4e4e4;
+  padding-left: 10px;
+}
+
+.profile-page .profile-page-info .profile-information .item .values .value {
+  border-left: none;
+  padding-left: 0;
+}
+
+.profile-page .profile-page-info .profile-information .info-item:first-child {
+  border-top: 0;
+}
