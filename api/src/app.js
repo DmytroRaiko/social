@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const app = express();
 const config = require('./services/config');
@@ -9,15 +10,9 @@ const config = require('./services/config');
 const profilesRoutes = require('./routes/profiles');
 const postsRoutes = require('./routes/posts');
 const fileRoutes = require('./routes/files');
+const selectRoutes = require('./routes/select');
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-  next();
-});
+app.use(cors());
 
 const portApp = config.appPort;
 
@@ -28,6 +23,7 @@ app.use(express.json());
 app.use('/profiles', profilesRoutes);
 app.use('/posts', postsRoutes);
 app.use('/files', fileRoutes);
+app.use('/select', selectRoutes);
 
 app.listen(portApp, () => {
   // eslint-disable-next-line no-console

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import profileProps from '../../PropTypes/ProfileProps';
+import profileProps from '../../services/PropTypes/ProfileProps';
 
 const universitysBlock = (universities) => universities?.map((university) => (
   <div className={`value ${university.universityid}`} key={`university-${university.universityid}`}>

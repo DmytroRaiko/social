@@ -7,7 +7,4 @@ module.exports = {
     db('profile').where('profileid', profileid).update('avatarlink', avatar),
   deleteProfileAvatar: async (profileid) =>
     db('profile').where('profileid', profileid).update('avatarlink', null),
-  getPostImage: async () => null,
-  updatePostImage: async () => null,
-  deletePostImage: async () => null,
 };

@@ -6,7 +6,7 @@ import PostComponent from './PostComponent';
 const Posts = () => {
   const {
     isFetching,
-    /* refetch, */
+    refetch,
     data,
   } = useQuery(
     'posts',
@@ -17,7 +17,7 @@ const Posts = () => {
   return (
     <>
       {isFetching && <div>Loading...</div>}
-      <PostComponent posts={posts} />
+      {data && <PostComponent posts={posts} refetch={refetch} />}
     </>
   );
 };

@@ -73,6 +73,35 @@ router.get('/:profileid', async (req, res) => {
   }
 });
 
+// show profile for edit
+
+router.get('/:profileid/edit', async (req, res) => {
+  const profileId = req.params.profileid;
+
+  try {
+    const profile = await profilesServices.getEditProfile(profileId);
+
+    if (profile && Object.keys(profile).length) {
+      const universityList =
+        await universitiesServices.getProfileEditUniversities(profileId);
+
+      if (universityList && universityList.length) {
+        profile[0].universities = universityList;
+      }
+
+      res
+        .status(200)
+        .send({ message: 'Fetching profile', data: profile, success: true });
+    } else {
+      res.status(404).send({ message: 'Not found', success: false });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .send({ message: 'Data fetching error', error, success: false });
+  }
+});
+
 // add profile
 
 router.post('/', async (req, res) => {
@@ -107,7 +136,7 @@ router.post('/:profileid', async (req, res) => {
       profileId
     );
 
-    if (updateProfile && Object.keys(updateProfile).length) {
+    if (updateProfile) {
       res.status(200).send({
         message: 'Profile updating',
         data: updateProfile,
@@ -131,7 +160,7 @@ router.delete('/:profileid', async (req, res) => {
   try {
     const deleteProfile = await profilesServices.deleteProfile(profileId);
 
-    if (deleteProfile && Object.keys(deleteProfile).length) {
+    if (deleteProfile) {
       res.status(200).send({ message: 'Profile deleting', success: true });
     } else {
       res.status(404).send({ message: 'Profile deleting', success: false });

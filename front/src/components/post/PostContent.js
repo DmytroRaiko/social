@@ -10,15 +10,9 @@ const dateFormat = (d) => {
 };
 
 const PostContent = ({
-  postId, postText, postImg, postEdit, postTime, changeTime,
+  postId, postText, postEdit, postTime, changeTime,
 }) => (
   <Link to={`/article/${postId}`} className="post-content">
-    { postImg && (
-      <p className="post-img">
-        <img src={postImg} alt="post" />
-      </p>
-    )}
-
     <p className="post-text">{postText}</p>
 
     <div className="post-footer-time">
@@ -39,14 +33,12 @@ const PostContent = ({
 PostContent.propTypes = {
   postId: PropTypes.number.isRequired,
   postText: PropTypes.string.isRequired,
-  postImg: PropTypes.string,
   postEdit: PropTypes.bool,
   changeTime: PropTypes.string,
   postTime: PropTypes.string.isRequired,
 };
 
 PostContent.defaultProps = {
-  postImg: null,
   postEdit: 0,
   changeTime: null,
 };
