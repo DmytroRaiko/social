@@ -6,7 +6,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import commentIcon from '../../services/icons/commentIcon.svg';
 
 const PostFooter = ({
-  postId, postLikes, postComments, // postMyLike,
+  postId, postLikes, postComments, postMyLike,
 }) => (
   <div className="post-footer">
     <Link to={`/articles/${postId}/comments`} className="footer-item">
@@ -16,6 +16,7 @@ const PostFooter = ({
       comments
     </Link>
     <div className="footer-item">
+      {postMyLike && 'I like it!, '}
       {postLikes || ' '}
       <IconButton className="like">
         <FavoriteBorderIcon />
@@ -28,13 +29,13 @@ PostFooter.propTypes = {
   postId: PropTypes.number.isRequired,
   postLikes: PropTypes.number,
   postComments: PropTypes.number,
-  // postMyLike: PropTypes.number,
+  postMyLike: PropTypes.number,
 };
 
 PostFooter.defaultProps = {
   postLikes: 0,
   postComments: 0,
-  // postMyLike: 0,
+  postMyLike: 0,
 };
 
 export default PostFooter;
