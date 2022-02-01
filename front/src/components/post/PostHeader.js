@@ -6,14 +6,26 @@ import {
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { useMutation } from 'react-query';
 import stringAvatar from '../../services/icons/avatarIcon';
 import EditPostModal from '../../containers/modals/EditPostModal';
-import { onDeleteArticle } from '../../handlers/handlers';
+import settings from '../../settings';
+import { deletePost } from '../../containers/post/api/crud';
 
 const ITEM_HEIGHT = 48;
 
+const dateFormat = (d) => {
+  const date = new Date(d);
+  return `${date.getDate()}.${
+    date.getMonth() + 1 < 10 ? '0' : ''}${date.getMonth() + 1}.${
+    date.getFullYear()} at ${date.getHours()}:${
+    date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()}`;
+};
+
 const PostHeader = ({
-  profileId, avatar, postAuthor, postId, refetchQuery,
+  profileId, avatar, postAuthor,
+  postId, refetchQuery,
+  postEdit, postTime, changeTime,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -27,9 +39,13 @@ const PostHeader = ({
     setAnchorEl(null);
   };
 
+  const mutation = useMutation(
+    'delete-post',
+    () => deletePost(postId),
+  );
+
   const onDeleteHandle = () => {
-    onDeleteArticle(postId);
-    handleClose();
+    mutation.mutate();
     refetchQuery();
   };
 
@@ -37,11 +53,25 @@ const PostHeader = ({
     <div className="post-header">
       <NavLink to={`/profile/${profileId}`}>
         {(avatar
-        && <img src={`http://localhost:9000/files/avatar/${profileId}`} alt="avatar" />
+        && <img src={`${settings.URI}/files/avatar/${profileId}`} alt="avatar" />
         )
       // eslint-disable-next-line react/jsx-props-no-spreading
       || <Avatar className="post-img" {...stringAvatar(postAuthor)} />}
-        <div className="author">{postAuthor}</div>
+        <div className="post-header-information">
+          <div className="author">{postAuthor}</div>
+          <div className="post-footer-time">
+            <p className="post-time">
+              {dateFormat(postTime)}
+            </p>
+
+            {postEdit && (
+              <p className="post-edit" title={dateFormat(changeTime)}>
+                {' '}
+                , edited
+              </p>
+            )}
+          </div>
+        </div>
       </NavLink>
 
       <IconButton
@@ -96,10 +126,15 @@ PostHeader.propTypes = {
   avatarLink: PropTypes.string,
   postId: PropTypes.number.isRequired,
   refetchQuery: PropTypes.func.isRequired,
+  postEdit: PropTypes.bool,
+  changeTime: PropTypes.string,
+  postTime: PropTypes.string.isRequired,
 };
 
 PostHeader.defaultProps = {
   avatar: null,
+  postEdit: 0,
+  changeTime: null,
 };
 
 export default PostHeader;

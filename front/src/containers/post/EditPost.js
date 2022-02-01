@@ -36,7 +36,7 @@ const EditPost = ({ postId, handleClose }) => {
                 </IconButton>
               </header>
               <EditPostForm
-                posts={postEdit}
+                post={postEdit}
                 postEditId={postId}
                 availabilities={availabilities}
                 onHandleClose={handleClose}

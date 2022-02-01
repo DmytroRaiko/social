@@ -126,7 +126,7 @@ router.post('/', async (req, res) => {
 
 // change profile
 
-router.post('/:profileid', async (req, res) => {
+router.put('/:profileid', async (req, res) => {
   const profileId = req.params.profileid;
   const dataUpdateProfile = req.body;
 

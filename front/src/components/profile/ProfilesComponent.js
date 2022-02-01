@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Avatar, Button } from '@mui/material';
 import stringAvatar from '../../services/icons/avatarIcon';
+import projectSettings from '../../settings';
 
 function ProfilesComponent({ profiles }) {
   const profilesList = profiles?.map((profile) => (
@@ -10,7 +11,7 @@ function ProfilesComponent({ profiles }) {
       <Link className="profile-card-info" to={`/profile/${profile.profileid}`}>
         <div className="post-img">
           {(profile.avatarlink
-              && <img src={`http://localhost:9000/files/avatar/${profile.profileid}`} alt="avatar" />
+              && <img src={`${projectSettings.URI}/files/avatar/${profile.profileid}`} alt="avatar" />
           )
             // eslint-disable-next-line react/jsx-props-no-spreading
             || <Avatar className="post-img" {...stringAvatar(profile.name)} />}

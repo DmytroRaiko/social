@@ -19,13 +19,7 @@ function ProfileEditContainer({ profileData, availabilities, university }) {
 
       <div className="profile-page-right-colmn">
         <EditProfileForm
-          name={profile.name}
-          email={profile.email || undefined}
-          phone={profile.phone || undefined}
-          universities={profile.universities}
-          emailsettingid={profile.emailsettingid}
-          phonesettingid={profile.phonesettingid}
-          universitysettingid={profile.universitysettingid}
+          profile={profile}
           availabilities={availabilities}
           university={university}
         />

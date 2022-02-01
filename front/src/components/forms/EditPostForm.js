@@ -4,42 +4,49 @@ import {
 } from 'formik';
 import {
   TextField,
-  Select,
 } from 'formik-mui';
-import {
-  Button, MenuItem,
-} from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import SaveIcon from '@mui/icons-material/Save';
-import postComponentProps from '../../services/PropTypes/PostComponentProps';
-import postComponentPropsDefault from '../../services/PropTypes/PostComponentPropsDefault';
+import { useMutation } from 'react-query';
+import { Button } from '@mui/material';
 import ErrorBoundary from '../ErrorBoundary';
-import { onEditArticleFormSubmit } from '../../handlers/handlers';
+import projectSettings from '../../settings';
+import { availabilitySelect } from '../optionsSelects/Availability';
+import { editPost } from '../../containers/post/api/crud';
 
 const EditPostForm = ({
-  posts, availabilities, onHandleClose, postEditId,
+  post, availabilities, onHandleClose, postEditId,
 }) => {
-  const postEdit = posts[0] ? posts[0] : null;
+  const mutation = useMutation(
+    'edit-post',
+    (formData) => editPost(postEditId, formData),
+  );
 
-  const availabilitySelect = availabilities?.map((availability) => (
-    <MenuItem
-      key={`availabilities-${availability.availabilityid}`}
-      value={availability.availabilityid}
-    >
-      {availability.availability}
-    </MenuItem>
-  ));
+  const postEdit = post
+    && {
+      text: post.text,
+      postAvailabilityId: post.postavailabilityid,
+    };
 
   const schema = Yup.object().shape({
     text: Yup.string().required('Article text is required'),
+    postAvailabilityId: Yup.number('Article availability must be number').required('Article availability is required'),
   });
 
-  const onFormSubmit = (dataSubmit) => {
-    onEditArticleFormSubmit(dataSubmit, postEditId)
-      .then(() => onHandleClose())
-      // eslint-disable-next-line no-console
-      .catch((e) => console.error(e));
+  const onFormSubmit = (dataSubmit, { setSubmitting }) => {
+    const onFormData = {
+      text: dataSubmit.text,
+      postavailabilityid: dataSubmit.postAvailabilityId,
+    };
+
+    mutation.mutate(onFormData);
+
+    if (!mutation.isLoading) {
+      onHandleClose();
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -50,11 +57,7 @@ const EditPostForm = ({
         validationSchema={schema}
       >
         {({ isSubmitting, dirty, isValid }) => (
-          <Form
-            method="put"
-            encType="application/x-www-form-urlencoded"
-            action={`http://localhost:9000/posts/${postEditId}`}
-          >
+          <Form>
             <Field
               component={TextField}
               type="text"
@@ -68,17 +71,7 @@ const EditPostForm = ({
               }}
             />
 
-            <Field
-              component={Select}
-              name="postavailabilityid"
-              label="Availability"
-              sx={{
-                width: '250px',
-                height: '40px',
-              }}
-            >
-              {availabilitySelect}
-            </Field>
+            {availabilitySelect('postAvailabilityId', 'outlined', availabilities)}
 
             <div className="modal-footer-block">
               <Button
@@ -87,14 +80,16 @@ const EditPostForm = ({
               >
                 Close
               </Button>
-              <Button
+              <LoadingButton
                 type="submit"
+                loading={isSubmitting}
+                loadingIndicator="Loading..."
                 variant="contained"
                 startIcon={<SaveIcon />}
                 disabled={!(dirty && isValid && !isSubmitting)}
               >
                 Save
-              </Button>
+              </LoadingButton>
             </div>
           </Form>
         )}
@@ -103,25 +98,24 @@ const EditPostForm = ({
   );
 };
 
-EditPostForm.propTypes = Object.assign(
-  postComponentProps,
-  {
-    availabilities: PropTypes.arrayOf(
-      PropTypes?.shape({
-        availabilityid: PropTypes.number.isRequired,
-        availability: PropTypes.string.isRequired,
-      }),
-    ),
-    onHandleClose: PropTypes.func,
-    postEditId: PropTypes.number,
-  },
-);
+EditPostForm.propTypes = {
+  post: PropTypes.shape({}),
+  availabilities: PropTypes.arrayOf(
+    PropTypes?.shape({
+      availabilityid: PropTypes.number.isRequired,
+      availability: PropTypes.string.isRequired,
+    }),
+  ),
+  onHandleClose: PropTypes.func,
+  postEditId: PropTypes.number,
+};
 
-EditPostForm.defaultProps = Object.assign(
-  postComponentPropsDefault,
-  {
-    availabilities: [],
+EditPostForm.defaultProps = {
+  post: {
+    text: '',
+    postavailabilityid: projectSettings.availability,
   },
-);
+  availabilities: [],
+};
 
 export default EditPostForm;

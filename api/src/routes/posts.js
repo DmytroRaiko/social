@@ -130,7 +130,6 @@ router.put('/:postid', async (req, res) => {
   const postId = req.params.postid;
   const dataUpdatePost = req.body;
 
-  console.log(postId);
   try {
     const updatePost = await postsServices.updatePost(dataUpdatePost, postId);
 

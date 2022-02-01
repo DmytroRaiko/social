@@ -84,6 +84,7 @@ module.exports = {
   getPostEdit: async (postId) =>
     db
       .select('post.text', 'post.postavailabilityid')
+      .first()
       .from('post')
       .where('postid', postId),
   addPost: async (insertData) => db('post').insert(insertData),

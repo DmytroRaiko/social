@@ -4,12 +4,13 @@ import { Avatar, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import stringAvatar from '../../services/icons/avatarIcon';
+import projectSettings from '../../settings';
 
 const ProfileAvatar = ({ avatarlink, profileId, name }) => (
   <div className={`profile-avatar profile-left-bar ${avatarlink}`}>
     <div className="post-img">
       {(avatarlink
-          && <img src={`http://localhost:9000/files/avatar/${profileId}`} alt="avatar" />
+          && <img src={`${projectSettings.URI}/files/avatar/${profileId}`} alt="avatar" />
       )
         // eslint-disable-next-line react/jsx-props-no-spreading
         || <Avatar className="post-img" {...stringAvatar(name)} />}

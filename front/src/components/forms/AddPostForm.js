@@ -4,47 +4,51 @@ import {
 } from 'formik';
 import {
   TextField,
-  Select,
 } from 'formik-mui';
 import {
-  Button, MenuItem,
+  Button,
 } from '@mui/material';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import PublishIcon from '@mui/icons-material/Publish';
+import { useMutation } from 'react-query';
+import LoadingButton from '@mui/lab/LoadingButton';
 import ErrorBoundary from '../ErrorBoundary';
-import { onAddArticleFormSubmit } from '../../handlers/handlers';
+import projectSettings from '../../settings';
+import { availabilitySelect } from '../optionsSelects/Availability';
+import { addPost } from '../../containers/post/api/crud';
 
-const AddPostForm = ({ availabilities, onHandleClose, refetch }) => {
-  const availabilitySelect = availabilities?.map((availability) => (
-    <MenuItem
-      key={`availabilities-${availability.availabilityid}`}
-      value={availability.availabilityid}
-    >
-      {availability.availability}
-    </MenuItem>
-  ));
+const AddPostForm = ({ availabilities, onHandleClose }) => {
+  const mutation = useMutation(
+    'edit-post',
+    (formData) => addPost(formData),
+  );
 
   const schema = Yup.object().shape({
     text: Yup.string().required('Article text is required'),
-    postavailabilityid: Yup.number('Article availability must be number').required('Article availability is required'),
+    postAvailabilityId: Yup.number('Article availability must be number').required('Article availability is required'),
   });
 
-  const onFormSubmit = (dataSubmit) => {
-    onAddArticleFormSubmit(dataSubmit)
-      .then(() => {
-        onHandleClose();
-        refetch();
-      })
-      // eslint-disable-next-line no-console
-      .catch((e) => console.error(e));
+  const onFormSubmit = (dataSubmit, { setSubmitting }) => {
+    const onFormData = {
+      text: dataSubmit.text,
+      postavailabilityid: dataSubmit.postAvailabilityId,
+    };
+
+    mutation.mutate(onFormData);
+
+    if (!mutation.isLoading) {
+      onHandleClose();
+      setSubmitting(false);
+    }
   };
 
   return (
     <ErrorBoundary>
       <Formik
         initialValues={{
-          postavailabilityid: 1,
+          text: '',
+          postAvailabilityId: projectSettings.availability,
         }}
         onSubmit={onFormSubmit}
         validationSchema={schema}
@@ -64,17 +68,7 @@ const AddPostForm = ({ availabilities, onHandleClose, refetch }) => {
               }}
             />
 
-            <Field
-              component={Select}
-              name="postavailabilityid"
-              label="Availability"
-              sx={{
-                width: '250px',
-                height: '40px',
-              }}
-            >
-              {availabilitySelect}
-            </Field>
+            {availabilitySelect('postAvailabilityId', 'outlined', availabilities)}
 
             <div className="modal-footer-block">
               <Button
@@ -83,14 +77,16 @@ const AddPostForm = ({ availabilities, onHandleClose, refetch }) => {
               >
                 Close
               </Button>
-              <Button
+              <LoadingButton
                 type="submit"
+                loading={isSubmitting}
+                loadingIndicator="Loading..."
                 variant="contained"
                 startIcon={<PublishIcon />}
                 disabled={!(dirty && isValid && !isSubmitting)}
               >
                 Publish
-              </Button>
+              </LoadingButton>
             </div>
           </Form>
         )}

@@ -1,68 +1,74 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import {
-  Formik, Form, Field,
-} from 'formik';
-import {
-  TextField,
-  Select,
-} from 'formik-mui';
-import {
-  Button, MenuItem,
-} from '@mui/material';
+import { Formik, Form, Field } from 'formik';
+import { TextField } from 'formik-mui';
 import * as Yup from 'yup';
 import SaveIcon from '@mui/icons-material/Save';
+import { useMutation } from 'react-query';
+import LoadingButton from '@mui/lab/LoadingButton';
 import ErrorBoundary from '../ErrorBoundary';
 import EditProfileFormProps from '../../services/PropTypes/EditProfileFormProps';
+import { availabilitySelect } from '../optionsSelects/Availability';
+import { editProfile } from '../../containers/profiles/api/crud';
+
+const phoneRegExp = /^[0-9\-\\+]{3,13}$/;
 
 const EditProfileForm = ({
-  name, email, phone, universities,
-  emailsettingid, phonesettingid, universitysettingid,
-  availabilities, university,
+  profile, availabilities,
 }) => {
+  const mutation = useMutation(
+    'edit-profile',
+    (formData) => editProfile(profile.profileid, formData),
+  );
+
+  // variable for autocomplete
   const profileUniversities = [];
-  // eslint-disable-next-line no-console
-  console.log(university);
+  profile.universities?.map((universityItem) => profileUniversities
+    .push(universityItem.universityid));
 
-  universities?.map((universityItem) => profileUniversities.push(universityItem.universityid));
-
+  // variable [initial values]
   const profileData = {
-    name,
-    email,
-    phone,
-    // universities: [1],
-    emailsettingid,
-    phonesettingid,
-    universitysettingid,
+    name: profile.name,
+    email: profile.email || '',
+    phone: profile.phone || '',
+    emailSettingId: profile.emailsettingid,
+    phoneSettingId: profile.phonesettingid,
+    universitySettingId: profile.universitysettingid,
   };
 
-  const availabilitySelect = availabilities?.map((availability) => (
-    <MenuItem
-      key={`availabilities-${availability.availabilityid}`}
-      value={availability.availabilityid}
-    >
-      {availability.availability}
-    </MenuItem>
-  ));
-
+  // variable [formik schema]
   const schemaEditProfile = Yup.object().shape({
     name: Yup.string()
       .min(2, 'Too Short')
       .max(256, 'Too Long')
       .required('Profile name is required'),
-    email: Yup.string().max(255, 'Too Long').email('Invalid email'),
-    phone: Yup.string().max(13, 'Too Long'),
-    // universities: Yup.array().of(
-    //   Yup.number(),
-    // ),
-    emailsettingid: Yup.number(),
-    phonesettingid: Yup.number(),
-    universitysettingid: Yup.number(),
+    email: Yup.string()
+      .max(255, 'Too Long')
+      .email('Invalid email'),
+    phone: Yup.string()
+      .min(6, 'Too Short')
+      .max(13, 'Too Long')
+      .matches(phoneRegExp, 'Phone number is not valid'),
+
+    emailSettingId: Yup.number().required(),
+    phoneSettingId: Yup.number().required(),
+    universitySettingId: Yup.number().required(),
   });
 
-  const onProfileEditFormSubmit = (dataSubmit) => {
-    // eslint-disable-next-line no-console
-    console.log(dataSubmit);
+  const onProfileEditFormSubmit = (dataSubmit, { setSubmitting }) => {
+    const onFormData = {
+      name: dataSubmit.name,
+      email: dataSubmit.email,
+      phone: dataSubmit.phone,
+    };
+
+    mutation.mutate(onFormData);
+
+    if (!mutation.isLoading) {
+      setSubmitting(false);
+    } else {
+      setSubmitting(true);
+    }
   };
 
   return (
@@ -71,8 +77,6 @@ const EditProfileForm = ({
         initialValues={profileData}
         onSubmit={onProfileEditFormSubmit}
         validationSchema={schemaEditProfile}
-        validateOnBlur={false}
-        validateOnChange
       >
         {({
           isSubmitting, dirty, isValid,
@@ -103,18 +107,7 @@ const EditProfileForm = ({
                     fullWidth
                   />
                 </div>
-                <Field
-                  component={Select}
-                  name="emailsettingid"
-                  label="Availability"
-                  variant="standard"
-                  sx={{
-                    width: '150px',
-                    height: '30px',
-                  }}
-                >
-                  {availabilitySelect}
-                </Field>
+                {availabilitySelect('emailSettingId', 'standard', availabilities)}
               </div>
 
               <div className="item info-item info-item-edit">
@@ -129,46 +122,29 @@ const EditProfileForm = ({
                     fullWidth
                   />
                 </div>
-                <Field
-                  component={Select}
-                  name="phonesettingid"
-                  label="Availability"
-                  variant="standard"
-                  sx={{
-                    width: '150px',
-                    height: '30px',
-                  }}
-                >
-                  {availabilitySelect}
-                </Field>
+
+                {availabilitySelect('phoneSettingId', 'standard', availabilities)}
               </div>
 
               <div className="item info-item info-item-edit">
                 <div className="values">
                   [Multiple select. Profiles universities]
                 </div>
-                <Field
-                  component={Select}
-                  name="universitysettingid"
-                  label="Availability"
-                  variant="standard"
-                  sx={{
-                    width: '150px',
-                    height: '30px',
-                  }}
-                >
-                  {availabilitySelect}
-                </Field>
+
+                {availabilitySelect('universitySettingId', 'standard', availabilities)}
+
               </div>
 
-              <Button
+              <LoadingButton
                 type="submit"
+                loading={isSubmitting}
+                loadingIndicator="Loading..."
                 variant="contained"
                 startIcon={<SaveIcon />}
                 disabled={!(dirty && isValid && !isSubmitting)}
               >
                 Save
-              </Button>
+              </LoadingButton>
             </div>
           </Form>
         )}

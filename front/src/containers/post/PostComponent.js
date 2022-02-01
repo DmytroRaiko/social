@@ -17,19 +17,18 @@ const PostComponent = ({ posts, refetch }) => {
           postAuthor={post.name}
           postId={post.postid}
           refetchQuery={refetch}
+          postEdit={post.changed}
+          postTime={post.timepost}
+          changeTime={post.timechanged}
         />
         <PostContent
           postId={post.postid}
           postText={post.text}
-          postEdit={post.changed}
-          postTime={post.timepost}
-          changeTime={post.timechanged}
         />
         <PostFooter
           postId={post.profileid}
           postLikes={post.totallikes}
           postComments={post.totalcomments}
-          totalViews={post.totalviews}
           postMyLike={post.postlikeid}
         />
       </ErrorBoundary>
