@@ -1,32 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
+import AddPostModal from './containers/modals/AddPostModal';
 
-const SiteHeader = ({ blocks }) => {
-  const headerButton = blocks.map((block) => (
-    <Link
-      key={block.path}
-      to={`/${block.path}`}
-    >
-      {block.title}
-    </Link>
-  ));
-
-  return (
-    <ErrorBoundary>
-      <div className="header-button-block">
-        {headerButton}
-      </div>
-    </ErrorBoundary>
-  );
-};
-
-SiteHeader.propTypes = {
-  blocks: PropTypes.arrayOf(PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    path: PropTypes.string.isRequired,
-  }).isRequired).isRequired,
-};
+const SiteHeader = () => (
+  <ErrorBoundary>
+    <div className="header-button-block">
+      <Link to="/articles">
+        Articles
+      </Link>
+      <AddPostModal />
+      <Link to="/profiles">
+        Profiles
+      </Link>
+    </div>
+  </ErrorBoundary>
+);
 
 export default SiteHeader;

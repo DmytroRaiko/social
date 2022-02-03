@@ -1,40 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import viewIcon from '../../icons/viewIcon.svg';
-import unLikeIcon from '../../icons/likeIcon.svg';
-import likeIcon from '../../icons/redLikeIcon.svg';
-import commentIcon from '../../icons/commentIcon.svg';
+import { IconButton } from '@mui/material';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import commentIcon from '../../services/icons/commentIcon.svg';
 
 const PostFooter = ({
-  postId, postLikes, postComments, totalViews, postMyLike,
+  postId, postLikes, postComments, postMyLike,
 }) => (
   <div className="post-footer">
-    <div className="footer-item">
-      <img src={viewIcon} alt="comments" />
-      {totalViews}
-    </div>
-    <div className="footer-item">
-      <img src={postMyLike ? likeIcon : unLikeIcon} alt="likes" />
-      {postLikes}
-    </div>
     <Link to={`/articles/${postId}/comments`} className="footer-item">
       <img src={commentIcon} alt="comments" />
       {postComments}
+      {' '}
+      comments
     </Link>
+    <div className="footer-item">
+      {postMyLike && 'I like it!, '}
+      {postLikes || ' '}
+      <IconButton className="like">
+        <FavoriteBorderIcon />
+      </IconButton>
+    </div>
   </div>
 );
 
 PostFooter.propTypes = {
   postId: PropTypes.number.isRequired,
-  totalViews: PropTypes.number,
   postLikes: PropTypes.number,
   postComments: PropTypes.number,
   postMyLike: PropTypes.number,
 };
 
 PostFooter.defaultProps = {
-  totalViews: 0,
   postLikes: 0,
   postComments: 0,
   postMyLike: 0,

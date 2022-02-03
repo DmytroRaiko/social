@@ -13,7 +13,6 @@ const Profile = () => {
 
     const {
       isFetching,
-      /* refetch, */
       data,
     } = useQuery(
       `profile-${profileId}`,

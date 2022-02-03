@@ -4,35 +4,31 @@ import PostContent from '../../components/post/PostContent';
 
 import './Post.css';
 import ErrorBoundary from '../../components/ErrorBoundary';
-import postComponentProps from '../../PropTypes/PostComponentProps';
-import postComponentPropsDefault from '../../PropTypes/PostComponentPropsDefault';
+import postComponentProps from '../../services/PropTypes/PostComponentProps';
+import postComponentPropsDefault from '../../services/PropTypes/PostComponentPropsDefault';
 
-const PostComponent = ({ posts, profilePage }) => {
+const PostComponent = ({ posts, refetch }) => {
   const postsList = posts?.map((post) => (
     <div className="post-body" key={`post-id-${post.postid}`}>
       <ErrorBoundary>
-        {!profilePage
-          && (
-          <PostHeader
-            profileId={post.profileid}
-            avatar={post.avatarlink}
-            postAuthor={post.name}
-            parentPostId={post.parentpostid}
-          />
-          )}
-        <PostContent
+        <PostHeader
+          profileId={post.profileid}
+          avatar={post.avatarlink}
+          postAuthor={post.name}
           postId={post.postid}
-          postText={post.text}
-          postImg={post.fotolink}
+          refetchQuery={refetch}
           postEdit={post.changed}
           postTime={post.timepost}
           changeTime={post.timechanged}
+        />
+        <PostContent
+          postId={post.postid}
+          postText={post.text}
         />
         <PostFooter
           postId={post.profileid}
           postLikes={post.totallikes}
           postComments={post.totalcomments}
-          totalViews={post.totalviews}
           postMyLike={post.postlikeid}
         />
       </ErrorBoundary>
