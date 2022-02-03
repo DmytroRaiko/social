@@ -1,8 +1,13 @@
 const router = require('express').Router();
 const selectServices = require('../services/store/select.services');
+const middleAsync = require('../middlewares/async');
+const auth = require('../middlewares/auth');
 
-router.get('/availability', async (req, res) => {
-  try {
+router.use(auth);
+
+router.get(
+  '/availability',
+  middleAsync(async (req, res) => {
     const availability = await selectServices.getAvailability();
 
     if (availability && Object.keys(availability).length) {
@@ -14,15 +19,12 @@ router.get('/availability', async (req, res) => {
         .status(404)
         .send({ message: 'Fetching availability', success: false });
     }
-  } catch (error) {
-    res
-      .status(500)
-      .send({ message: 'Data fetching error', error, success: false });
-  }
-});
+  })
+);
 
-router.get('/universities', async (req, res) => {
-  try {
+router.get(
+  '/universities',
+  middleAsync(async (req, res) => {
     const universities = await selectServices.getUniversities();
 
     if (universities && Object.keys(universities).length) {
@@ -34,11 +36,7 @@ router.get('/universities', async (req, res) => {
         .status(404)
         .send({ message: 'Fetching universities', success: false });
     }
-  } catch (error) {
-    res
-      .status(500)
-      .send({ message: 'Data fetching error', error, success: false });
-  }
-});
+  })
+);
 
 module.exports = router;
