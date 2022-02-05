@@ -13,6 +13,7 @@ const fileRoutes = require('./routes/files');
 const selectRoutes = require('./routes/select');
 const loginRoutes = require('./routes/login');
 const logs = require('./middlewares/logs');
+const errors = require('./middlewares/errors');
 const middlewareServices = require('./services/middlewares');
 
 app.use(logs(middlewareServices));
@@ -31,11 +32,7 @@ app.use('/select', selectRoutes);
 app.use('/login', loginRoutes);
 
 // eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  // eslint-disable-next-line no-console
-  console.log(err);
-  res.status(500).send('Something went wrong');
-});
+app.use(errors);
 
 app.listen(portApp, () => {
   // eslint-disable-next-line no-console
