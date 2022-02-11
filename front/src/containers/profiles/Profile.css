@@ -50,6 +50,7 @@
 
 .profile-button-group {
   width: 100%;
+  margin-top: 5px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -104,6 +105,31 @@
   width: 200px;
   height: 200px;
   font-size: 5.5rem;
+}
+
+.profile-page .profile-avatar .post-img {
+  position: relative;
+}
+
+.profile-page .profile-avatar .post-img div.avatar-buttons {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.profile-page .profile-avatar .post-img div.avatar-buttons {
+  background: rgba(187, 187, 187, 0.32);
+}
+
+.profile-page .profile-avatar .post-img:hover div.avatar-buttons {
+  display: flex;
+}
+.profile-page .profile-avatar .post-img div.avatar-buttons .avatar-button:first-child {
+  width: 100%;
 }
 
 .profile-page .profile-page-info.edit {
@@ -192,11 +218,18 @@
   flex-direction: row;
   width: 100%;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-top: 20px;
   padding-top: 5px;
 }
 
 .info-item-edit .value {
   width: 70%;
+}
+.university-autocomplete {
+  width: 300px;
+}
+
+.modal-crop {
+  width: auto;
 }

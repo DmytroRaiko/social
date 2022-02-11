@@ -15,7 +15,7 @@ module.exports = {
       .where('profileid', profileId),
   getProfileEditUniversities: async (profileId) =>
     db
-      .select('university.universityid')
+      .select('university.universityid', 'university.name')
       .from('universitylist')
       .join(
         'university',

@@ -1,9 +1,12 @@
 const router = require('express').Router();
+const fs = require('fs');
 const postsServices = require('../services/store/posts.services');
 const commentsServices = require('../services/store/comments.services');
 const likesServices = require('../services/store/likes.services');
 const middleAsync = require('../middlewares/async');
 const auth = require('../middlewares/auth');
+const upload = require('../services/multer/multer-post');
+const deletePostImage = require('../services/multer/deletePostImage');
 
 router.use(auth);
 
@@ -71,15 +74,36 @@ router.get(
   })
 );
 
+// show file
+
+router.get('/:profileid/:filename', (req, res) => {
+  const { profileid: profileId, filename: fileName } = req.params;
+
+  fs.stat(`./posts/${profileId}/${fileName}`, (err) => {
+    if (err === null) {
+      // File exist
+      res.status(200).sendfile(`./posts/${profileId}/${fileName}`);
+    } else if (err.code === 'ENOENT') {
+      // File does not exist
+      res.status(404).send({ message: 'File loading', success: false });
+    } else {
+      res.status(500).send({ message: 'Unknown error', success: false });
+    }
+  });
+});
+
 // add post
 
 router.post(
   '/',
+  upload.single('postImage'),
   middleAsync(async (req, res) => {
     const { profileid } = req;
+    const path = req.file ? req.file.path : null;
 
     const dataInsertPost = req.body;
     dataInsertPost.profileid = profileid;
+    dataInsertPost.imagelink = path;
 
     const addPost = await postsServices.addPost(dataInsertPost);
 
@@ -97,9 +121,15 @@ router.post(
 
 router.put(
   '/:postid',
+  upload.single('postImage'),
   middleAsync(async (req, res) => {
     const postId = req.params.postid;
     const dataUpdatePost = req.body;
+    const path = req.file ? req.file.path : null;
+
+    dataUpdatePost.imagelink = path;
+
+    await deletePostImage(postId);
 
     const updatePost = await postsServices.updatePost(dataUpdatePost, postId);
 
@@ -116,6 +146,7 @@ router.delete(
   '/:postid',
   middleAsync(async (req, res) => {
     const postId = req.params.postid;
+    await deletePostImage(postId);
 
     const deletePost = await postsServices.deletePost(postId);
 

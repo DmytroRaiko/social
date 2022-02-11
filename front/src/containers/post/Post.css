@@ -47,13 +47,20 @@
   border-radius: 3px;
 }
 
+.post-body .post-image {
+  margin-top: 5px;
+}
+
+.post-body .post-image img {
+  width: 100%;
+}
+
 .post-body:last-child {
   margin-bottom: 40px;
 }
 
 .post-footer-time {
   display: flex;
-  justify-content: flex-end;
 }
 
 .post-footer-time p {
@@ -130,6 +137,10 @@
   border-radius: 3px;
 }
 
+.modal textarea {
+  padding: 0 10px;
+}
+
 .modal .edit-modal-header,
 .modal .add-modal-header {
   border-bottom: 1px solid #e4e4e4;
@@ -146,4 +157,29 @@
 
 .modal .modal-footer-block {
   margin-top: 15px;
+}
+
+.attached-photo {
+  position: relative;
+  width: fit-content;
+  margin-top: 15px;
+}
+
+.attached-photo img {
+  width: auto;
+}
+
+.attached-photo .attached-photo-delete {
+  background: rgba(0, 0, 0, 0.64);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.attached-photo:hover .attached-photo-delete {
+  display: flex;
 }

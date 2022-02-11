@@ -1,6 +1,7 @@
 const multer = require('multer');
 const fs = require('fs');
 const mimetype = require('./mimetypeArray');
+const filter = require('./fileFilter');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -23,18 +24,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype &&
-    (file.mimetype === 'image/png' ||
-      file.mimetype === 'image/jpg' ||
-      file.mimetype === 'image/jpeg')
-  ) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
+const fileFilter = filter;
 
 const upload = multer({ storage, fileFilter });
 

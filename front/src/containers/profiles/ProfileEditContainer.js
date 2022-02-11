@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ProfileAvatar from '../../components/profile/ProfileAvatar';
-import EditProfileForm from '../../components/forms/EditProfileForm';
+import EditProfileAvatar from '../../components/profile/EditProfileAvatar';
+import EditProfileForm from '../post/forms/EditProfileForm';
 
 function ProfileEditContainer({ profileData, availabilities, university }) {
   const profile = profileData[0] || null;
@@ -10,7 +10,7 @@ function ProfileEditContainer({ profileData, availabilities, university }) {
     (profile && (
     <div className="profile-page">
       <div className="profile-avatar profile-left-bar">
-        <ProfileAvatar
+        <EditProfileAvatar
           avatarlink={profile.avatarlink}
           profileId={profile.profileid}
           name={profile.name}

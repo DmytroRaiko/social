@@ -1,12 +1,33 @@
+import { serialize } from 'object-to-formdata';
 import { apiClient } from '../../../config/axios';
 
 export const getPosts = async () => apiClient.get('/posts');
 
 export const getPost = async (id) => apiClient.get(`/posts/${id}`);
 
-export const addPost = async (data) => apiClient.post('/posts', data);
+export const addPost = async (data) => {
+  const formData = serialize(data, { indices: true });
 
-export const editPost = async (id, data) => apiClient.put(`/posts/${id}`, data);
+  return apiClient.post(
+    '/posts',
+    formData,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    },
+  );
+};
+
+export const editPost = async (id, data) => {
+  const formData = serialize(data, { indices: true });
+
+  return apiClient.put(
+    `/posts/${id}`,
+    formData,
+    {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    },
+  );
+};
 
 export const getPostEdit = async (id) => apiClient.get(`/posts/${id}/edit`);
 

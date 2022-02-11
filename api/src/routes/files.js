@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const fs = require('fs');
 const path = require('path');
-const upload = require('../services/multer-avatar');
-const mimetype = require('../services/mimetypeArray');
+const upload = require('../services/multer/multer-avatar');
+const mimetype = require('../services/multer/mimetypeArray');
 const filesServices = require('../services/store/files.services');
 const middleAsync = require('../middlewares/async');
 const auth = require('../middlewares/auth');
@@ -47,7 +47,7 @@ router.get(
 
 router.post(
   '/:profileid/avatar',
-  upload.single('profileAvatar'),
+  upload.single('avatar'),
   middleAsync(async (req, res) => {
     const { profileid } = req.params;
 
@@ -59,7 +59,7 @@ router.post(
         filedata.mimetype
       );
 
-      if (avatarUpdate && Object.keys(avatarUpdate).length) {
+      if (avatarUpdate) {
         res.status(200).send({
           message: 'Load avatar',
           data: filedata,
