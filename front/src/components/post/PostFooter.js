@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import commentIcon from '../../services/icons/commentIcon.svg';
 
 const PostFooter = ({
@@ -16,10 +17,11 @@ const PostFooter = ({
       comments
     </Link>
     <div className="footer-item">
-      {postMyLike && 'I like it!, '}
       {postLikes || ' '}
-      <IconButton className="like">
-        <FavoriteBorderIcon />
+      <IconButton className="like" color="warning">
+        {postMyLike
+          ? <FavoriteIcon />
+          : <FavoriteBorderIcon />}
       </IconButton>
     </div>
   </div>

@@ -66,8 +66,8 @@ const PostHeader = ({
 
             {postEdit && (
               <p className="post-edit" title={dateFormat(changeTime)}>
-                {' '}
-                , edited
+                {'  '}
+                (edited)
               </p>
             )}
           </div>
