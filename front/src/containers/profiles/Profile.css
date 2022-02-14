@@ -1,4 +1,4 @@
-.site-body a.profile-card {
+.site-body .profile-card {
   text-decoration: none;
   color: #0E0E0E;
   width: 50%;
@@ -12,61 +12,48 @@
   align-items: center;
 }
 
-.site-body a.profile-card:last-child {
+.site-body .profile-card:last-child {
   margin-bottom: 40px;
 }
 
-.site-body a div.profile-card-info {
+.site-body div a.profile-card-info {
   text-decoration: none;
   color: #0E0E0E;
-  width: 50%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
 }
 
-.site-body a.profile-card p {
+.site-body div.profile-card .post-img {
   margin: 0;
 }
 
-.site-body a.profile-card p.post-img {
-  margin-right: 20px;
-  padding-right: 10px;
-  border-right: 1px solid #e4e4e4;
-}
-
-.site-body a.profile-card p.post-img img {
+.site-body div.profile-card .post-img img,
+.site-body div.profile-card .post-img div.MuiAvatar-root {
   width: 75px;
+  height: 75px;
+  margin: 0;
+  font-size: 2rem;
 }
 
-.site-body a.profile-card div.profile-list-name {
+.site-body div.profile-card div.profile-list-name {
   font-size: 30px;
-}
-
-.add-friend-button {
-  background: rgb(29, 155, 240);
-  border-radius: 4px;
-  border: 1px solid #1e458a;
-  height: 40px;
-  width: 88px;
-  color: white;
-  padding: 0 30px;
-  font-weight: 600;
+  padding-left: 20px;
+  margin-left: 10px;
+  border-left: 1px solid #e4e4e4;
+  height: 75px;
   display: flex;
   align-items: center;
-  justify-content: center
 }
 
-.add-friend-button:hover::after {
-  content: "+";
-  font-size: 30px;
-  margin-left: 5px;
-}
-
-.add-friend-button:hover {
-  background: #1e458a;
-  font-size: 0;
+.profile-button-group {
+  width: 100%;
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .profile-main-page {
@@ -86,6 +73,7 @@
 }
 
 .profile-page div.block-shadow {
+  border-radius: 3px;
   padding: 10px;
   box-shadow: 0 5px 11px 1px #e4e4e4;
 }
@@ -104,8 +92,50 @@
   width: 250px;
 }
 
+.profile-page .profile-avatar img,
+.profile-page .profile-avatar .post-img div {
+  margin-bottom: 20px;
+}
+
 .profile-page .profile-avatar img {
   width: 240px;
+}
+
+.profile-page .profile-avatar .post-img div {
+  width: 200px;
+  height: 200px;
+  font-size: 5.5rem;
+}
+
+.profile-page .profile-avatar .post-img {
+  position: relative;
+}
+
+.profile-page .profile-avatar .post-img div.avatar-buttons {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.profile-page .profile-avatar .post-img div.avatar-buttons {
+  background: rgba(187, 187, 187, 0.32);
+}
+
+.profile-page .profile-avatar .post-img:hover div.avatar-buttons {
+  display: flex;
+}
+.profile-page .profile-avatar .post-img div.avatar-buttons .avatar-button:first-child {
+  width: 100%;
+}
+
+.profile-page .profile-page-info.edit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .profile-page .profile-page-info .profile-name {
@@ -114,6 +144,12 @@
   text-align: right;
   font-size: 30px;
   font-weight: 600;
+}
+
+.profile-page .profile-page-info .profile-name.edit {
+  border-bottom: 0;
+  padding-bottom: 0;
+  width: 100%;
 }
 
 .profile-page .profile-page-right-colmn .post-body {
@@ -175,4 +211,25 @@
 
 .profile-page .profile-page-info .profile-information .info-item:first-child {
   border-top: 0;
+}
+
+.info-item-edit {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 20px;
+  padding-top: 5px;
+}
+
+.info-item-edit .value {
+  width: 70%;
+}
+.university-autocomplete {
+  width: 300px;
+}
+
+.modal-crop {
+  width: auto;
 }

@@ -1,29 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import avatarIcon from '../../icons/avatarIcon.svg';
+import { Avatar, Button } from '@mui/material';
+import stringAvatar from '../../services/icons/avatarIcon';
+import projectSettings from '../../settings';
 
 function ProfilesComponent({ profiles }) {
   const profilesList = profiles?.map((profile) => (
-    <Link className="profile-card" to={`/profile/${profile.profileid}`} key={`profile-${profile.profileid}`}>
-      <div className="profile-card-info">
-        <p className="post-img">
-          <img
-            src={
-              (profile.avatarlink && `http://localhost:9000/files/avatar/${profile.profileid}`)
-              || avatarIcon
-            }
-            alt="post"
-          />
-        </p>
+    <div className="profile-card" key={`profile-${profile.profileid}`}>
+      <Link className="profile-card-info" to={`/profile/${profile.profileid}`}>
+        <div className="post-img">
+          {(profile.avatarlink
+              && <img src={`${projectSettings.URI}/files/avatar/${profile.profileid}`} alt="avatar" />
+          )
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            || <Avatar className="post-img" {...stringAvatar(profile.name)} />}
+        </div>
 
         <div className="profile-list-name">
           {profile.name}
         </div>
-      </div>
+      </Link>
 
-      <button type="button" className="add-friend-button">Add</button>
-    </Link>
+      <Button variant="contained">Add</Button>
+    </div>
   ));
 
   return profilesList || <div> no any profile </div>;

@@ -9,12 +9,10 @@ module.exports = {
         'profile.avatarlink',
         'post.*',
         'poststatistic.*',
-        'imagelist.fotolink',
         'mylike.postlikeid'
       )
       .from('profile')
       .join('post', 'post.profileid', '=', 'profile.profileid')
-      .leftJoin('imagelist', 'post.postid', '=', 'imagelist.postid')
       .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
       .leftJoin(
         db
@@ -34,12 +32,14 @@ module.exports = {
     db
       .select(
         'post.*',
+        'profile.profileid',
+        'profile.name',
+        'profile.avatarlink',
         'poststatistic.*',
-        'imagelist.fotolink',
         'mylike.postlikeid'
       )
       .from('post')
-      .leftJoin('imagelist', 'post.postid', '=', 'imagelist.postid')
+      .join('profile', 'post.profileid', '=', 'profile.profileid')
       .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
       .leftJoin(
         db
@@ -64,12 +64,10 @@ module.exports = {
         'profile.avatarlink',
         'post.*',
         'poststatistic.*',
-        'imagelist.fotolink',
         'mylike.postlikeid'
       )
       .from('profile')
       .join('post', 'post.profileid', '=', 'profile.profileid')
-      .leftJoin('imagelist', 'post.postid', '=', 'imagelist.postid')
       .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
       .leftJoin(
         db
@@ -83,9 +81,28 @@ module.exports = {
         'mylike.postid'
       )
       .where('post.postid', '=', postId),
+  getPostEdit: async (postId) =>
+    db
+      .select(
+        'post.text',
+        'post.imagelink',
+        'availability.availabilityid',
+        'availability.availability'
+      )
+      .first()
+      .from('post')
+      .join(
+        'availability',
+        'post.postavailabilityid',
+        '=',
+        'availability.availabilityid'
+      )
+      .where('postid', postId),
   addPost: async (insertData) => db('post').insert(insertData),
+  getPostImageName: async (postId) =>
+    db.select('imagelink').first().from('post').where('postid', '=', postId),
   updatePost: async (updateData, postId) =>
-    db('post').update(updateData).where('postid', postId),
+    db('post').update(updateData).where('postid', '=', postId),
   deletePost: async (postId) =>
     db.from('post').where('postid', postId).delete(),
 };

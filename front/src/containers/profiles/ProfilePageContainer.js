@@ -1,8 +1,8 @@
 import React from 'react';
-import profileDataProps from '../../PropTypes/ProfileDataProps';
+import profileDataProps from '../../services/PropTypes/ProfileDataProps';
 import ProfilePageMainInfo from '../../components/profile/ProfilePageMainInfo';
-import ProfileAvatar from '../../components/profile/ProfileAvatar';
 import ProfilePosts from './ProfilePosts';
+import ProfileAvatar from '../../components/profile/ProfileAvatar';
 
 function ProfilePageContainer({ profileData }) {
   const profile = profileData[0] || null;
@@ -11,7 +11,11 @@ function ProfilePageContainer({ profileData }) {
     (profile && (
     <div className="profile-page">
       <div className="profile-avatar profile-left-bar">
-        <ProfileAvatar avatarlink={profile.avatarlink} profileId={profile.profileid} />
+        <ProfileAvatar
+          avatarlink={profile.avatarlink}
+          profileId={profile.profileid}
+          name={profile.name}
+        />
         <div className="profile-left-bar">
           {null}
         </div>

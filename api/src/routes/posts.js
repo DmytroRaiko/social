@@ -1,54 +1,45 @@
 const router = require('express').Router();
+const fs = require('fs');
 const postsServices = require('../services/store/posts.services');
 const commentsServices = require('../services/store/comments.services');
 const likesServices = require('../services/store/likes.services');
+const middleAsync = require('../middlewares/async');
+const auth = require('../middlewares/auth');
+const upload = require('../services/multer/multer-post');
+const deletePostImage = require('../services/multer/deletePostImage');
 
-// -- must to be change -- start
-// ниже заглушка!
-const setGetCookie = (req, res) => {
-  res.cookie('profileid', 1);
-  return req.cookies.profileid || 1;
-};
-// -- end
+router.use(auth);
 
-// show all posts
+router.get(
+  '/',
+  middleAsync(async (req, res) => {
+    const { profileid } = req;
 
-router.get('/', async (req, res) => {
-  const profileid = setGetCookie(req, res);
+    const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
+    const limit = page * 10;
+    const offset = (page - 1) * 10;
 
-  const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
-  const limit = page * 10;
-  const offset = (page - 1) * 10;
+    const posts = await postsServices.getAllPosts(profileid, offset, limit);
 
-  if (profileid !== null) {
-    try {
-      const posts = await postsServices.getAllPosts(profileid, offset, limit);
-
-      if (posts && Object.keys(posts).length) {
-        res
-          .status(200)
-          .send({ message: 'Show posts', data: posts, success: true });
-      } else {
-        res.status(404).send({ message: 'Not found', success: false });
-      }
-    } catch (error) {
+    if (posts && Object.keys(posts).length) {
       res
-        .status(500)
-        .send({ message: 'Data fetching error', error, success: false });
+        .status(200)
+        .send({ message: 'Show posts', data: posts, success: true });
+    } else {
+      res.status(404).send({ message: 'Not found', success: false });
     }
-  } else {
-    res.status(401).send({ message: 'Access denied', success: false });
-  }
-});
+  })
+);
 
 // show post where postid = :postid
 
-router.get('/:postid', async (req, res) => {
-  const postId = req.params.postid;
-  const profileid = setGetCookie(req, res);
+router.get(
+  '/:postid',
+  middleAsync(async (req, res) => {
+    const postId = req.params.postid;
+    const { profileid } = req;
 
-  if (profileid !== null) {
-    try {
+    if (profileid !== null) {
       const post = await postsServices.getPost(profileid, postId);
 
       if (post && Object.keys(post).length) {
@@ -58,74 +49,108 @@ router.get('/:postid', async (req, res) => {
       } else {
         res.status(404).send({ message: 'Not found', success: false });
       }
-    } catch (error) {
-      res
-        .status(500)
-        .send({ message: 'Data fetching error', error, success: false });
+    } else {
+      res.status(401).send({ message: 'Access denied', success: false });
     }
-  } else {
-    res.status(401).send({ message: 'Access denied', success: false });
-  }
+  })
+);
+
+// show post for edit
+
+router.get(
+  '/:postid/edit',
+  middleAsync(async (req, res) => {
+    const postId = req.params.postid;
+
+    const post = await postsServices.getPostEdit(postId);
+
+    if (post && Object.keys(post).length) {
+      res
+        .status(200)
+        .send({ message: 'Post fetching', data: post, success: true });
+    } else {
+      res.status(404).send({ message: 'Not found', success: false });
+    }
+  })
+);
+
+// show file
+
+router.get('/:profileid/:filename', (req, res) => {
+  const { profileid: profileId, filename: fileName } = req.params;
+
+  fs.stat(`./posts/${profileId}/${fileName}`, (err) => {
+    if (err === null) {
+      // File exist
+      res.status(200).sendfile(`./posts/${profileId}/${fileName}`);
+    } else if (err.code === 'ENOENT') {
+      // File does not exist
+      res.status(404).send({ message: 'File loading', success: false });
+    } else {
+      res.status(500).send({ message: 'Unknown error', success: false });
+    }
+  });
 });
 
 // add post
 
-router.post('/', async (req, res) => {
-  const author = setGetCookie(req, res);
+router.post(
+  '/',
+  upload.single('postImage'),
+  middleAsync(async (req, res) => {
+    const { profileid } = req;
+    const path = req.file ? req.file.path : null;
 
-  if (author !== null) {
     const dataInsertPost = req.body;
-    dataInsertPost.profileid = author;
+    dataInsertPost.profileid = profileid;
+    dataInsertPost.imagelink = path;
 
-    try {
-      const addPost = await postsServices.addPost(dataInsertPost);
+    const addPost = await postsServices.addPost(dataInsertPost);
 
-      if (addPost && Object.keys(addPost).length) {
-        res
-          .status(200)
-          .send({ message: 'Post adding', data: addPost, success: true });
-      } else {
-        res.status(404).send({ message: 'Not found', success: false });
-      }
-    } catch (error) {
+    if (addPost && Object.keys(addPost).length) {
       res
-        .status(500)
-        .send({ message: 'Error adding data', error, success: false });
+        .status(200)
+        .send({ message: 'Post adding', data: addPost, success: true });
+    } else {
+      res.status(404).send({ message: 'Not found', success: false });
     }
-  } else {
-    res.status(401).send({ message: 'Access denied', success: false });
-  }
-});
+  })
+);
 
 // update post
 
-router.put('/:postid', async (req, res) => {
-  const postId = req.params.postid;
-  const dataUpdatePost = req.body;
+router.put(
+  '/:postid',
+  upload.single('postImage'),
+  middleAsync(async (req, res) => {
+    const postId = req.params.postid;
+    const dataUpdatePost = req.body;
+    const path = req.file ? req.file.path : null;
 
-  try {
+    dataUpdatePost.imagelink = path;
+
+    await deletePostImage(postId);
+
     const updatePost = await postsServices.updatePost(dataUpdatePost, postId);
 
-    if (updatePost && Object.keys(updatePost).length) {
+    if (updatePost) {
       res.status(200).send({ message: 'Post updating', success: true });
     } else {
       res.status(404).send({ message: 'Not found', success: false });
     }
-  } catch (error) {
-    res
-      .status(500)
-      .send({ message: 'Data updating error', error, success: false });
-  }
-});
+  })
+);
 
 // delete post
-router.delete('/:postid', async (req, res) => {
-  const postId = req.params.postid;
+router.delete(
+  '/:postid',
+  middleAsync(async (req, res) => {
+    const postId = req.params.postid;
+    await deletePostImage(postId);
 
-  try {
     const deletePost = await postsServices.deletePost(postId);
 
-    if (deletePost && Object.keys(deletePost).length) {
+    if (deletePost) {
       res.status(200).send({
         message: 'Post deleting',
         data: deletePost,
@@ -134,23 +159,20 @@ router.delete('/:postid', async (req, res) => {
     } else {
       res.status(404).send({ message: 'Not found', success: false });
     }
-  } catch (error) {
-    res
-      .status(500)
-      .send({ message: 'Data deleting error', error, success: false });
-  }
-});
+  })
+);
 
 // show all comments
 
-router.get('/:postid/comments', async (req, res) => {
-  const postId = req.params.postid;
+router.get(
+  '/:postid/comments',
+  middleAsync(async (req, res) => {
+    const postId = req.params.postid;
 
-  const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
-  const limit = page * 30;
-  const offset = (page - 1) * 30;
+    const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
+    const limit = page * 30;
+    const offset = (page - 1) * 30;
 
-  try {
     const commentsForPost = await commentsServices.getComments(
       postId,
       offset,
@@ -166,119 +188,94 @@ router.get('/:postid/comments', async (req, res) => {
     } else {
       res.status(200).send({ message: 'Not found', success: false });
     }
-  } catch (error) {
-    res
-      .status(500)
-      .send({ message: 'Data fetching error', error, success: false });
-  }
-});
+  })
+);
 
 // add comment
 
-router.post('/:postid/comments', async (req, res) => {
-  const author = setGetCookie(req, res);
+router.post(
+  '/:postid/comments',
+  middleAsync(async (req, res) => {
+    const { profileid } = req;
 
-  if (author !== null) {
     const dataInsertComment = req.body;
-    dataInsertComment.profileid = author;
+    dataInsertComment.profileid = profileid;
     dataInsertComment.postid = req.params.postid;
 
-    try {
-      const addComment = await commentsServices.addComment(dataInsertComment);
+    const addComment = await commentsServices.addComment(dataInsertComment);
 
-      if (addComment && Object.keys(addComment).length) {
-        res
-          .status(200)
-          .send({ message: 'Post adding', data: addComment, success: true });
-      } else {
-        res
-          .status(404)
-          .send({ message: 'Not found', countComments: 0, success: true });
-      }
-    } catch (error) {
+    if (addComment && Object.keys(addComment).length) {
       res
-        .status(500)
-        .send({ message: 'Data add error', error, success: false });
+        .status(200)
+        .send({ message: 'Post adding', data: addComment, success: true });
+    } else {
+      res
+        .status(404)
+        .send({ message: 'Not found', countComments: 0, success: true });
     }
-  } else {
-    res.status(401).send({ message: 'Access denied', success: false });
-  }
-});
+  })
+);
 
 // change comment
 
-router.put('/:postid/comment/:commentid', async (req, res) => {
-  const author = setGetCookie(req, res);
-  const commentId = req.params.commentid;
+router.put(
+  '/:postid/comment/:commentid',
+  middleAsync(async (req, res) => {
+    const commentId = req.params.commentid;
 
-  if (author !== null) {
     const dataInsertComment = req.body;
 
-    try {
-      const changeComment = await commentsServices.updateComment(
-        dataInsertComment,
-        commentId
-      );
+    const changeComment = await commentsServices.updateComment(
+      dataInsertComment,
+      commentId
+    );
 
-      if (changeComment && Object.keys(changeComment).length) {
-        res.status(200).send({
-          message: 'Comment changing',
-          data: changeComment,
-          success: true,
-        });
-      } else {
-        res.status(404).send({ message: 'Not found', success: false });
-      }
-    } catch (error) {
-      res
-        .status(500)
-        .send({ message: 'Data changing error', error, success: false });
+    if (changeComment) {
+      res.status(200).send({
+        message: 'Comment changing',
+        data: changeComment,
+        success: true,
+      });
+    } else {
+      res.status(404).send({ message: 'Not found', success: false });
     }
-  } else {
-    res.status(401).send({ message: 'Access denied', success: false });
-  }
-});
+  })
+);
 
 // delete comment
 
-router.delete('/:postid/comment/:commentid', async (req, res) => {
-  const author = setGetCookie(req, res);
-  const commentId = req.params.commentid;
+router.delete(
+  '/:postid/comment/:commentid',
+  middleAsync(async (req, res) => {
+    const { profileid } = req;
+    const commentId = req.params.commentid;
 
-  if (author !== null) {
-    try {
-      const deleteComment = await commentsServices.deleteComment(
-        commentId,
-        author
-      );
+    const deleteComment = await commentsServices.deleteComment(
+      commentId,
+      profileid
+    );
 
-      if (deleteComment && Object.keys(deleteComment).length) {
-        res.status(200).send({
-          message: 'Comment deleting',
-          data: deleteComment,
-          success: true,
-        });
-      } else {
-        res.status(404).send({ message: 'Not found', success: false });
-      }
-    } catch (error) {
-      res
-        .status(500)
-        .send({ message: 'Data deleting error', error, success: false });
+    if (deleteComment) {
+      res.status(200).send({
+        message: 'Comment deleting',
+        data: deleteComment,
+        success: true,
+      });
     }
-  }
-});
+  })
+);
 
 // show all likes
 
-router.get('/:postid/likes', async (req, res) => {
-  const postId = req.params.postid;
+router.get(
+  '/:postid/likes',
+  middleAsync(async (req, res) => {
+    const postId = req.params.postid;
 
-  const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
-  const limit = page * 50;
-  const offset = (page - 1) * 50;
+    const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
+    const limit = page * 50;
+    const offset = (page - 1) * 50;
 
-  try {
     const likesForPost = await likesServices.getLikes(postId, offset, limit);
 
     if (likesForPost && Object.keys(likesForPost).length) {
@@ -291,71 +288,53 @@ router.get('/:postid/likes', async (req, res) => {
     } else {
       res.status(200).send({ message: 'Not found', success: false });
     }
-  } catch (error) {
-    res
-      .status(500)
-      .send({ message: 'Data fetching error', error, success: false });
-  }
-});
+  })
+);
 
 // post like
 
-router.post('/:postid/likes', async (req, res) => {
-  const profileId = setGetCookie(req, res);
+router.post(
+  '/:postid/likes',
+  middleAsync(async (req, res) => {
+    const { profileid } = req;
 
-  if (profileId !== null) {
     const dataLike = {
-      profileid: profileId,
+      profileid,
       postid: req.params.postid,
     };
 
-    try {
-      const likePost = await likesServices.addLike(dataLike);
+    const likePost = await likesServices.addLike(dataLike);
 
-      if (likePost && Object.keys(likePost).length) {
-        res
-          .status(200)
-          .send({ message: 'Like adding', data: likePost, success: true });
-      } else {
-        res
-          .status(404)
-          .send({ message: 'Not found', countLikes: 0, success: true });
-      }
-    } catch (error) {
+    if (likePost && Object.keys(likePost).length) {
       res
-        .status(500)
-        .send({ message: 'Data add error', error, success: false });
+        .status(200)
+        .send({ message: 'Like adding', data: likePost, success: true });
+    } else {
+      res
+        .status(404)
+        .send({ message: 'Not found', countLikes: 0, success: true });
     }
-  } else {
-    res.status(401).send({ message: 'Access denied', success: false });
-  }
-});
+  })
+);
 
 // post unlike
 
-router.delete('/:postid/likes', async (req, res) => {
-  const profileId = setGetCookie(req, res);
-  const postId = req.params.postid;
+router.delete(
+  '/:postid/likes',
+  middleAsync(async (req, res) => {
+    const profileId = req.profileid;
+    const postId = req.params.postid;
 
-  if (profileId !== null) {
-    try {
-      const unlikePost = await likesServices.deleteLike(postId, profileId);
+    const unlikePost = await likesServices.deleteLike(postId, profileId);
 
-      if (unlikePost && Object.keys(unlikePost).length) {
-        res.status(200).send({
-          message: 'Unlike post',
-          data: unlikePost,
-          success: true,
-        });
-      } else {
-        res.status(404).send({ message: 'Not found', success: false });
-      }
-    } catch (error) {
-      res
-        .status(500)
-        .send({ message: 'Data deleting error', error, success: false });
+    if (unlikePost) {
+      res.status(200).send({
+        message: 'Unlike post',
+        data: unlikePost,
+        success: true,
+      });
     }
-  }
-});
+  })
+);
 
 module.exports = router;

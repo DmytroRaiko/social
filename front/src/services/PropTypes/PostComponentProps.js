@@ -2,7 +2,7 @@ const PropTypes = require('prop-types');
 
 module.exports = {
   posts: PropTypes.arrayOf(
-    PropTypes.shape().isRequired,
+    PropTypes.shape({}).isRequired,
   ),
   profilePage: PropTypes.bool,
 };

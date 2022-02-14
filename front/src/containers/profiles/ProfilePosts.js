@@ -7,7 +7,7 @@ import PostComponent from '../post/PostComponent';
 const ProfilePosts = ({ profileId }) => {
   const {
     isFetching,
-    /* refetch, */
+    refetch,
     data,
   } = useQuery(
     `profile-post-${profileId}`,
@@ -18,7 +18,7 @@ const ProfilePosts = ({ profileId }) => {
   return (
     <>
       {isFetching && <div>Loading...</div>}
-      <PostComponent posts={posts} profilePage />
+      {data && <PostComponent posts={posts} refetch={refetch} />}
     </>
   );
 };

@@ -60,6 +60,48 @@ module.exports = {
         'a3.availabilityid'
       )
       .where('profile.profileid', profileId),
+  getEditProfile: async (profileId) =>
+    db
+      .select(
+        'profile.name',
+        'profile.phone',
+        'profile.email',
+        'profile.avatarlink',
+        'profile.profileid',
+        'a1.availabilityid as emailsettingid',
+        'a1.availability as emailsetting',
+        'a2.availabilityid as phonesettingid',
+        'a2.availability as phonesetting',
+        'a3.availabilityid as universitysettingid',
+        'a3.availability as universitysetting'
+      )
+      .from('profile')
+      .join(
+        'profilesetting',
+        'profilesetting.profileid',
+        '=',
+        'profile.profileid'
+      )
+      .as('settingsTable')
+      .join(
+        'availability as a1',
+        'profilesetting.emailsettingid',
+        '=',
+        'a1.availabilityid'
+      )
+      .join(
+        'availability as a2',
+        'profilesetting.phonesettingid',
+        '=',
+        'a2.availabilityid'
+      )
+      .join(
+        'availability as a3',
+        'profilesetting.universitysettingid',
+        '=',
+        'a3.availabilityid'
+      )
+      .where('profile.profileid', profileId),
   addProfile: async (insertData) => db('profile').insert(insertData),
   updateProfile: async (updateData, profileId) =>
     db('profile').update(updateData).where('profileid', profileId),

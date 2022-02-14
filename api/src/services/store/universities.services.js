@@ -13,6 +13,17 @@ module.exports = {
         'universitylist.universityid'
       )
       .where('profileid', profileId),
+  getProfileEditUniversities: async (profileId) =>
+    db
+      .select('university.universityid', 'university.name')
+      .from('universitylist')
+      .join(
+        'university',
+        'university.universityid',
+        '=',
+        'universitylist.universityid'
+      )
+      .where('profileid', profileId),
   addUniversity: async (insertData) => db('universityId').insert(insertData),
   updateUniversity: async (updateData, universityId) =>
     db('university').insert(updateData).where('universityid', universityId),

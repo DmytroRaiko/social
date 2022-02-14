@@ -1,54 +1,31 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-
-const dateFormat = (d) => {
-  const date = new Date(d);
-  return `${date.getDate()}-${
-    date.getMonth() + 1 < 10 ? '0' : ''}${date.getMonth() + 1}-${
-    date.getFullYear()} at ${date.getHours()}:${
-    date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()}`;
-};
+import settings from '../../settings';
 
 const PostContent = ({
-  postId, postText, postImg, postEdit, postTime, changeTime,
+  postId, postText, postImage,
 }) => (
-  <Link to={`/article/${postId}`} className="post-content">
-    { postImg && (
-      <p className="post-img">
-        <img src={postImg} alt="post" />
-      </p>
-    )}
-
-    <p className="post-text">{postText}</p>
-
-    <div className="post-footer-time">
-      {postEdit && (
-        <p className="post-edit" title={dateFormat(changeTime)}>
-          edited,
-          {' '}
-        </p>
+  <>
+    {postImage
+      && (
+        <div className="post-image">
+          <img src={`${settings.URI}/${postImage}`} alt="Post" />
+        </div>
       )}
-
-      <p className="post-time">
-        {dateFormat(postTime)}
-      </p>
-    </div>
-  </Link>
+    <Link to={`/article/${postId}`} className="post-content">
+      <p className="post-text">{postText}</p>
+    </Link>
+  </>
 );
 
 PostContent.propTypes = {
   postId: PropTypes.number.isRequired,
   postText: PropTypes.string.isRequired,
-  postImg: PropTypes.string,
-  postEdit: PropTypes.bool,
-  changeTime: PropTypes.string,
-  postTime: PropTypes.string.isRequired,
+  postImage: PropTypes.string,
 };
 
 PostContent.defaultProps = {
-  postImg: null,
-  postEdit: 0,
-  changeTime: null,
+  postImage: null,
 };
 
 export default PostContent;
