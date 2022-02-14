@@ -4,6 +4,7 @@ const postsServices = require('../services/store/posts.services');
 const universitiesServices = require('../services/store/universities.services');
 const middleAsync = require('../middlewares/async');
 const auth = require('../middlewares/auth');
+const NotFoundException = require('../services/errors/NotFoundException');
 
 router.use(auth);
 
@@ -17,13 +18,13 @@ router.get(
     const profiles = await profilesServices.getProfiles(offset, limit);
 
     if (profiles && Object.keys(profiles).length) {
-      res.status(200).send({
+      res.send({
         message: 'Fetching profiles',
         data: profiles,
         success: true,
       });
     } else {
-      res.status(404).send({ message: 'Not found', success: false });
+      throw new NotFoundException('Profiles');
     }
   })
 );
@@ -46,11 +47,9 @@ router.get(
         profile[0].universities = universityList;
       }
 
-      res
-        .status(200)
-        .send({ message: 'Fetching profile', data: profile, success: true });
+      res.send({ message: 'Fetching profile', data: profile, success: true });
     } else {
-      res.status(404).send({ message: 'Not found', success: false });
+      throw new NotFoundException('Profile not found');
     }
   })
 );
@@ -72,11 +71,9 @@ router.get(
         profile[0].universities = universityList;
       }
 
-      res
-        .status(200)
-        .send({ message: 'Fetching profile', data: profile, success: true });
+      res.send({ message: 'Fetching profile', data: profile, success: true });
     } else {
-      res.status(404).send({ message: 'Not found', success: false });
+      throw new NotFoundException('Edited profile not found');
     }
   })
 );
@@ -91,11 +88,9 @@ router.post(
     const addPofile = await profilesServices.addProfile(dataInsertProfile);
 
     if (addPofile && Object.keys(addPofile).length) {
-      res
-        .status(200)
-        .send({ message: 'Profile adding', data: addPofile, success: true });
+      res.send({ message: 'Profile adding', data: addPofile, success: true });
     } else {
-      res.status(404).send({ message: 'Not found', success: false });
+      throw new NotFoundException('Profile not found');
     }
   })
 );
@@ -106,7 +101,7 @@ router.put(
   '/:profileid',
   middleAsync(async (req, res) => {
     const profileId = req.params.profileid;
-    console.log(req.body);
+
     const dataUpdateProfile = {
       name: req.body.name,
       email: req.body.email || null,
@@ -119,13 +114,13 @@ router.put(
     );
 
     if (updateProfile) {
-      res.status(200).send({
+      res.send({
         message: 'Profile updating',
         data: updateProfile,
         success: true,
       });
     } else {
-      res.status(404).send({ message: 'Profile updating', success: false });
+      throw new NotFoundException('Profile not found');
     }
   })
 );
@@ -140,9 +135,9 @@ router.delete(
     const deleteProfile = await profilesServices.deleteProfile(profileId);
 
     if (deleteProfile) {
-      res.status(200).send({ message: 'Profile deleting', success: true });
+      res.send({ message: 'Profile deleting', success: true });
     } else {
-      res.status(404).send({ message: 'Profile deleting', success: false });
+      throw new NotFoundException('Profile not found');
     }
   })
 );
@@ -158,15 +153,13 @@ router.get(
     const posts = await postsServices.getAllUserPosts(profileId, userProfileId);
 
     if (posts && Object.keys(posts).length) {
-      res.status(200).send({
+      res.send({
         message: 'Show all posts for profile',
         data: posts,
         success: true,
       });
     } else {
-      res
-        .status(200)
-        .send({ message: 'Not found', success: false, data: null });
+      throw new NotFoundException('There no posts yet here!');
     }
   })
 );

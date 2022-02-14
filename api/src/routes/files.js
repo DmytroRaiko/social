@@ -6,6 +6,7 @@ const mimetype = require('../services/multer/mimetypeArray');
 const filesServices = require('../services/store/files.services');
 const middleAsync = require('../middlewares/async');
 const auth = require('../middlewares/auth');
+const NotFoundException = require('../services/errors/NotFoundException');
 
 router.use(auth);
 
@@ -24,21 +25,19 @@ router.get(
         (err) => {
           if (err === null) {
             // File exist
-            res
-              .status(200)
-              .sendfile(
-                `./avatars/${profileid}/avatar${mimetype[avatar[0].avatarlink]}`
-              );
+            res.sendfile(
+              `./avatars/${profileid}/avatar${mimetype[avatar[0].avatarlink]}`
+            );
           } else if (err.code === 'ENOENT') {
             // File does not exist
-            res.status(404).send({ message: 'File loading', success: false });
+            throw new NotFoundException('Profile avatar did`t found');
           } else {
-            res.status(500).send({ message: 'Unknown error', success: false });
+            throw new Error(err);
           }
         }
       );
     } else {
-      res.status(200).send({ message: 'File loading', success: false });
+      throw new NotFoundException('Profile avatar did`t found');
     }
   })
 );
@@ -60,24 +59,16 @@ router.post(
       );
 
       if (avatarUpdate) {
-        res.status(200).send({
+        res.send({
           message: 'Load avatar',
           data: filedata,
           success: true,
         });
       } else {
-        res.status(200).send({
-          message: 'Load avatar',
-          data: null,
-          success: false,
-        });
+        throw new NotFoundException('Load avatar!');
       }
     } else {
-      res.status(404).send({
-        message: 'Error to load avatar',
-        data: null,
-        success: false,
-      });
+      throw new NotFoundException('Load avatar!');
     }
   })
 );
@@ -94,11 +85,7 @@ router.delete(
     if (avatarDelete) {
       fs.readdir(`./avatars/${profileid}`, (err, files) => {
         if (err) {
-          res.status(500).send({
-            message: 'Drop avatar',
-            error: err,
-            success: false,
-          });
+          throw new Error(err);
         } else {
           files.forEach((file) => {
             const fileDir = path.join(`./avatars/${profileid}`, file);
@@ -107,7 +94,7 @@ router.delete(
               fs.unlinkSync(fileDir);
             }
           });
-          res.status(200).send({
+          res.send({
             message: 'Drop avatar',
             data: avatarDelete,
             success: true,
@@ -115,11 +102,7 @@ router.delete(
         }
       });
     } else {
-      res.status(200).send({
-        message: 'Drop avatar',
-        data: null,
-        success: false,
-      });
+      throw new NotFoundException('Avatar not found');
     }
   })
 );
