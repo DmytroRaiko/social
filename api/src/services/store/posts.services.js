@@ -83,11 +83,24 @@ module.exports = {
       .where('post.postid', '=', postId),
   getPostEdit: async (postId) =>
     db
-      .select('post.text', 'post.postavailabilityid')
+      .select(
+        'post.text',
+        'post.imagelink',
+        'availability.availabilityid',
+        'availability.availability'
+      )
       .first()
       .from('post')
+      .join(
+        'availability',
+        'post.postavailabilityid',
+        '=',
+        'availability.availabilityid'
+      )
       .where('postid', postId),
   addPost: async (insertData) => db('post').insert(insertData),
+  getPostImageName: async (postId) =>
+    db.select('imagelink').first().from('post').where('postid', '=', postId),
   updatePost: async (updateData, postId) =>
     db('post').update(updateData).where('postid', '=', postId),
   deletePost: async (postId) =>

@@ -6,15 +6,17 @@ import * as Yup from 'yup';
 import SaveIcon from '@mui/icons-material/Save';
 import { useMutation } from 'react-query';
 import LoadingButton from '@mui/lab/LoadingButton';
-import ErrorBoundary from '../ErrorBoundary';
-import EditProfileFormProps from '../../services/PropTypes/EditProfileFormProps';
-import { availabilitySelect } from '../optionsSelects/Availability';
-import { editProfile } from '../../containers/profiles/api/crud';
+import ErrorBoundary from '../../../components/ErrorBoundary';
+import EditProfileFormProps from '../../../services/PropTypes/EditProfileFormProps';
+import MyAutocomplete from '../../../components/form-elements/MyAutocomplete';
+import { editProfile } from '../../profiles/api/crud';
+import settings from '../../../settings';
+import AvailabilitySchema from '../../../services/Formik/AvailabilitySchema';
 
 const phoneRegExp = /^[0-9\-\\+]{3,13}$/;
 
 const EditProfileForm = ({
-  profile, availabilities,
+  profile, availabilities, university,
 }) => {
   const mutation = useMutation(
     'edit-profile',
@@ -24,16 +26,29 @@ const EditProfileForm = ({
   // variable for autocomplete
   const profileUniversities = [];
   profile.universities?.map((universityItem) => profileUniversities
-    .push(universityItem.universityid));
+    .push({
+      value: universityItem.universityid,
+      label: universityItem.name,
+    }));
 
   // variable [initial values]
   const profileData = {
     name: profile.name,
     email: profile.email || '',
     phone: profile.phone || '',
-    emailSettingId: profile.emailsettingid,
-    phoneSettingId: profile.phonesettingid,
-    universitySettingId: profile.universitysettingid,
+    universities: profileUniversities,
+    emailSettingId: {
+      value: profile.emailsettingid,
+      label: profile.emailsetting,
+    },
+    phoneSettingId: {
+      value: profile.phonesettingid,
+      label: profile.phonesetting,
+    },
+    universitySettingId: {
+      value: profile.universitysettingid,
+      label: profile.universitysetting,
+    },
   };
 
   // variable [formik schema]
@@ -49,20 +64,17 @@ const EditProfileForm = ({
       .min(6, 'Too Short')
       .max(13, 'Too Long')
       .matches(phoneRegExp, 'Phone number is not valid'),
-
-    emailSettingId: Yup.number().required(),
-    phoneSettingId: Yup.number().required(),
-    universitySettingId: Yup.number().required(),
+    universities: Yup.array()
+      .of(
+        AvailabilitySchema,
+      ),
+    emailSettingId: AvailabilitySchema.required('E-mail availability is required'),
+    phoneSettingId: AvailabilitySchema.required('Phone availability is required'),
+    universitySettingId: AvailabilitySchema.required('Universities availability is required'),
   });
 
   const onProfileEditFormSubmit = (dataSubmit, { setSubmitting }) => {
-    const onFormData = {
-      name: dataSubmit.name,
-      email: dataSubmit.email,
-      phone: dataSubmit.phone,
-    };
-
-    mutation.mutate(onFormData);
+    mutation.mutate(dataSubmit);
 
     if (!mutation.isLoading) {
       setSubmitting(false);
@@ -107,7 +119,14 @@ const EditProfileForm = ({
                     fullWidth
                   />
                 </div>
-                {availabilitySelect('emailSettingId', 'standard', availabilities)}
+
+                <Field
+                  component={MyAutocomplete}
+                  name="emailSettingId"
+                  label="Visible to"
+                  options={availabilities}
+                  sx={settings.profileAvailabilityStyles}
+                />
               </div>
 
               <div className="item info-item info-item-edit">
@@ -123,28 +142,52 @@ const EditProfileForm = ({
                   />
                 </div>
 
-                {availabilitySelect('phoneSettingId', 'standard', availabilities)}
+                <Field
+                  component={MyAutocomplete}
+                  name="phoneSettingId"
+                  label="Visible to"
+                  options={availabilities}
+                  sx={settings.profileAvailabilityStyles}
+                />
               </div>
+              <ErrorBoundary>
+                <div className="item info-item info-item-edit">
+                  <div className="value">
 
-              <div className="item info-item info-item-edit">
-                <div className="values">
-                  [Multiple select. Profiles universities]
+                    <Field
+                      component={MyAutocomplete}
+                      variant="outlined"
+                      name="universities"
+                      label="Universities"
+                      placeholder="You study at the..."
+                      multiple
+                      options={university}
+                    />
+                  </div>
+
+                  <Field
+                    component={MyAutocomplete}
+                    className="university-autocomplete"
+                    name="universitySettingId"
+                    label="Visible to"
+                    options={availabilities}
+                    sx={settings.profileAvailabilityStyles}
+                  />
                 </div>
+              </ErrorBoundary>
 
-                {availabilitySelect('universitySettingId', 'standard', availabilities)}
-
+              <div>
+                <LoadingButton
+                  type="submit"
+                  loading={isSubmitting}
+                  loadingIndicator="Loading..."
+                  variant="contained"
+                  startIcon={<SaveIcon />}
+                  disabled={!(dirty && isValid && !isSubmitting)}
+                >
+                  Save
+                </LoadingButton>
               </div>
-
-              <LoadingButton
-                type="submit"
-                loading={isSubmitting}
-                loadingIndicator="Loading..."
-                variant="contained"
-                startIcon={<SaveIcon />}
-                disabled={!(dirty && isValid && !isSubmitting)}
-              >
-                Save
-              </LoadingButton>
             </div>
           </Form>
         )}
@@ -158,7 +201,6 @@ EditProfileForm.propTypes = EditProfileFormProps;
 EditProfileForm.defaultProps = {
   email: undefined,
   phone: undefined,
-  universities: [],
   university: [],
 };
 

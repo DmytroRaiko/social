@@ -24,6 +24,7 @@ const PostComponent = ({ posts, refetch }) => {
         <PostContent
           postId={post.postid}
           postText={post.text}
+          postImage={post.imagelink}
         />
         <PostFooter
           postId={post.profileid}

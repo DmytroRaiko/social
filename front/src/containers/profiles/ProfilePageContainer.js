@@ -1,8 +1,8 @@
 import React from 'react';
 import profileDataProps from '../../services/PropTypes/ProfileDataProps';
 import ProfilePageMainInfo from '../../components/profile/ProfilePageMainInfo';
-import ProfileAvatar from '../../components/profile/ProfileAvatar';
 import ProfilePosts from './ProfilePosts';
+import ProfileAvatar from '../../components/profile/ProfileAvatar';
 
 function ProfilePageContainer({ profileData }) {
   const profile = profileData[0] || null;

@@ -2,4 +2,5 @@
 /node_modules
 .idea
 ./avatars
+./posts
 ./forms

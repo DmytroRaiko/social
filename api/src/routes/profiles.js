@@ -106,7 +106,12 @@ router.put(
   '/:profileid',
   middleAsync(async (req, res) => {
     const profileId = req.params.profileid;
-    const dataUpdateProfile = req.body;
+    console.log(req.body);
+    const dataUpdateProfile = {
+      name: req.body.name,
+      email: req.body.email || null,
+      phone: req.body.phone || null,
+    };
 
     const updateProfile = await profilesServices.updateProfile(
       dataUpdateProfile,

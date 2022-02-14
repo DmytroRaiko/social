@@ -69,8 +69,11 @@ module.exports = {
         'profile.avatarlink',
         'profile.profileid',
         'a1.availabilityid as emailsettingid',
+        'a1.availability as emailsetting',
         'a2.availabilityid as phonesettingid',
-        'a3.availabilityid as universitysettingid'
+        'a2.availability as phonesetting',
+        'a3.availabilityid as universitysettingid',
+        'a3.availability as universitysetting'
       )
       .from('profile')
       .join(

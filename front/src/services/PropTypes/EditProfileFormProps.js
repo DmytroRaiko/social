@@ -9,19 +9,22 @@ module.exports = {
       PropTypes.shape({}),
     ),
     emailsettingid: PropTypes.number.isRequired,
+    emailsetting: PropTypes.string.isRequired,
     phonesettingid: PropTypes.number.isRequired,
+    phonesetting: PropTypes.string.isRequired,
     universitysettingid: PropTypes.number.isRequired,
+    universitysetting: PropTypes.string.isRequired,
   }).isRequired,
   availabilities: PropTypes.arrayOf(
     PropTypes.shape({
-      availabilityid: PropTypes.number.isRequired,
-      availability: PropTypes.string.isRequired,
+      value: PropTypes.number.isRequired,
+      label: PropTypes.string.isRequired,
     }),
   ).isRequired,
   university: PropTypes.arrayOf(
     PropTypes.shape({
-      universityid: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
+      value: PropTypes.number.isRequired,
+      label: PropTypes.string.isRequired,
     }),
   ),
 };
