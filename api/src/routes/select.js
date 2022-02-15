@@ -2,6 +2,7 @@ const router = require('express').Router();
 const selectServices = require('../services/store/select.services');
 const middleAsync = require('../middlewares/async');
 const auth = require('../middlewares/auth');
+const NotFoundException = require('../services/errors/NotFoundException');
 
 router.use(auth);
 
@@ -11,13 +12,9 @@ router.get(
     const availability = await selectServices.getAvailability();
 
     if (availability && Object.keys(availability).length) {
-      res
-        .status(200)
-        .send({ message: 'Show posts', data: availability, success: true });
+      res.send({ message: 'Show posts', data: availability, success: true });
     } else {
-      res
-        .status(404)
-        .send({ message: 'Fetching availability', success: false });
+      throw new NotFoundException('Availability');
     }
   })
 );
@@ -28,13 +25,9 @@ router.get(
     const universities = await selectServices.getUniversities();
 
     if (universities && Object.keys(universities).length) {
-      res
-        .status(200)
-        .send({ message: 'Show posts', data: universities, success: true });
+      res.send({ message: 'Show posts', data: universities, success: true });
     } else {
-      res
-        .status(404)
-        .send({ message: 'Fetching universities', success: false });
+      throw new NotFoundException('Universities');
     }
   })
 );

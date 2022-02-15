@@ -11,7 +11,13 @@ function ProfilesComponent({ profiles }) {
       <Link className="profile-card-info" to={`/profile/${profile.profileid}`}>
         <div className="post-img">
           {(profile.avatarlink
-              && <img src={`${projectSettings.URI}/files/avatar/${profile.profileid}`} alt="avatar" />
+              && (
+              <img
+                className="avatar"
+                src={`${projectSettings.URI}/files/avatar/${profile.profileid}`}
+                alt="avatar"
+              />
+              )
           )
             // eslint-disable-next-line react/jsx-props-no-spreading
             || <Avatar className="post-img" {...stringAvatar(profile.name)} />}

@@ -5,14 +5,14 @@ const filter = require('./fileFilter');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const path = `avatars/${req.params.profileid}/`;
+    const path = `images/${req.params.profileid}/`;
 
-    fs.stat('avatars/', (err) => {
-      if (err) {
-        fs.mkdirSync('avatars/');
+    fs.stat('images/', (errorImages) => {
+      if (errorImages) {
+        fs.mkdirSync('images/');
       }
-      fs.stat(path, (error) => {
-        if (error) {
+      fs.stat(path, (errorPath) => {
+        if (errorPath) {
           fs.mkdirSync(path);
         }
         cb(null, path);

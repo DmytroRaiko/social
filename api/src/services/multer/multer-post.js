@@ -7,22 +7,26 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const { profileid } = req;
 
-    const path = `posts/${profileid}/`;
+    const path = `images/${profileid}/posts`;
 
-    fs.stat('posts/', (err) => {
-      if (err) {
-        fs.mkdirSync('posts/');
+    fs.stat('images/', (errorImages) => {
+      if (errorImages) {
+        fs.mkdirSync('images/');
       }
-      fs.stat(path, (error) => {
-        if (error) {
-          fs.mkdirSync(path);
+      fs.stat(`images/${profileid}/`, (errorProfile) => {
+        if (errorProfile) {
+          fs.mkdirSync(`images/${profileid}/`);
         }
-        cb(null, path);
+        fs.stat(path, (errorPath) => {
+          if (errorPath) {
+            fs.mkdirSync(path);
+          }
+          cb(null, path);
+        });
       });
     });
   },
   filename: (req, file, cb) => {
-    console.log(file);
     cb(null, `${file.fieldname}-${Date.now()}${mimetype[file.mimetype]}`);
   },
 });

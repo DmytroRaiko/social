@@ -84,7 +84,13 @@ const EditProfileAvatar = ({ avatarlink, profileId, name }) => {
 
       <div className="post-img">
         {(image
-          && <img src={image} alt="avatar" />
+          && (
+          <img
+            className="avatar"
+            src={image}
+            alt="avatar"
+          />
+          )
         )
         // eslint-disable-next-line react/jsx-props-no-spreading
         || <Avatar className="post-img" {...stringAvatar(name)} />}
