@@ -1,3 +1,5 @@
+const UnauthorizedException = require('../services/errors/UnauthorizedException');
+
 module.exports = (req, res, next) => {
   let auth = false;
 
@@ -16,7 +18,7 @@ module.exports = (req, res, next) => {
   // заглушка - end
 
   if (!auth) {
-    res.status(401).send('Unauthorized');
+    next(new UnauthorizedException());
   }
   next();
 };

@@ -1,6 +1,4 @@
 .env
 /node_modules
 .idea
-./avatars
-./posts
-./forms
+images

@@ -1,6 +1,15 @@
-// eslint-disable-next-line no-unused-vars
+const NotFoundException = require('../services/errors/NotFoundException');
+const UnauthorizedException = require('../services/errors/UnauthorizedException');
+// eslint-disable-next-line no-unused-vars,consistent-return
 module.exports = (err, req, res, next) => {
-  // eslint-disable-next-line no-console
-  console.log(err);
-  res.status(500).send('Something went wrong');
+  if (err instanceof NotFoundException) {
+    res
+      .status(404)
+      .send({ data: null, success: false, errorMessage: err.message });
+  }
+  if (err instanceof UnauthorizedException) {
+    res.status(401).send('Unauthorized sdfsdfsdf');
+  } else {
+    res.status(500).send('Something went wrong');
+  }
 };

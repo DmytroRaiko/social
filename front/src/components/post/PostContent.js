@@ -9,7 +9,7 @@ const PostContent = ({
     {postImage
       && (
         <div className="post-image">
-          <img src={`${settings.URI}/${postImage}`} alt="Post" />
+          <img src={`${settings.URI}/files/${postImage}`} alt="Post" />
         </div>
       )}
     <Link to={`/article/${postId}`} className="post-content">

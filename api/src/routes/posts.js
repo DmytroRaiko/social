@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const fs = require('fs');
+// const fs = require('fs');
 const postsServices = require('../services/store/posts.services');
 const commentsServices = require('../services/store/comments.services');
 const likesServices = require('../services/store/likes.services');
@@ -7,6 +7,7 @@ const middleAsync = require('../middlewares/async');
 const auth = require('../middlewares/auth');
 const upload = require('../services/multer/multer-post');
 const deletePostImage = require('../services/multer/deletePostImage');
+const NotFoundException = require('../services/errors/NotFoundException');
 
 router.use(auth);
 
@@ -22,11 +23,9 @@ router.get(
     const posts = await postsServices.getAllPosts(profileid, offset, limit);
 
     if (posts && Object.keys(posts).length) {
-      res
-        .status(200)
-        .send({ message: 'Show posts', data: posts, success: true });
+      res.send({ message: 'Show posts', data: posts, success: true });
     } else {
-      res.status(404).send({ message: 'Not found', success: false });
+      throw new NotFoundException('Posts');
     }
   })
 );
@@ -39,18 +38,12 @@ router.get(
     const postId = req.params.postid;
     const { profileid } = req;
 
-    if (profileid !== null) {
-      const post = await postsServices.getPost(profileid, postId);
+    const post = await postsServices.getPost(profileid, postId);
 
-      if (post && Object.keys(post).length) {
-        res
-          .status(200)
-          .send({ message: 'Post fetching', data: post, success: true });
-      } else {
-        res.status(404).send({ message: 'Not found', success: false });
-      }
+    if (post && Object.keys(post).length) {
+      res.send({ message: 'Post fetching', data: post, success: true });
     } else {
-      res.status(401).send({ message: 'Access denied', success: false });
+      throw new NotFoundException('There is no post yet here!');
     }
   })
 );
@@ -65,32 +58,12 @@ router.get(
     const post = await postsServices.getPostEdit(postId);
 
     if (post && Object.keys(post).length) {
-      res
-        .status(200)
-        .send({ message: 'Post fetching', data: post, success: true });
+      res.send({ message: 'Post fetching', data: post, success: true });
     } else {
-      res.status(404).send({ message: 'Not found', success: false });
+      throw new NotFoundException('Post not found');
     }
   })
 );
-
-// show file
-
-router.get('/:profileid/:filename', (req, res) => {
-  const { profileid: profileId, filename: fileName } = req.params;
-
-  fs.stat(`./posts/${profileId}/${fileName}`, (err) => {
-    if (err === null) {
-      // File exist
-      res.status(200).sendfile(`./posts/${profileId}/${fileName}`);
-    } else if (err.code === 'ENOENT') {
-      // File does not exist
-      res.status(404).send({ message: 'File loading', success: false });
-    } else {
-      res.status(500).send({ message: 'Unknown error', success: false });
-    }
-  });
-});
 
 // add post
 
@@ -108,11 +81,9 @@ router.post(
     const addPost = await postsServices.addPost(dataInsertPost);
 
     if (addPost && Object.keys(addPost).length) {
-      res
-        .status(200)
-        .send({ message: 'Post adding', data: addPost, success: true });
+      res.send({ message: 'Post adding', data: addPost, success: true });
     } else {
-      res.status(404).send({ message: 'Not found', success: false });
+      throw new NotFoundException('Post not found');
     }
   })
 );
@@ -125,23 +96,22 @@ router.put(
   middleAsync(async (req, res) => {
     const postId = req.params.postid;
     const dataUpdatePost = req.body;
-    const path = req.file ? req.file.path : null;
-
-    dataUpdatePost.imagelink = path;
+    dataUpdatePost.imagelink = req.file ? req.file.path : null;
 
     await deletePostImage(postId);
 
     const updatePost = await postsServices.updatePost(dataUpdatePost, postId);
 
     if (updatePost) {
-      res.status(200).send({ message: 'Post updating', success: true });
+      res.send({ message: 'Post updating', success: true });
     } else {
-      res.status(404).send({ message: 'Not found', success: false });
+      throw new NotFoundException('Post not found');
     }
   })
 );
 
 // delete post
+
 router.delete(
   '/:postid',
   middleAsync(async (req, res) => {
@@ -151,13 +121,13 @@ router.delete(
     const deletePost = await postsServices.deletePost(postId);
 
     if (deletePost) {
-      res.status(200).send({
+      res.send({
         message: 'Post deleting',
         data: deletePost,
         success: true,
       });
     } else {
-      res.status(404).send({ message: 'Not found', success: false });
+      throw new NotFoundException('Post not found');
     }
   })
 );
@@ -168,7 +138,6 @@ router.get(
   '/:postid/comments',
   middleAsync(async (req, res) => {
     const postId = req.params.postid;
-
     const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
     const limit = page * 30;
     const offset = (page - 1) * 30;
@@ -180,13 +149,13 @@ router.get(
     );
 
     if (commentsForPost && Object.keys(commentsForPost).length) {
-      res.status(200).send({
+      res.send({
         message: 'Fetching comments',
         data: commentsForPost,
         success: true,
       });
     } else {
-      res.status(200).send({ message: 'Not found', success: false });
+      throw new NotFoundException('Comments not found');
     }
   })
 );
@@ -205,13 +174,9 @@ router.post(
     const addComment = await commentsServices.addComment(dataInsertComment);
 
     if (addComment && Object.keys(addComment).length) {
-      res
-        .status(200)
-        .send({ message: 'Post adding', data: addComment, success: true });
+      res.send({ message: 'Post adding', data: addComment, success: true });
     } else {
-      res
-        .status(404)
-        .send({ message: 'Not found', countComments: 0, success: true });
+      throw new NotFoundException('Post not found');
     }
   })
 );
@@ -231,13 +196,13 @@ router.put(
     );
 
     if (changeComment) {
-      res.status(200).send({
+      res.send({
         message: 'Comment changing',
         data: changeComment,
         success: true,
       });
     } else {
-      res.status(404).send({ message: 'Not found', success: false });
+      throw new NotFoundException('Comment inserting');
     }
   })
 );
@@ -256,11 +221,13 @@ router.delete(
     );
 
     if (deleteComment) {
-      res.status(200).send({
+      res.send({
         message: 'Comment deleting',
         data: deleteComment,
         success: true,
       });
+    } else {
+      throw new NotFoundException('Comment not found');
     }
   })
 );
@@ -279,14 +246,14 @@ router.get(
     const likesForPost = await likesServices.getLikes(postId, offset, limit);
 
     if (likesForPost && Object.keys(likesForPost).length) {
-      res.status(200).send({
+      res.send({
         message: 'Fetching likes',
         data: likesForPost,
         success: true,
         postid: postId,
       });
     } else {
-      res.status(200).send({ message: 'Not found', success: false });
+      throw new NotFoundException('Likes not found');
     }
   })
 );
@@ -306,13 +273,9 @@ router.post(
     const likePost = await likesServices.addLike(dataLike);
 
     if (likePost && Object.keys(likePost).length) {
-      res
-        .status(200)
-        .send({ message: 'Like adding', data: likePost, success: true });
+      res.send({ message: 'Like adding', data: likePost, success: true });
     } else {
-      res
-        .status(404)
-        .send({ message: 'Not found', countLikes: 0, success: true });
+      throw new NotFoundException('Can`t like');
     }
   })
 );
@@ -328,11 +291,13 @@ router.delete(
     const unlikePost = await likesServices.deleteLike(postId, profileId);
 
     if (unlikePost) {
-      res.status(200).send({
+      res.send({
         message: 'Unlike post',
         data: unlikePost,
         success: true,
       });
+    } else {
+      throw new NotFoundException('Like not found');
     }
   })
 );

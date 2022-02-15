@@ -22,6 +22,7 @@ const AvatarCropModal = ({
         style={{ height: 650, width: '100%' }}
         onInitialized={(instance) => setCropper(instance)}
         rotatable={false}
+        aspectRatio={3 / 3}
         viewMode={1}
         modal
       />

@@ -9,7 +9,7 @@ import FormikPost from '../../../components/forms/FormikPost';
 const EditPostForm = ({
   post, availabilities, onHandleClose, postEditId,
 }) => {
-  const photo = post.imagelink ? `${projectSettings.URI}/${post.imagelink}` : null;
+  const photo = post.imagelink ? `${projectSettings.URI}/files/${post.imagelink}` : null;
   const [loadedPhoto, setLoadedPhoto] = useState(photo);
   const [editImage, setEditImage] = useState(photo);
 
