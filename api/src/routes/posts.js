@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const fs = require('fs');
+// const fs = require('fs');
 const postsServices = require('../services/store/posts.services');
 const commentsServices = require('../services/store/comments.services');
 const likesServices = require('../services/store/likes.services');
@@ -111,6 +111,7 @@ router.put(
 );
 
 // delete post
+
 router.delete(
   '/:postid',
   middleAsync(async (req, res) => {
@@ -300,24 +301,5 @@ router.delete(
     }
   })
 );
-
-// show file
-
-router.get('/:profileid/:filename', (req, res) => {
-  const { profileid: profileId, filename: fileName } = req.params;
-
-  fs.stat(`./posts/${profileId}/${fileName}`, (err) => {
-    if (err === null) {
-      // File exist
-      res.sendfile(`./posts/${profileId}/${fileName}`);
-    } else if (err.code === 'ENOENT') {
-      // File does not exist
-      // eslint-disable-next-line no-new
-      // throw new NotFoundException('text');
-    } else {
-      throw new Error(err);
-    }
-  });
-});
 
 module.exports = router;

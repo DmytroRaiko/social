@@ -53,7 +53,13 @@ const PostHeader = ({
     <div className="post-header">
       <NavLink to={`/profile/${profileId}`}>
         {(avatar
-        && <img src={`${settings.URI}/files/avatar/${profileId}`} alt="avatar" />
+        && (
+        <img
+          className="avatar"
+          src={`${settings.URI}/files/avatar/${profileId}`}
+          alt="avatar"
+        />
+        )
         )
       // eslint-disable-next-line react/jsx-props-no-spreading
       || <Avatar className="post-img" {...stringAvatar(postAuthor)} />}

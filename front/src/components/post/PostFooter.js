@@ -18,7 +18,7 @@ const PostFooter = ({
     </Link>
     <div className="footer-item">
       {postLikes || ' '}
-      <IconButton className="like" color="warning">
+      <IconButton className="like" color="error">
         {postMyLike
           ? <FavoriteIcon />
           : <FavoriteBorderIcon />}
