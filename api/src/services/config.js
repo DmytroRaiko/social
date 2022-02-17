@@ -5,4 +5,7 @@ module.exports = {
   dbPass: process.env.DB_PASS,
   dbUser: process.env.DB_USER,
   db: process.env.DATABASE,
+  googleID: process.env.GOOGLE_ID,
+  googleSecret: process.env.GOOGLE_SECRET,
+  appSecretKey: process.env.KEY_TOKEN,
 };

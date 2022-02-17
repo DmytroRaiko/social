@@ -14,7 +14,7 @@ router.use(auth);
 router.get(
   '/',
   middleAsync(async (req, res) => {
-    const { profileid } = req;
+    const { profileid } = req.session;
 
     const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
     const limit = page * 10;

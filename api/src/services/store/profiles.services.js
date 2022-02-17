@@ -107,4 +107,6 @@ module.exports = {
     db('profile').update(updateData).where('profileid', profileId),
   deleteProfile: async (profileId) =>
     db.from('profile').where('profileid', profileId).delete(),
+  getProfileByIdAuth: async (id) =>
+    db.select().first().from('profile').where('profileid', '=', id),
 };
