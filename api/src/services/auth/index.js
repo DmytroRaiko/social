@@ -30,7 +30,6 @@ module.exports = {
   authById: async (id) => {
     const user = await profilesService.getProfileByIdAuth(id);
 
-    console.log(user);
     if (user) {
       const accessToken = jwt.sign(
         { profileid: user.profileid },

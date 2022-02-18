@@ -45,7 +45,6 @@ router.post(
   '/facebook',
   passport.authenticate('facebook-token'),
   middleAsync(async (req, res) => {
-    console.log(req);
     await handlerRouterAuth(req, res);
   })
 );
