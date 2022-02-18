@@ -37,7 +37,13 @@ router.post(
   '/google',
   passport.authenticate('google-token', { session: false }),
   middleAsync(async (req, res) => {
-    await handlerRouterAuth(req, res);
+    const resultHandleRouter = await handlerRouterAuth(req.user.profileid);
+
+    if (resultHandleRouter) {
+      res.send(resultHandleRouter);
+    } else {
+      throw new UnauthorizedException('');
+    }
   })
 );
 
@@ -45,7 +51,13 @@ router.post(
   '/facebook',
   passport.authenticate('facebook-token'),
   middleAsync(async (req, res) => {
-    await handlerRouterAuth(req, res);
+    const resultHandleRouter = await handlerRouterAuth(req.user.profileid);
+
+    if (resultHandleRouter) {
+      res.send(resultHandleRouter);
+    } else {
+      throw new UnauthorizedException('');
+    }
   })
 );
 

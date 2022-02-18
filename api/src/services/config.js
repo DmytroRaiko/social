@@ -1,5 +1,6 @@
 module.exports = {
   appPort: process.env.APP_PORT,
+  secretKey: process.env.KEY_TOKEN,
   database: {
     dbHost: process.env.DB_HOST,
     dbPort: process.env.DB_PORT,
@@ -16,6 +17,5 @@ module.exports = {
       facebookID: process.env.FACEBOOK_ID,
       facebookSecret: process.env.FACEBOOK_SECRET,
     },
-    secretKey: process.env.KEY_TOKEN,
   },
 };

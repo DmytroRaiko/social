@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
     let decoded;
     try {
       decoded = await new Promise((resolve, reject) => {
-        jwt.verify(token, config.auth.secretKey, (err, result) => {
+        jwt.verify(token, config.secretKey, (err, result) => {
           if (err) {
             reject(err);
           }

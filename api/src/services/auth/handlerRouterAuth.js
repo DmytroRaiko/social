@@ -1,16 +1,14 @@
-const UnauthorizedException = require('../errors/UnauthorizedException');
 const auth = require('./index');
 
-module.exports = async (req, res) => {
-  const { accessToken, refreshToken } = await auth.authById(req.user.profileid);
+module.exports = async (profilleId) => {
+  const { accessToken, refreshToken } = await auth.authById(profilleId);
 
   if (accessToken) {
-    res.send({
+    return {
       accessToken,
       refreshToken,
       success: true,
-    });
-  } else {
-    throw new UnauthorizedException('');
+    };
   }
+  return 0;
 };

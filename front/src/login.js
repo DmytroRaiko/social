@@ -12,8 +12,6 @@ const Login = () => {
       access_token: data.accessToken,
     })
       .then((res) => {
-        // eslint-disable-next-line no-console
-        console.log(res.data);
         setAuth(res.data);
       })
       .catch((err) => {
