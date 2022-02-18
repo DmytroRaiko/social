@@ -10,7 +10,7 @@ module.exports = {
     if (session) {
       const accessToken = jwt.sign(
         { profileid: session.profileid },
-        config.appSecretKey
+        config.auth.secretKey
       );
       const newRefreshToken = uuidV4();
       await authService.deleteSessionByToken(session.accesstoken);
@@ -30,10 +30,11 @@ module.exports = {
   authById: async (id) => {
     const user = await profilesService.getProfileByIdAuth(id);
 
+    console.log(user);
     if (user) {
       const accessToken = jwt.sign(
         { profileid: user.profileid },
-        config.appSecretKey
+        config.auth.secretKey
       );
       const refreshToken = uuidV4();
       await authService.addSession({

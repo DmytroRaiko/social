@@ -10,4 +10,12 @@ module.exports = {
     db('oauthlist').where('accesstoken', '=', token).del(),
   deleteSessionById: async (profileId) =>
     db('oauthlist').where('profileid', '=', profileId).del(),
+  google: {
+    selectProfileByTokenId: async (profileId) =>
+      db.select().first().from('profile').where('googleid', '=', profileId),
+  },
+  facebook: {
+    selectProfileByTokenId: async (profileId) =>
+      db.select().first().from('profile').where('facebookid', '=', profileId),
+  },
 };

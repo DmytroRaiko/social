@@ -3,6 +3,7 @@ const passport = require('passport');
 const auth = require('../services/auth');
 const middleAsync = require('../middlewares/async');
 const UnauthorizedException = require('../services/errors/UnauthorizedException');
+const handlerRouterAuth = require('../services/auth/handlerRouterAuth');
 
 router.post(
   '/refresh',
@@ -36,19 +37,16 @@ router.post(
   '/google',
   passport.authenticate('google-token', { session: false }),
   middleAsync(async (req, res) => {
-    const { accessToken, refreshToken } = await auth.authById(
-      req.user.profileid
-    );
+    await handlerRouterAuth(req, res);
+  })
+);
 
-    if (accessToken) {
-      res.send({
-        accessToken,
-        refreshToken,
-        success: true,
-      });
-    } else {
-      throw new UnauthorizedException('');
-    }
+router.post(
+  '/facebook',
+  passport.authenticate('facebook-token'),
+  middleAsync(async (req, res) => {
+    console.log(req);
+    await handlerRouterAuth(req, res);
   })
 );
 

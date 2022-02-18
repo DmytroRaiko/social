@@ -1,5 +1,5 @@
 const passport = require('passport');
-const GoogleTokenStrategy = require('passport-google-token').Strategy;
+const FacebookTokenStrategy = require('passport-facebook-token');
 const config = require('../config');
 const authServices = require('../store/auth.services');
 const profilesServices = require('../store/profiles.services');
@@ -7,26 +7,25 @@ const profilesServices = require('../store/profiles.services');
 module.exports = () => {
   const registerStrategy = () => {
     passport.use(
-      new GoogleTokenStrategy(
+      new FacebookTokenStrategy(
         {
-          clientID: config.auth.google.googleID,
-          clientSecret: config.auth.google.googleSecret,
+          clientID: config.auth.facebook.facebookID,
+          clientSecret: config.auth.facebook.facebookSecret,
         },
         async (accessToken, refreshToken, profile, done) => {
-          let user = await authServices.google.selectProfileByTokenId(
+          let user = await authServices.facebook.selectProfileByTokenId(
             profile.id
           );
 
           if (!user) {
-            const [{ value: email }] = profile.emails;
-
             await profilesServices.addProfile({
               name: profile.displayName,
-              email,
-              googleid: profile.id,
+              facebookid: profile.id,
             });
 
-            user = await authServices.google.selectProfileByTokenId(profile.id);
+            user = await authServices.facebook.selectProfileByTokenId(
+              profile.id
+            );
           }
 
           done(null, {
@@ -38,5 +37,9 @@ module.exports = () => {
       )
     );
   };
+
+  passport.serializeUser((user, done) => {
+    done(null, user);
+  });
   return { registerStrategy, passport };
 };
