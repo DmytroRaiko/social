@@ -2,12 +2,13 @@ import { useCallback, useState } from 'react';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import axios from 'axios';
+import settings from './settings';
 
 const Login = () => {
   const [auth, setAuth] = useState();
 
   const handleGoogleAuth = useCallback((data) => {
-    axios.post('http://localhost:9000/auth/google', {
+    axios.post(`${settings.URI}/auth/google`, {
       access_token: data.accessToken,
     })
       .then((res) => {
@@ -22,7 +23,7 @@ const Login = () => {
   });
 
   const handleFacebookAuth = useCallback((data) => {
-    axios.post('http://localhost:9000/auth/facebook', {
+    axios.post(`${settings.URI}/auth/facebook`, {
       access_token: data.accessToken,
     })
       .then((res) => {
@@ -37,7 +38,7 @@ const Login = () => {
   return (
     <div>
       <GoogleLogin
-        clientId="1006100114910-tmu8rk22m8vvq42lnfofplapd8u4ifr1.apps.googleusercontent.com"
+        clientId={settings.googleClientID}
         buttonText="Login"
         onSuccess={handleGoogleAuth}
         onFailure={((error) => {
@@ -47,7 +48,7 @@ const Login = () => {
         cookiePolicy="single_host_origin"
       />
       <FacebookLogin
-        appId="1003222183610086"
+        appId={settings.facebookClientID}
         autoLoad
         fields="name,email"
         scope="public_profile,user_friends"
