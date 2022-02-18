@@ -8,7 +8,7 @@ module.exports = (err, req, res, next) => {
       .send({ data: null, success: false, errorMessage: err.message });
   }
   if (err instanceof UnauthorizedException) {
-    res.status(401).send('Unauthorized sdfsdfsdf');
+    res.status(401).send('Unauthorized');
   } else {
     res.status(500).send('Something went wrong');
   }

@@ -8,4 +8,6 @@ module.exports = {
     width: '150px',
     height: '35px',
   },
+  googleClientID: '1006100114910-tmu8rk22m8vvq42lnfofplapd8u4ifr1.apps.googleusercontent.com',
+  facebookClientID: '1003222183610086',
 };

@@ -14,6 +14,7 @@ import Post from './containers/post/Post';
 import Profile from './containers/profiles/Profile';
 import PostComments from './containers/post/PostComments';
 import ProfileEdit from './containers/profiles/ProfileEdit';
+import Login from './login';
 
 const queryClient = new QueryClient();
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <SiteHeader />
         <div className="site-body">
           <Routes>
+            <Route path="/" element={<Login />} />
             <Route path="/articles" element={<Posts />} />
             <Route path="/article/:id" element={<Post />} />
             <Route path="/articles/:id/comments" element={<PostComments />} />
