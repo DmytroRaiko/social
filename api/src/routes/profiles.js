@@ -148,7 +148,7 @@ router.get(
   '/:profileid/posts',
   middleAsync(async (req, res) => {
     const profileId = req.params.profileid;
-    const userProfileId = req.profileid;
+    const userProfileId = req.session.profileid;
 
     const posts = await postsServices.getAllUserPosts(profileId, userProfileId);
 
@@ -158,9 +158,8 @@ router.get(
         data: posts,
         success: true,
       });
-    } else {
-      throw new NotFoundException('There no posts yet here!');
     }
+    res.send({ data: [] });
   })
 );
 

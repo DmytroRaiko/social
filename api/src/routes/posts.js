@@ -285,7 +285,7 @@ router.post(
 router.delete(
   '/:postid/likes',
   middleAsync(async (req, res) => {
-    const profileId = req.profileid;
+    const profileId = req.session.profileid;
     const postId = req.params.postid;
 
     const unlikePost = await likesServices.deleteLike(postId, profileId);
