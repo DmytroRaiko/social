@@ -9,6 +9,7 @@ module.exports = {
     db: process.env.DATABASE,
   },
   auth: {
+    expiresTime: '30m',
     google: {
       googleID: process.env.GOOGLE_ID,
       googleSecret: process.env.GOOGLE_SECRET,
