@@ -158,9 +158,8 @@ router.get(
         data: posts,
         success: true,
       });
-    } else {
-      throw new NotFoundException('There no posts yet here!');
     }
+    res.send({ data: [] });
   })
 );
 
