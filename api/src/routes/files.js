@@ -10,8 +10,6 @@ const NotFoundException = require('../services/errors/NotFoundException');
 
 const ROOT_DIR = path.resolve(__dirname, '../../');
 
-router.use(auth);
-
 // get profile avatar
 
 router.get(
@@ -71,6 +69,7 @@ router.get('/images/:profileid/posts/:filename', (req, res) => {
 
 router.post(
   '/:profileid/avatar',
+  auth,
   upload.single('avatar'),
   middleAsync(async (req, res) => {
     const { profileid } = req.params;
@@ -102,6 +101,7 @@ router.post(
 
 router.delete(
   '/avatar/:profileid',
+  auth,
   middleAsync(async (req, res) => {
     const { profileid } = req.params;
 
