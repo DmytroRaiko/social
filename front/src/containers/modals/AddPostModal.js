@@ -16,7 +16,6 @@ const AddPostModal = () => {
         sx={{
           width: '100%',
           textTransform: 'capitalize',
-          borderLeft: 1,
         }}
       >
         Add post
