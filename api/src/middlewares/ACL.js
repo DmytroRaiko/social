@@ -1,79 +1,8 @@
 const ForbiddenException = require('../services/errors/ForbiddenException');
 const profilesServices = require('../services/store/profiles.services');
 
-const ACTIONS = {
-  READ: 'read',
-  CREATE: 'create',
-  UPDATE: 'update',
-  DELETE: 'delete',
-};
-
-const POSSESSIONS = {
-  ANY: 'any',
-  OWN: 'own',
-};
-
-const RESOURCES = {
-  POSTS: 'posts',
-  PROFILES: 'profiles',
-  FILES: 'files',
-};
-
-const ROLES = {
-  ADMIN: 'admin',
-  USER: 'user',
-};
-
-const adminAllow = [
-  {
-    action: ACTIONS.CREATE,
-    possession: POSSESSIONS.ANY,
-  },
-  {
-    action: ACTIONS.DELETE,
-    possession: POSSESSIONS.ANY,
-  },
-  {
-    action: ACTIONS.READ,
-    possession: POSSESSIONS.ANY,
-  },
-  {
-    action: ACTIONS.UPDATE,
-    possession: POSSESSIONS.OWN,
-  },
-];
-
-const userAllow = [
-  {
-    action: ACTIONS.CREATE,
-    possession: POSSESSIONS.OWN,
-  },
-  {
-    action: ACTIONS.DELETE,
-    possession: POSSESSIONS.OWN,
-  },
-  {
-    action: ACTIONS.READ,
-    possession: POSSESSIONS.ANY,
-  },
-  {
-    action: ACTIONS.UPDATE,
-    possession: POSSESSIONS.OWN,
-  },
-];
-
-const rulesACL = {
-  [ROLES.ADMIN]: {
-    [RESOURCES.POSTS]: adminAllow,
-    [RESOURCES.PROFILES]: adminAllow,
-    [RESOURCES.FILES]: adminAllow,
-  },
-  [ROLES.USER]: {
-    [RESOURCES.POSTS]: userAllow,
-    [RESOURCES.PROFILES]: userAllow,
-    [RESOURCES.FILES]: userAllow,
-  },
-};
+const rulesACL = require('../services/auth/acl/rules');
+const POSSESSIONS = require('../services/auth/acl/possessions');
 
 // eslint-disable-next-line consistent-return
 module.exports = (rule) => async (req, res, next) => {
