@@ -16,7 +16,6 @@ const ROOT_DIR = path.resolve(__dirname, '../../');
 
 router.get(
   '/avatar/:profileid',
-  middleACL({ resource: 'files', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => {
     const { profileid } = req.params;
 
@@ -50,27 +49,23 @@ router.get(
 
 // show file
 
-router.get(
-  '/images/:profileid/posts/:filename',
-  middleACL({ resource: 'files', action: 'read', possession: 'any' }),
-  (req, res) => {
-    const { profileid: profileId, filename: fileName } = req.params;
-    const pathFile = `./images/${profileId}/posts/${fileName}`;
+router.get('/images/:profileid/posts/:filename', (req, res) => {
+  const { profileid: profileId, filename: fileName } = req.params;
+  const pathFile = `./images/${profileId}/posts/${fileName}`;
 
-    fs.stat(pathFile, (err) => {
-      if (err === null) {
-        // File exist
-        res.sendFile(pathFile, {
-          root: ROOT_DIR,
-        });
-      } else if (err.code === 'ENOENT') {
-        throw new NotFoundException('files');
-      } else {
-        throw new Error('File system error');
-      }
-    });
-  }
-);
+  fs.stat(pathFile, (err) => {
+    if (err === null) {
+      // File exist
+      res.sendFile(pathFile, {
+        root: ROOT_DIR,
+      });
+    } else if (err.code === 'ENOENT') {
+      throw new NotFoundException('files');
+    } else {
+      throw new Error('File system error');
+    }
+  });
+});
 
 // update profile avatar
 
