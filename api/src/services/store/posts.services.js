@@ -81,6 +81,8 @@ module.exports = {
         'mylike.postid'
       )
       .where('post.postid', '=', postId),
+  getPostInfo: async (postId) =>
+    db.select().first().from('post').where('postid', '=', postId),
   getPostEdit: async (postId) =>
     db
       .select(

@@ -31,7 +31,7 @@ module.exports = {
     await authService.deleteSessionByToken(token);
   },
   authById: async (id) => {
-    const user = await profilesService.getProfileByIdAuth(id);
+    const user = await profilesService.getProfileById(id);
 
     if (user) {
       const accessToken = jwt.sign(

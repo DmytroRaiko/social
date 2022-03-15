@@ -8,11 +8,13 @@ const auth = require('../middlewares/auth');
 const upload = require('../services/multer/multer-post');
 const deletePostImage = require('../services/multer/deletePostImage');
 const NotFoundException = require('../services/errors/NotFoundException');
+const middleACL = require('../middlewares/ACL');
 
 router.use(auth);
 
 router.get(
   '/',
+  middleACL({ resource: 'posts', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => {
     const { profileid } = req.session;
 
@@ -34,6 +36,7 @@ router.get(
 
 router.get(
   '/:postid',
+  middleACL({ resource: 'posts', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => {
     const postId = req.params.postid;
     const { profileid } = req;
@@ -52,6 +55,7 @@ router.get(
 
 router.get(
   '/:postid/edit',
+  middleACL({ resource: 'posts', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => {
     const postId = req.params.postid;
 
@@ -69,6 +73,7 @@ router.get(
 
 router.post(
   '/',
+  middleACL({ resource: 'posts', action: 'create', possession: 'any' }),
   upload.single('postImage'),
   middleAsync(async (req, res) => {
     const { profileid } = req;
@@ -92,6 +97,13 @@ router.post(
 
 router.put(
   '/:postid',
+  middleACL({
+    resource: 'posts',
+    action: 'update',
+    possession: 'own',
+    getResource: (req) => postsServices.getPostInfo(req.params.postid),
+    isOwn: (resource, profileId) => resource.profileid === profileId,
+  }),
   upload.single('postImage'),
   middleAsync(async (req, res) => {
     const postId = req.params.postid;
@@ -114,6 +126,13 @@ router.put(
 
 router.delete(
   '/:postid',
+  middleACL({
+    resource: 'posts',
+    action: 'delete',
+    possession: 'own',
+    getResource: (req) => postsServices.getPostInfo(req.params.postid),
+    isOwn: (resource, profileId) => resource.profileid === profileId,
+  }),
   middleAsync(async (req, res) => {
     const postId = req.params.postid;
     await deletePostImage(postId);
@@ -136,6 +155,7 @@ router.delete(
 
 router.get(
   '/:postid/comments',
+  middleACL({ resource: 'posts', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => {
     const postId = req.params.postid;
     const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
@@ -164,6 +184,7 @@ router.get(
 
 router.post(
   '/:postid/comments',
+  middleACL({ resource: 'posts', action: 'create', possession: 'any' }),
   middleAsync(async (req, res) => {
     const { profileid } = req;
 
@@ -185,6 +206,13 @@ router.post(
 
 router.put(
   '/:postid/comment/:commentid',
+  middleACL({
+    resource: 'posts',
+    action: 'update',
+    possession: 'own',
+    getResource: (req) => commentsServices.getCommentInfo(req.params.commentid),
+    isOwn: (resource, profileId) => resource.profileid === profileId,
+  }),
   middleAsync(async (req, res) => {
     const commentId = req.params.commentid;
 
@@ -211,6 +239,13 @@ router.put(
 
 router.delete(
   '/:postid/comment/:commentid',
+  middleACL({
+    resource: 'posts',
+    action: 'delete',
+    possession: 'own',
+    getResource: (req) => commentsServices.getCommentInfo(req.params.commentid),
+    isOwn: (resource, profileId) => resource.profileid === profileId,
+  }),
   middleAsync(async (req, res) => {
     const { profileid } = req;
     const commentId = req.params.commentid;
@@ -236,6 +271,13 @@ router.delete(
 
 router.get(
   '/:postid/likes',
+  middleACL({
+    resource: 'posts',
+    action: 'read',
+    possession: 'any',
+    getResource: (req) => likesServices.getLikeInfo(req.params.id),
+    isOwn: (resource, profileId) => resource.profileid === profileId,
+  }),
   middleAsync(async (req, res) => {
     const postId = req.params.postid;
 
@@ -262,6 +304,7 @@ router.get(
 
 router.post(
   '/:postid/likes',
+  middleACL({ resource: 'posts', action: 'create', possession: 'any' }),
   middleAsync(async (req, res) => {
     const { profileid } = req;
 
@@ -284,6 +327,14 @@ router.post(
 
 router.delete(
   '/:postid/likes',
+  middleACL({
+    resource: 'posts',
+    action: 'delete',
+    possession: 'own',
+    getResource: (req) =>
+      likesServices.getLikeInfo(req.session.profileid, req.params.postid),
+    isOwn: (resource, profileId) => resource.profileid === profileId,
+  }),
   middleAsync(async (req, res) => {
     const profileId = req.session.profileid;
     const postId = req.params.postid;

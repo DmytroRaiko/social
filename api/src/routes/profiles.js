@@ -5,11 +5,13 @@ const universitiesServices = require('../services/store/universities.services');
 const middleAsync = require('../middlewares/async');
 const auth = require('../middlewares/auth');
 const NotFoundException = require('../services/errors/NotFoundException');
+const middleACL = require('../middlewares/ACL');
 
 router.use(auth);
 
 router.get(
   '/',
+  middleACL({ resource: 'profiles', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => {
     const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
     const limit = page * 50;
@@ -33,6 +35,7 @@ router.get(
 
 router.get(
   '/:profileid',
+  middleACL({ resource: 'profiles', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => {
     const profileId = req.params.profileid;
 
@@ -58,6 +61,13 @@ router.get(
 
 router.get(
   '/:profileid/edit',
+  middleACL({
+    resource: 'profiles',
+    action: 'read',
+    possession: 'own',
+    getResource: (req) => profilesServices.getProfileById(req.params.profileid),
+    isOwn: (resource, profileId) => resource.profileid === profileId,
+  }),
   middleAsync(async (req, res) => {
     const profileId = req.params.profileid;
 
@@ -82,6 +92,7 @@ router.get(
 
 router.post(
   '/',
+  middleACL({ resource: 'profiles', action: 'create', possession: 'any' }),
   middleAsync(async (req, res) => {
     const dataInsertProfile = req.body;
 
@@ -99,6 +110,13 @@ router.post(
 
 router.put(
   '/:profileid',
+  middleACL({
+    resource: 'profiles',
+    action: 'update',
+    possession: 'own',
+    getResource: (req) => profilesServices.getProfileById(req.params.profileid),
+    isOwn: (resource, profileId) => resource.profileid === profileId,
+  }),
   middleAsync(async (req, res) => {
     const profileId = req.params.profileid;
 
@@ -129,6 +147,13 @@ router.put(
 
 router.delete(
   '/:profileid',
+  middleACL({
+    resource: 'profiles',
+    action: 'delete',
+    possession: 'own',
+    getResource: (req) => profilesServices.getProfileById(req.params.profileid),
+    isOwn: (resource, profileId) => resource.profileid === profileId,
+  }),
   middleAsync(async (req, res) => {
     const profileId = req.params.profileid;
 
@@ -146,6 +171,7 @@ router.delete(
 
 router.get(
   '/:profileid/posts',
+  middleACL({ resource: 'profiles', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => {
     const profileId = req.params.profileid;
     const userProfileId = req.session.profileid;

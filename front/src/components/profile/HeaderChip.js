@@ -8,6 +8,7 @@ import Divider from '@mui/material/Divider';
 import Logout from '@mui/icons-material/Logout';
 import { Chip } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import GroupIcon from '@mui/icons-material/Group';
 import projectSettings from '../../settings';
 import stringAvatar from '../../services/icons/avatarIcon';
 import context from '../../services/context';
@@ -71,10 +72,13 @@ const HeaderChip = () => {
           </MenuItem>
         </RouterLink>
         <RouterLink
-          style={{ color: 'inherit' }}
+          style={{ color: 'inherit', textDecoration: 'none' }}
           to="/profiles/"
         >
           <MenuItem>
+            <ListItemIcon>
+              <GroupIcon />
+            </ListItemIcon>
             Profiles
           </MenuItem>
         </RouterLink>

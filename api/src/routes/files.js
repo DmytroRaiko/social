@@ -7,6 +7,8 @@ const filesServices = require('../services/store/files.services');
 const middleAsync = require('../middlewares/async');
 const auth = require('../middlewares/auth');
 const NotFoundException = require('../services/errors/NotFoundException');
+const middleACL = require('../middlewares/ACL');
+const profilesServices = require('../services/store/profiles.services');
 
 const ROOT_DIR = path.resolve(__dirname, '../../');
 
@@ -14,6 +16,7 @@ const ROOT_DIR = path.resolve(__dirname, '../../');
 
 router.get(
   '/avatar/:profileid',
+  middleACL({ resource: 'files', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => {
     const { profileid } = req.params;
 
@@ -47,28 +50,33 @@ router.get(
 
 // show file
 
-router.get('/images/:profileid/posts/:filename', (req, res) => {
-  const { profileid: profileId, filename: fileName } = req.params;
-  const pathFile = `./images/${profileId}/posts/${fileName}`;
+router.get(
+  '/images/:profileid/posts/:filename',
+  middleACL({ resource: 'files', action: 'read', possession: 'any' }),
+  (req, res) => {
+    const { profileid: profileId, filename: fileName } = req.params;
+    const pathFile = `./images/${profileId}/posts/${fileName}`;
 
-  fs.stat(pathFile, (err) => {
-    if (err === null) {
-      // File exist
-      res.sendFile(pathFile, {
-        root: ROOT_DIR,
-      });
-    } else if (err.code === 'ENOENT') {
-      throw new NotFoundException('post');
-    } else {
-      throw new Error('File system error');
-    }
-  });
-});
+    fs.stat(pathFile, (err) => {
+      if (err === null) {
+        // File exist
+        res.sendFile(pathFile, {
+          root: ROOT_DIR,
+        });
+      } else if (err.code === 'ENOENT') {
+        throw new NotFoundException('files');
+      } else {
+        throw new Error('File system error');
+      }
+    });
+  }
+);
 
 // update profile avatar
 
 router.post(
   '/:profileid/avatar',
+  middleACL({ resource: 'files', action: 'create', possession: 'any' }),
   auth,
   upload.single('avatar'),
   middleAsync(async (req, res) => {
@@ -101,6 +109,13 @@ router.post(
 
 router.delete(
   '/avatar/:profileid',
+  middleACL({
+    resource: 'files',
+    action: 'delete',
+    possession: 'own',
+    getResource: (req) => profilesServices.getProfileById(req.params.profileid),
+    isOwn: (resource, profileId) => resource.profileid === profileId,
+  }),
   auth,
   middleAsync(async (req, res) => {
     const { profileid } = req.params;
