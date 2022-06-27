@@ -13,7 +13,7 @@
     },
     "plugins": ["prettier"],
     "rules": {
-        "prettier/prettier": "error",
+        "prettier/prettier": "off",
         "comma-dangle": "off",
         "operator-linebreak": "off",
         "implicit-arrow-linebreak": "off"

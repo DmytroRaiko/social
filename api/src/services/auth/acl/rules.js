@@ -25,7 +25,7 @@ const adminAllow = [
 const userAllow = [
   {
     action: ACTIONS.CREATE,
-    possession: POSSESSIONS.OWN,
+    possession: POSSESSIONS.ANY,
   },
   {
     action: ACTIONS.DELETE,

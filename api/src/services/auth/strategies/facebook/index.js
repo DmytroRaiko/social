@@ -1,8 +1,8 @@
 const passport = require('passport');
 const FacebookTokenStrategy = require('passport-facebook-token');
-const config = require('../config');
-const authServices = require('../store/auth.services');
-const profilesServices = require('../store/profiles.services');
+const config = require('../../../config');
+const authServices = require('../../../store/auth.services');
+const profilesServices = require('../../../store/profiles.services');
 
 passport.use(
   new FacebookTokenStrategy(
@@ -11,7 +11,9 @@ passport.use(
       clientSecret: config.auth.facebook.facebookSecret,
     },
     async (accessToken, refreshToken, profile, done) => {
-      let user = await authServices.facebook.selectProfileByTokenId(profile.id);
+      let user = await authServices.facebook.selectProfileByFacebookTokenId(
+        profile.id
+      );
 
       if (!user) {
         await profilesServices.addProfile({
@@ -19,7 +21,7 @@ passport.use(
           facebookid: profile.id,
         });
 
-        user = await authServices.facebook.selectProfileByTokenId(profile.id);
+        user = await authServices.facebook.selectProfileByFacebookTokenId(profile.id);
       }
 
       done(null, {

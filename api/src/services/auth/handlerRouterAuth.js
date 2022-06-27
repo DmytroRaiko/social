@@ -1,14 +1,12 @@
 const auth = require('./index');
 
-module.exports = async (profilleId) => {
-  const { accessToken, refreshToken } = await auth.authById(profilleId);
+module.exports = async (profileId) => {
+  const authentication = await auth.authById(
+    profileId
+  );
 
-  if (accessToken) {
-    return {
-      accessToken,
-      refreshToken,
-      success: true,
-    };
+  if (authentication.newAccessToken) {
+    return authentication;
   }
   return 0;
 };

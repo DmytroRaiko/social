@@ -1,8 +1,8 @@
 const passport = require('passport');
 const GoogleTokenStrategy = require('passport-google-token').Strategy;
-const config = require('../config');
-const authServices = require('../store/auth.services');
-const profilesServices = require('../store/profiles.services');
+const config = require('../../../config');
+const authServices = require('../../../store/auth.services');
+const profilesServices = require('../../../store/profiles.services');
 
 passport.use(
   new GoogleTokenStrategy(
@@ -11,7 +11,9 @@ passport.use(
       clientSecret: config.auth.google.googleSecret,
     },
     async (accessToken, refreshToken, profile, done) => {
-      let user = await authServices.google.selectProfileByTokenId(profile.id);
+      let user = await authServices.google.selectProfileByGoogleTokenId(
+        profile.id
+      );
 
       if (!user) {
         const [{ value: email }] = profile.emails;
@@ -22,7 +24,7 @@ passport.use(
           googleid: profile.id,
         });
 
-        user = await authServices.google.selectProfileByTokenId(profile.id);
+        user = await authServices.google.selectProfileByGoogleTokenId(profile.id);
       }
 
       done(null, {
