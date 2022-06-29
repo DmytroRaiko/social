@@ -21,7 +21,7 @@ require('./services/auth/strategies');
 app.use(logs(middlewareServices));
 app.use(cors(
   {
-    credential: true,
+    credentials: true,
     origin: config.clientUrl
   }
 ));

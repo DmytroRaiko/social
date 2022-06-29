@@ -7,17 +7,18 @@ const BadRequestException = require('../errors/BadRequestException');
 const UnauthorizedException = require('../errors/UnauthorizedException');
 const { transporter } = require('../mail-service');
 const config = require('../config');
+const profileServices = require('../store/profiles.services');
 
 module.exports = {
-  registration: async (email, password) => {
+  registration: async (name, email, password) => {
     const hashPassword = await bcrypt.hash(password, 3);
     const activateLink = uuid.v4();
 
     const createProfile = await profilesService.addProfile({
-      email, password: hashPassword, activateLink, name: 'New profile',
+      email, password: hashPassword, activateLink, name,
     });
 
-    if (!createProfile?.profileid) {
+    if (!createProfile[0]?.profileid) {
       throw new BadRequestException('Unknown error');
     }
 
@@ -54,6 +55,26 @@ module.exports = {
     });
 
     return { ...tokens, user: loginData };
+  },
+
+  forgotPassword: async (email) => {
+    const profile = await profileServices.getProfileByEmail(email);
+
+    if (profile?.profileid) {
+      const link = `${config.clientUrl}/reset-password/${profile?.activateLink}`;
+
+      transporter.sendMail({
+        from: 'rajkodima@gmail.com',
+        to: email,
+        subject: 'Password resetting',
+        text: 'Reset password to your account',
+        html: `Click <a href=${link}>here</a> to reset your password.`,
+      });
+
+      return 1;
+    }
+
+    return 0;
   },
 
   refresh: async (refreshToken) => {
@@ -101,5 +122,12 @@ module.exports = {
     }
 
     return null;
+  },
+
+  resetPassword: async (hash, password) => {
+    const hashPassword = await bcrypt.hash(password, 3);
+
+    // eslint-disable-next-line no-return-await
+    return await authService.resetPassword(hash, hashPassword);
   },
 };

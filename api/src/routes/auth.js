@@ -2,6 +2,13 @@ const router = require('express').Router();
 const passport = require('passport');
 const middleAsync = require('../middlewares/async');
 const authControllers = require('../controllers/auth');
+const auth = require('../middlewares/auth');
+
+router.get(
+  '/user-by-cookie',
+  auth,
+  middleAsync(async (req, res) => authControllers.getOneUser(req, res))
+);
 
 router.post(
   '/registration',
@@ -11,6 +18,16 @@ router.post(
 router.post(
   '/login',
   middleAsync(async (req, res) => authControllers.login(req, res))
+);
+
+router.post(
+  '/forgot-password',
+  middleAsync(async (req, res) => authControllers.forgotPassword(req, res))
+);
+
+router.post(
+  '/reset-password/:hash',
+  middleAsync(async (req, res) => authControllers.resetPassword(req, res))
 );
 
 router.post(

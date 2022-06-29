@@ -7,20 +7,35 @@ const BadRequestException = require('../../services/errors/BadRequestException')
 const config = require('../../services/config');
 
 module.exports = {
-  registration: async (req, res) => {
-    const { email, password } = req.body;
+  getOneUser: async (req, res) => {
+    const { profileid } = req.session;
 
-    if (!email || !password) {
+    if (!profileid) {
+      throw new UnauthorizedException();
+    }
+
+    const user = await authServices.getUserById(profileid);
+
+    if (!user) {
+      throw new BadRequestException('Unknown error');
+    }
+    res.send({ user });
+  },
+
+  registration: async (req, res) => {
+    const { name, email, password } = req.body;
+
+    if (!email || !password || !name) {
       throw new BadRequestException('Validation error');
     }
 
     const isProfile = await profileServices.getProfileByEmail(email);
 
     if (isProfile?.profileid) {
-      throw new BadRequestException(`User with email address ${email} already exist`);
+      throw new BadRequestException('User with this email already exist');
     }
 
-    const registration = await auth.registration(email, password);
+    const registration = await auth.registration(name, email, password);
 
     if (!registration) {
       throw new Error('Unknown error');
@@ -54,6 +69,18 @@ module.exports = {
     });
 
     res.send(login);
+  },
+
+  forgotPassword: async (req, res) => {
+    const { email } = req.body;
+
+    const forgot = await auth.forgotPassword(email);
+
+    if (!forgot) {
+      throw new BadRequestException('Please, register your account!');
+    }
+
+    res.send({ message: 'We send mail to your email!' });
   },
 
   refresh: async (req, res) => {
@@ -90,6 +117,19 @@ module.exports = {
     await authServices.activateProfile(hash);
 
     res.redirect(config.clientUrl);
+  },
+
+  resetPassword: async (req, res) => {
+    const { hash } = req.params;
+    const { password } = req.body;
+
+    const resetPassword = await auth.resetPassword(hash, password);
+
+    if (!resetPassword) {
+      throw new Error('Unknown Error');
+    }
+
+    res.send();
   },
 
   facebook: async (req, res) => {

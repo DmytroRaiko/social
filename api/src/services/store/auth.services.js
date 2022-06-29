@@ -21,4 +21,6 @@ module.exports = {
     selectProfileByFacebookTokenId: async (profileId) =>
       db.select().first().from('profile').where('facebookid', '=', profileId),
   },
+  resetPassword: (hash, password) =>
+    db('profile').update({ password, isActivated: true }).where('activateLink', hash),
 };

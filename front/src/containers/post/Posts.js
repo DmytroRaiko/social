@@ -2,6 +2,7 @@ import './Post.css';
 import { useQuery } from 'react-query';
 import { getPosts } from './api/crud';
 import PostComponent from './PostComponent';
+import { Loader } from '../../components/Loader';
 
 const Posts = () => {
   const {
@@ -16,7 +17,7 @@ const Posts = () => {
 
   return (
     <>
-      {isFetching && <div>Loading...</div>}
+      {isFetching && <Loader />}
       {data && <PostComponent posts={posts} refetch={refetch} />}
     </>
   );

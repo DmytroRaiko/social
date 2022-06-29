@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   BrowserRouter,
   Routes,
-  Route,
+  Route, Navigate,
 } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import SiteHeader from './containers/SiteHeader';
 import AddArticle from './components/AddArticle';
 import Profiles from './containers/profiles/Profiles';
@@ -14,58 +13,71 @@ import Post from './containers/post/Post';
 import Profile from './containers/profiles/Profile';
 import PostComments from './containers/post/PostComments';
 import ProfileEdit from './containers/profiles/ProfileEdit';
-import Login from './login';
-import context from './services/context';
-import ErrorBoundary from './components/ErrorBoundary';
-
-const queryClient = new QueryClient();
+import Login from './containers/auth/Login';
+import Registration from './containers/auth/Registration';
+import ForgotPassword from './containers/auth/ForgotPassword';
+import ResetPassword from './containers/auth/ResetPassword';
+import useAuth from './containers/providers/authProvider';
+import { Loader } from './components/Loader';
 
 function App() {
-  const [contextData, setContextData] = useState({
-    authAccess: false,
-    userData: null,
-    setContextData: () => {},
-  });
+  const { isLoading, isAuth } = useAuth();
 
-  // temporary context value - start
-  useEffect(() => {
-    setContextData({
-      authAccess: true,
-      userData: {
-        id: 1,
-        name: 'Dmitry Raiko',
-        icon: null,
-      },
-      setContextData,
-    });
-  }, []);
-  // end
+  if (isLoading) {
+    return (
+      <div className="auth-page">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (!isAuth) {
+    return (
+      <BrowserRouter>
+        <div className="auth-page">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Navigate replace to="/sign-in" />
+            }
+            />
+
+            <Route path="sign-in" index element={<Login />} />
+            <Route path="sign-up" element={<Registration />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password/:hash" element={<ResetPassword />} />
+
+            <Route path="*" element={<Navigate replace to="/sign-in" />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    );
+  }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ErrorBoundary>
-        <context.Provider value={contextData}>
-          <BrowserRouter>
-            <SiteHeader />
-            <div className="site-body">
-              <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/articles" element={<Posts />} />
-                <Route path="/article/:id" element={<Post />} />
-                <Route path="/articles/:id/comments" element={<PostComments />} />
-                <Route path="/articleAdd" element={<AddArticle />} />
-                <Route path="/profiles" element={<Profiles />} />
-                <Route path="/profile/:id" element={<Profile />} />
-                <Route path="/profile/:id/edit" element={<ProfileEdit />} />
-                <Route path="/date/:date" element={<DateComponent />} />
+    <BrowserRouter>
+      <SiteHeader />
+      <div className="site-body">
+        <Routes>
+          <Route path="sign-in" index element={<Navigate replace to="/articles" />} />
+          <Route path="sign-up" element={<Navigate replace to="/articles" />} />
+          <Route path="forgot-password" element={<Navigate replace to="/articles" />} />
+          <Route path="reset-password/:hash" element={<Navigate replace to="/articles" />} />
 
-                <Route path="*" element={<div> 404 </div>} />
-              </Routes>
-            </div>
-          </BrowserRouter>
-        </context.Provider>
-      </ErrorBoundary>
-    </QueryClientProvider>
+          <Route path="/articles" element={<Posts />} />
+          <Route path="/article/:id" element={<Post />} />
+          <Route path="/articles/:id/comments" element={<PostComments />} />
+          <Route path="/articleAdd" element={<AddArticle />} />
+          <Route path="/profiles" element={<Profiles />} />
+          <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/profile/:id/edit" element={<ProfileEdit />} />
+          <Route path="/date/:date" element={<DateComponent />} />
+
+          <Route path="*" element={<div> 404 </div>} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 

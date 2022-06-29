@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useMutation } from 'react-query';
 import PostHeader from '../../components/post/PostHeader';
 import PostFooter from '../../components/post/PostFooter';
 import PostContent from '../../components/post/PostContent';
@@ -6,9 +8,40 @@ import './Post.css';
 import ErrorBoundary from '../../components/ErrorBoundary';
 import postComponentProps from '../../services/PropTypes/PostComponentProps';
 import postComponentPropsDefault from '../../services/PropTypes/PostComponentPropsDefault';
+import { deleteLikePost, likePost } from './api/crud';
 
 const PostComponent = ({ posts, refetch }) => {
-  const postsList = posts?.map((post) => (
+  const [postList, setPostList] = useState(posts);
+
+  const deleteLike = useMutation(
+    'post-like',
+    (postId) => deleteLikePost(postId),
+  );
+
+  const postLike = useMutation(
+    'post-like',
+    (postId) => likePost(postId),
+  );
+
+  const setLikeHandle = (postId, postLikeId) => {
+    let likeTmp;
+
+    if (postLikeId) {
+      deleteLike.mutate(postId);
+
+      likeTmp = null;
+    } else {
+      postLike.mutate(postId);
+
+      likeTmp = true;
+    }
+
+    setPostList(postList.map((post) => (post.postid === postId
+      ? { ...post, postlikeid: likeTmp }
+      : post)));
+  };
+
+  const postsList = postList?.map((post) => (
     <div className="post-body" key={`post-id-${post.postid}`}>
       <ErrorBoundary>
         <PostHeader
@@ -27,10 +60,12 @@ const PostComponent = ({ posts, refetch }) => {
           postImage={post.imagelink}
         />
         <PostFooter
-          postId={post.profileid}
+          postId={post.postid}
+          postProfileId={post.profileid}
           postLikes={post.totallikes}
+          setLikeHandle={setLikeHandle}
           postComments={post.totalcomments}
-          postMyLike={post.postlikeid}
+          postMyLike={Boolean(post.postlikeid)}
         />
       </ErrorBoundary>
     </div>

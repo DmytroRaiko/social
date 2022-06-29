@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -11,13 +11,14 @@ import { Link as RouterLink } from 'react-router-dom';
 import GroupIcon from '@mui/icons-material/Group';
 import projectSettings from '../../settings';
 import stringAvatar from '../../services/icons/avatarIcon';
-import context from '../../services/context';
 import styleSettings from '../../services/style.settings';
+import useAuth from '../../containers/providers/authProvider';
 
 const { menuPaperProps } = styleSettings;
 
 const HeaderChip = () => {
-  const { authAccess, userData } = useContext(context);
+  const { isAuth, user, logoutFn } = useAuth();
+  const userData = user?.user;
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -28,18 +29,18 @@ const HeaderChip = () => {
     setAnchorEl(null);
   };
 
-  return (authAccess && userData
+  return (isAuth && userData
     && (
     <>
       <Box className="box-chip">
         <Chip
           onClick={handleClick}
           avatar={
-            (userData.icon
+            (userData.avatarlink
               && (
                 <img
                   className="avatar"
-                  src={`${projectSettings.URI}/files/avatar/${userData.id}`}
+                  src={`${projectSettings.URI}/files/avatar/${userData.profileid}`}
                   alt="avatar"
                 />
               )
@@ -63,7 +64,7 @@ const HeaderChip = () => {
       >
         <RouterLink
           style={{ color: 'inherit', textDecoration: 'none' }}
-          to={`/profile/${userData.id}`}
+          to={`/profile/${userData.profileid}`}
         >
           <MenuItem>
             <Avatar />
@@ -83,7 +84,7 @@ const HeaderChip = () => {
           </MenuItem>
         </RouterLink>
         <Divider />
-        <MenuItem>
+        <MenuItem onClick={() => logoutFn()}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

@@ -18,9 +18,8 @@ export const addPost = async (data) => {
     '/posts',
     formData,
     {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+      ...header,
+      'Content-Type': 'multipart/form-data',
     },
   );
 };
@@ -32,7 +31,8 @@ export const editPost = async (id, data) => {
     `/posts/${id}`,
     formData,
     {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      ...header,
+      'Content-Type': 'multipart/form-data',
     },
   );
 };
@@ -48,3 +48,7 @@ export const getPostLikes = async (id) => apiClient.get(`/posts/${id}/likes`, he
 export const getAvailability = async () => apiClient.get('/select/availability', header);
 
 export const getUniversities = async () => apiClient.get('/select/universities', header);
+
+export const likePost = async (postId) => apiClient.post(`/posts/${postId}/likes`, {}, header);
+
+export const deleteLikePost = async (postId) => apiClient.delete(`/posts/${postId}/likes`, header);
