@@ -12,9 +12,10 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       let user = await authServices.google.selectProfileByGoogleTokenId(
-        profile.id
+        profile.id,
+        // eslint-disable-next-line no-underscore-dangle
+        profile._json.email,
       );
-
       if (!user) {
         const [{ value: email }] = profile.emails;
 
@@ -25,6 +26,8 @@ passport.use(
         });
 
         user = await authServices.google.selectProfileByGoogleTokenId(profile.id);
+      } else {
+        await profilesServices.updateProfile({ googleid: profile.id }, user.profileid);
       }
 
       done(null, {

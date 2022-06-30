@@ -16,9 +16,9 @@ export const forgotPassword = async (data) => apiClient.post('/auth/forgot-passw
 export const resetPassword = async (hash, data) => apiClient.post(`auth/reset-password/${hash}`, data);
 
 export const googleOAuth = async (data) => apiClient.post(`${settings.URI}/auth/google`, {
-  access_token: data.accessToken,
+  access_token: data,
 });
 
 export const facebookOAuth = async (data) => apiClient.post(`${settings.URI}/auth/facebook`, {
-  access_token: data.accessToken,
+  access_token: data,
 });

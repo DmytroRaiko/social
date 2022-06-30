@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import RegistrationForm from '../../components/forms/RegistrationForm';
 import { registration, facebookOAuth, googleOAuth } from './api/crud';
 import SocialBtns from '../../components/auth/SocialBtns';
+import useAuth from '../providers/authProvider';
 
 const Registration = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -16,6 +17,7 @@ const Registration = () => {
     enqueueSnackbar(message, { variant });
   };
   const navigate = useNavigate();
+  const { loginFn } = useAuth();
 
   const registerFn = useMutation(
     'registration',
@@ -35,8 +37,34 @@ const Registration = () => {
       },
     },
   );
-  const handleGoogleAuth = useMutation('google-auth', (data) => googleOAuth(data));
-  const handleFacebookAuth = useMutation('facebook-auth', (data) => facebookOAuth(data));
+  const handleGoogleAuth = useMutation(
+    'google-auth',
+    (data) => googleOAuth(data),
+    {
+      onSuccess: (data) => {
+        if (data.status === 200) {
+          handleSnack('You are log in!', 'success');
+          loginFn(true, data?.data);
+        } else {
+          handleSnack(data?.data?.message, 'error');
+        }
+      },
+    },
+  );
+  const handleFacebookAuth = useMutation(
+    'facebook-auth',
+    (data) => facebookOAuth(data),
+    {
+      onSuccess: (data) => {
+        if (data.status === 200) {
+          handleSnack('You are log in!', 'success');
+          loginFn(true, data?.data);
+        } else {
+          handleSnack(data?.data?.message, 'error');
+        }
+      },
+    },
+  );
 
   return (
     <Card sx={{ margin: 'auto', width: '400px' }}>

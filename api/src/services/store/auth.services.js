@@ -14,8 +14,8 @@ module.exports = {
     db('oauthlist').where('profileid', '=', profileId).del(),
   activateProfile: async (hash) => db('profile').update({ isActivated: true }).where('activateLink', hash),
   google: {
-    selectProfileByGoogleTokenId: async (profileId) =>
-      db.select().first().from('profile').where('googleid', '=', profileId),
+    selectProfileByGoogleTokenId: async (profileId, email) => db.select().first().from('profile').where('googleid', profileId)
+      .orWhere('email', email),
   },
   facebook: {
     selectProfileByFacebookTokenId: async (profileId) =>
