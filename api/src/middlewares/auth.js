@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
     let decoded;
     try {
       decoded = await new Promise((resolve, reject) => {
-        jwt.verify(token, config.secretKey, (err, result) => {
+        jwt.verify(token, config.accessTokenKey, (err, result) => {
           if (err) {
             reject(err);
           }
@@ -22,7 +22,9 @@ module.exports = async (req, res, next) => {
       req.session = decoded;
       next();
     } else {
-      throw new UnauthorizedException('');
+      next(new UnauthorizedException(''));
     }
+  } else {
+    next(new UnauthorizedException(''));
   }
 };

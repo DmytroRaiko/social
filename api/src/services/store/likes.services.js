@@ -14,6 +14,13 @@ module.exports = {
       .where('postid', postId)
       .offset(offset)
       .limit(limit),
+  getLikeInfo: async (profileId, postId) =>
+    db
+      .select()
+      .first()
+      .from('postlike')
+      .where('postid', '=', postId)
+      .andWhere('profileid', '=', profileId),
   addLike: async (insertData) => db('postlike').insert(insertData),
   deleteLike: async (postId, profileId) =>
     db

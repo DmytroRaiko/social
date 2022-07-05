@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { getEditProfile } from './api/crud';
 import ProfileEditContainer from './ProfileEditContainer';
 import { getAvailability, getUniversities } from '../post/api/crud';
+import { Loader } from '../../components/Loader';
 
 const ProfileEdit = () => {
   const params = useParams();
@@ -30,7 +31,7 @@ const ProfileEdit = () => {
       <div className="profile-main-page">
         {
           (profileIsFetching || availabilityIsFetching || universitiesIsFetching)
-          && <div>Loading...</div>
+          && <Loader />
         }
         { profileEdit && availabilities && universities
           && (

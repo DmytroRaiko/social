@@ -14,6 +14,8 @@ module.exports = {
       .where('comment.postid', postId)
       .offset(offset)
       .limit(limit),
+  getCommentInfo: async (commentId) =>
+    db.select().first().from('comment').where('commentid', '=', commentId),
   addComment: async (insertData) => db('comment').insert(insertData),
   updateComment: async (updateData, commentId) =>
     db('comment').insert(updateData).where('commentid', commentId),

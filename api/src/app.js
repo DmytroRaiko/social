@@ -16,11 +16,15 @@ const authRoutes = require('./routes/auth');
 const logs = require('./middlewares/logs');
 const errors = require('./middlewares/errors');
 const middlewareServices = require('./services/middlewares');
-require('./services/strategies/google.strategy');
-require('./services/strategies/facebook.strategy');
+require('./services/auth/strategies');
 
 app.use(logs(middlewareServices));
-app.use(cors());
+app.use(cors(
+  {
+    credentials: true,
+    origin: config.clientUrl
+  }
+));
 
 const portApp = config.appPort;
 

@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import PropTypes from 'prop-types';
 import { getProfilePosts } from './api/crud';
 import PostComponent from '../post/PostComponent';
+import { Loader } from '../../components/Loader';
 
 const ProfilePosts = ({ profileId }) => {
   const {
@@ -17,7 +18,7 @@ const ProfilePosts = ({ profileId }) => {
 
   return (
     <>
-      {isFetching && <div>Loading...</div>}
+      {isFetching && <Loader />}
       {data && <PostComponent posts={posts} refetch={refetch} />}
     </>
   );

@@ -3,6 +3,7 @@ import profileDataProps from '../../services/PropTypes/ProfileDataProps';
 import ProfilePageMainInfo from '../../components/profile/ProfilePageMainInfo';
 import ProfilePosts from './ProfilePosts';
 import ProfileAvatar from '../../components/profile/ProfileAvatar';
+import { Loader } from '../../components/Loader';
 
 function ProfilePageContainer({ profileData }) {
   const profile = profileData[0] || null;
@@ -38,7 +39,7 @@ function ProfilePageContainer({ profileData }) {
         <ProfilePosts profileId={profile.profileid} />
       </div>
     </div>
-    )) || <div> loading...</div>
+    )) || <Loader />
   );
 }
 

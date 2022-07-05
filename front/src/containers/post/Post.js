@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getPost } from './api/crud';
 import PostComponent from './PostComponent';
+import { Loader } from '../../components/Loader';
 
 const Post = () => {
   const params = useParams();
@@ -15,7 +16,7 @@ const Post = () => {
 
     return (
       <>
-        {isFetching && <div>Loading...</div>}
+        {isFetching && <Loader />}
         {posts && <PostComponent posts={posts} refetch={refetch} />}
       </>
     );

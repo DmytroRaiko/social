@@ -5,6 +5,7 @@ import { IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { getAvailability } from './api/crud';
 import AddPostForm from '../../components/forms/AddPostForm';
+import { Loader } from '../../components/Loader';
 
 const EditPost = ({ handleClose }) => {
   const availabilityQuery = useQuery('availabilities', () => getAvailability());
@@ -15,7 +16,7 @@ const EditPost = ({ handleClose }) => {
 
   return (
     <>
-      {availabilityIsFetching && <div> Loading... </div>}
+      {availabilityIsFetching && <Loader />}
       {availabilities && (
       <>
         <header className="add-modal-header">
