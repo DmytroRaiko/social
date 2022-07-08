@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import React from 'react';
 import { useMutation } from 'react-query';
+// import { useI,nView } from 'react-intersection-observer';
 import PostHeader from '../../components/post/PostHeader';
 import PostFooter from '../../components/post/PostFooter';
 import PostContent from '../../components/post/PostContent';
@@ -9,9 +10,10 @@ import ErrorBoundary from '../../components/ErrorBoundary';
 import postComponentProps from '../../services/PropTypes/PostComponentProps';
 import postComponentPropsDefault from '../../services/PropTypes/PostComponentPropsDefault';
 import { deleteLikePost, likePost } from './api/crud';
+import postViewScroll from '../../hooks/postViewScroll';
 
-const PostComponent = ({ posts, refetch }) => {
-  const [postList, setPostList] = useState(posts);
+const PostComponent = ({ posts, setPosts }) => {
+  postViewScroll();
 
   const deleteLike = useMutation(
     'post-like',
@@ -36,20 +38,23 @@ const PostComponent = ({ posts, refetch }) => {
       likeTmp = true;
     }
 
-    setPostList(postList.map((post) => (post.postid === postId
+    setPosts(posts.map((post) => (post.postid === postId
       ? { ...post, postlikeid: likeTmp }
       : post)));
   };
 
-  const postsList = postList?.map((post) => (
-    <div className="post-body" key={`post-id-${post.postid}`}>
+  const postsList = posts?.map((post) => (
+    <div
+      className="post-body"
+      data-id={post.postid}
+      key={`post-id-${post.postid}`}
+    >
       <ErrorBoundary>
         <PostHeader
           profileId={post.profileid}
           avatar={post.avatarlink}
           postAuthor={post.name}
           postId={post.postid}
-          refetchQuery={refetch}
           postEdit={post.changed}
           postTime={post.timepost}
           changeTime={post.timechanged}
@@ -61,11 +66,7 @@ const PostComponent = ({ posts, refetch }) => {
         />
         <PostFooter
           postId={post.postid}
-          postProfileId={post.profileid}
-          postLikes={post.totallikes}
           setLikeHandle={setLikeHandle}
-          postComments={post.totalcomments}
-          postMyLike={Boolean(post.postlikeid)}
         />
       </ErrorBoundary>
     </div>

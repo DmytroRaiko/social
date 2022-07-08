@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const app = express();
 const passport = require('passport');
+const socket = require('socket.io');
 const config = require('./services/config');
 
 // require route directory
@@ -13,9 +14,11 @@ const postsRoutes = require('./routes/posts');
 const fileRoutes = require('./routes/files');
 const selectRoutes = require('./routes/select');
 const authRoutes = require('./routes/auth');
+const socketController = require('./controllers/socket.io/index');
 const logs = require('./middlewares/logs');
 const errors = require('./middlewares/errors');
 const middlewareServices = require('./services/middlewares');
+
 require('./services/auth/strategies');
 
 app.use(logs(middlewareServices));
@@ -42,7 +45,15 @@ app.use('/auth', authRoutes);
 // eslint-disable-next-line no-unused-vars
 app.use(errors);
 
-app.listen(portApp, () => {
+const server = app.listen(portApp, () => {
   // eslint-disable-next-line no-console
   console.log(`App listening at: http://localhost:${portApp}`);
 });
+
+const io = socket(server, {
+  cors: {
+    origin: config.clientUrl,
+  }
+});
+
+io.on('connection', (s) => socketController(io, s));

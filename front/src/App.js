@@ -11,7 +11,6 @@ import DateComponent from './components/DateComponent';
 import Posts from './containers/post/Posts';
 import Post from './containers/post/Post';
 import Profile from './containers/profiles/Profile';
-import PostComments from './containers/post/PostComments';
 import ProfileEdit from './containers/profiles/ProfileEdit';
 import Login from './containers/auth/Login';
 import Registration from './containers/auth/Registration';
@@ -67,7 +66,6 @@ function App() {
 
           <Route path="/articles" element={<Posts />} />
           <Route path="/article/:id" element={<Post />} />
-          <Route path="/articles/:id/comments" element={<PostComments />} />
           <Route path="/articleAdd" element={<AddArticle />} />
           <Route path="/profiles" element={<Profiles />} />
           <Route path="/profile/:id" element={<Profile />} />

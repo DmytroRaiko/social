@@ -9,13 +9,15 @@ module.exports = {
     const { profileid } = req.session;
 
     const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
-    const limit = page * 10;
+    const limit = 10;
     const offset = (page - 1) * 10;
 
     const posts = await postsServices.getAllPosts(profileid, offset, limit);
 
     if (posts && Object.keys(posts).length) {
-      res.send({ message: 'Show posts', data: posts, success: true });
+      res.send({
+        message: 'Show posts', data: posts, success: true, count: posts.length
+      });
     } else {
       throw new NotFoundException('Posts');
     }
@@ -98,14 +100,9 @@ module.exports = {
 
   getComments: async (req, res) => {
     const postId = req.params.postid;
-    const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
-    const limit = page * 30;
-    const offset = (page - 1) * 30;
 
     const commentsForPost = await commentsServices.getComments(
       postId,
-      offset,
-      limit
     );
 
     if (commentsForPost && Object.keys(commentsForPost).length) {
@@ -177,6 +174,7 @@ module.exports = {
   },
 
   getLikes: async (req, res) => {
+    const { profileid } = req.session;
     const postId = req.params.postid;
 
     const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
@@ -184,10 +182,12 @@ module.exports = {
     const offset = (page - 1) * 50;
 
     const likesForPost = await likesServices.getLikes(postId, offset, limit);
+    const myLike = await likesServices.getMyLike(postId, profileid);
 
     if (likesForPost && Object.keys(likesForPost).length) {
       res.send({
         message: 'Fetching likes',
+        myLike,
         data: likesForPost,
         success: true,
         postid: postId,

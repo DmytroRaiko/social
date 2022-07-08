@@ -29,11 +29,43 @@
   font-size: 1rem;
 }
 
+.post-container {
+  height: calc(100vh - 45px);
+  overflow: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.load-more {
+  background: linear-gradient(to top, #f9f9f9, #ffffff, #ffffff);
+  box-shadow: 0 -12px 17px -1px #e4e4e4;
+  padding: 20px 12px;
+  margin-bottom: 25px;
+  width: 55%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  font-weight: 700;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #c7c7c7;
+}
+
+.css-o4b71y-MuiAccordionSummary-content.Mui-expanded {
+  margin: 12px 0 !important;
+}
+
+.css-1usb9rw-MuiButtonBase-root-MuiAccordionSummary-root.Mui-expanded {
+  min-height: 48px !important;
+}
 
 .post-header .author {
   font-size: 20px;
   text-decoration: none;
   color: #0E0E0E;
+  font-weight: 600;
 }
 
 .post-body {
@@ -101,11 +133,21 @@
   border-top: 1px solid #e4e4e4;
 }
 
+.action-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.comment-block {
+  border-top: 1px solid #e4e4e4;
+}
+
 .post-footer .footer-item {
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 100%;
+  width: 50%;
 }
 
 .post-footer .footer-item:first-child {
@@ -123,6 +165,45 @@
 
 .post-footer .footer-item .like {
   margin-left: 1px;
+}
+
+.comments {
+  max-height: 500px;
+  overflow: auto;
+  border-bottom: 1px solid #e4e4e4;
+}
+
+.comment {
+  margin-top: 5px;
+}
+
+.comment .header {
+  justify-content: space-between !important;
+}
+
+.comment .avatar {
+  width: 27px;
+  height: 27px;
+  font-size: 13px;
+  margin-right: 5px;
+}
+
+.comment-menu {
+  width: 27px !important;
+  height: 25px !important;
+}
+
+.comment .content {
+  margin-top: 5px;
+  font-size: 18px;
+  font-weight: 300;
+  margin-left: 32px;
+  padding-bottom: 2px;
+  border-bottom: 1px dotted #e4e4e4;
+}
+
+.comment:last-child .content {
+  border-bottom: none;
 }
 
 .modal {

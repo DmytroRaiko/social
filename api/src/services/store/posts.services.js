@@ -4,27 +4,15 @@ module.exports = {
   getAllPosts: async (profileId, offset = 0, limit = 15) =>
     db
       .select(
+        'post.*',
         'profile.profileid',
         'profile.name',
         'profile.avatarlink',
-        'post.*',
         'poststatistic.*',
-        'mylike.postlikeid'
       )
       .from('profile')
       .join('post', 'post.profileid', '=', 'profile.profileid')
       .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
-      .leftJoin(
-        db
-          .select('postlikeid', 'postid', 'profile.profileid')
-          .from('postlike')
-          .leftJoin('profile', 'profile.profileid', '=', 'postlike.profileid')
-          .where('profile.profileid', '=', profileId)
-          .as('mylike'),
-        'post.postid',
-        '=',
-        'mylike.postid'
-      )
       .orderBy('post.timepost', 'DESC')
       .offset(offset)
       .limit(limit),
@@ -36,22 +24,10 @@ module.exports = {
         'profile.name',
         'profile.avatarlink',
         'poststatistic.*',
-        'mylike.postlikeid'
       )
       .from('post')
       .join('profile', 'post.profileid', '=', 'profile.profileid')
       .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
-      .leftJoin(
-        db
-          .select('postlikeid', 'postid', 'profile.profileid')
-          .from('postlike')
-          .leftJoin('profile', 'profile.profileid', '=', 'postlike.profileid')
-          .where('profile.profileid', '=', userProfileId)
-          .as('mylike'),
-        'post.postid',
-        '=',
-        'mylike.postid'
-      )
       .where('post.profileid', '=', profileId)
       .orderBy('post.timepost', 'DESC')
       .offset(offset)
@@ -63,23 +39,11 @@ module.exports = {
         'profile.name',
         'profile.avatarlink',
         'post.*',
-        'poststatistic.*',
-        'mylike.postlikeid'
+        'poststatistic.*'
       )
       .from('profile')
       .join('post', 'post.profileid', '=', 'profile.profileid')
       .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
-      .leftJoin(
-        db
-          .select('postlikeid', 'postid', 'profile.profileid')
-          .from('postlike')
-          .leftJoin('profile', 'profile.profileid', '=', 'postlike.profileid')
-          .where('profile.profileid', '=', profileId)
-          .as('mylike'),
-        'post.postid',
-        '=',
-        'mylike.postid'
-      )
       .where('post.postid', '=', postId),
   getPostInfo: async (postId) =>
     db.select().first().from('post').where('postid', '=', postId),

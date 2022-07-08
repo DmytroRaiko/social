@@ -7,6 +7,7 @@ import {
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { useMutation } from 'react-query';
+import TimeAgo from 'react-timeago';
 import stringAvatar from '../../services/icons/avatarIcon';
 import EditPostModal from '../../containers/modals/EditPostModal';
 import settings from '../../settings';
@@ -15,17 +16,9 @@ import useAuth from '../../containers/providers/authProvider';
 
 const ITEM_HEIGHT = 48;
 
-const dateFormat = (d) => {
-  const date = new Date(d);
-  return `${date.getDate()}.${
-    date.getMonth() + 1 < 10 ? '0' : ''}${date.getMonth() + 1}.${
-    date.getFullYear()} at ${date.getHours()}:${
-    date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()}`;
-};
-
 const PostHeader = ({
   profileId, avatar, postAuthor,
-  postId, refetchQuery,
+  postId,
   postEdit, postTime, changeTime,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -48,7 +41,6 @@ const PostHeader = ({
 
   const onDeleteHandle = () => {
     mutation.mutate();
-    refetchQuery();
   };
 
   return (
@@ -69,11 +61,11 @@ const PostHeader = ({
           <div className="author">{postAuthor}</div>
           <div className="post-footer-time">
             <p className="post-time">
-              {dateFormat(postTime)}
+              <TimeAgo date={postTime} />
             </p>
 
             {postEdit && (
-              <p className="post-edit" title={dateFormat(changeTime)}>
+              <p className="post-edit" title={changeTime}>
                 {'  '}
                 (edited)
               </p>
@@ -138,7 +130,6 @@ PostHeader.propTypes = {
   postAuthor: PropTypes.string.isRequired,
   avatarLink: PropTypes.string,
   postId: PropTypes.number.isRequired,
-  refetchQuery: PropTypes.func.isRequired,
   postEdit: PropTypes.bool,
   changeTime: PropTypes.string,
   postTime: PropTypes.string.isRequired,
