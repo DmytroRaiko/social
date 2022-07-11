@@ -10,8 +10,6 @@ export const useSocketComments = (roomId, userId) => {
     socketRef.current = io(URI, {
       query: {
         roomId,
-        auth: {
-        },
       },
     });
 

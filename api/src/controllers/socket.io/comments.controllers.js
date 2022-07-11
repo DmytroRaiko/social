@@ -15,23 +15,20 @@ module.exports = (io, socket) => {
       text, parentProfileId, postid: postId, profileid: profileId,
     });
 
-    const comments = await commentServices.getComments(socket.postId);
-    io.to(`comments-${socket.postId}`).emit('comments', comments);
+    await getComments();
   };
 
   const changeComment = async (data) => {
     const { commentId, text } = data;
     await commentServices.updateComment({ text, changed: 1 }, commentId);
 
-    const comments = await commentServices.getComments(socket.postId);
-    io.to(`comments-${socket.postId}`).emit('comments', comments);
+    await getComments();
   };
 
   const deleteComment = async (data) => {
     await commentServices.deleteComment(data);
 
-    const comments = await commentServices.getComments(socket.postId);
-    io.to(`comments-${socket.postId}`).emit('comments', comments);
+    await getComments();
   };
 
   socket.on('comments:get', getComments);
