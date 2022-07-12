@@ -1,33 +1,37 @@
 const db = require('../db');
 
 module.exports = {
-  getAllPosts: async (profileId, offset = 0, limit = 15) =>
+  getAllPosts: async (profileId, offset = 0, limit = 10) =>
     db
       .select(
         'post.*',
         'profile.profileid',
         'profile.name',
         'profile.avatarlink',
-        'poststatistic.*',
       )
       .from('profile')
       .join('post', 'post.profileid', '=', 'profile.profileid')
-      .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
+      .whereNotIn(
+        'post.postid',
+        db
+          .distinct()
+          .select('postid')
+          .from('postview')
+          .where('profileid', profileId)
+      )
       .orderBy('post.timepost', 'DESC')
       .offset(offset)
       .limit(limit),
-  getAllUserPosts: async (profileId, userProfileId, offset = 0, limit = 20) =>
+  getAllUserPosts: async (profileId, userProfileId, offset = 0, limit = 10) =>
     db
       .select(
         'post.*',
         'profile.profileid',
         'profile.name',
         'profile.avatarlink',
-        'poststatistic.*',
       )
       .from('post')
       .join('profile', 'post.profileid', '=', 'profile.profileid')
-      .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
       .where('post.profileid', '=', profileId)
       .orderBy('post.timepost', 'DESC')
       .offset(offset)
@@ -39,11 +43,10 @@ module.exports = {
         'profile.name',
         'profile.avatarlink',
         'post.*',
-        'poststatistic.*'
       )
+      .first()
       .from('profile')
       .join('post', 'post.profileid', '=', 'profile.profileid')
-      .join('poststatistic', 'poststatistic.postid', '=', 'post.postid')
       .where('post.postid', '=', postId),
   getPostInfo: async (postId) =>
     db.select().first().from('post').where('postid', '=', postId),
@@ -71,4 +74,9 @@ module.exports = {
     db('post').update(updateData).where('postid', '=', postId),
   deletePost: async (postId) =>
     db.from('post').where('postid', postId).delete(),
+  isView: async (postId, profileId) =>
+    db.select().first().from('postview').where('postid', postId)
+      .andWhere('profileid', profileId),
+  viewPost: async (postId, profileId) =>
+    db('postview').insert({ postid: postId, profileid: profileId })
 };

@@ -41,3 +41,5 @@ export const getUniversities = async () => apiClient.get('/select/universities')
 export const likePost = async (postId) => apiClient.post(`/posts/${postId}/likes`, {});
 
 export const deleteLikePost = async (postId) => apiClient.delete(`/posts/${postId}/likes`);
+
+export const viewPost = async (postId) => apiClient.put(`/posts/view/${postId}`);

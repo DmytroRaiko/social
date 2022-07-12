@@ -8,11 +8,7 @@ module.exports = {
   getAllPosts: async (req, res) => {
     const { profileid } = req.session;
 
-    const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
-    const limit = 10;
-    const offset = (page - 1) * 10;
-
-    const posts = await postsServices.getAllPosts(profileid, offset, limit);
+    const posts = await postsServices.getAllPosts(profileid);
 
     if (posts && Object.keys(posts).length) {
       res.send({
@@ -79,6 +75,18 @@ module.exports = {
     } else {
       throw new NotFoundException('Post not found');
     }
+  },
+
+  viewPost: async (req, res) => {
+    const { profileid } = req.session;
+    const { postId } = req.params;
+
+    const isView = await postsServices.isView(postId, profileid);
+    if (!isView?.postviewid) {
+      await postsServices.viewPost(postId, profileid);
+    }
+
+    res.send();
   },
 
   deletePost: async (req, res) => {
@@ -199,13 +207,9 @@ module.exports = {
 
   postLike: async (req, res) => {
     const { profileid } = req.session;
+    const { postid } = req.params;
 
-    const dataLike = {
-      profileid,
-      postid: req.params.postid,
-    };
-
-    const likePost = await likesServices.addLike(dataLike);
+    const likePost = await likesServices.addLike(postid, profileid);
 
     if (likePost && Object.keys(likePost).length) {
       res.send({ message: 'Like adding', data: likePost, success: true });

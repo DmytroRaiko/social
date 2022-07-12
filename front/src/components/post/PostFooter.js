@@ -32,7 +32,7 @@ const PostFooter = ({ postId }) => {
     commentId: null,
     text: '',
   });
-  const myLike = likes.find((el) => el.profileid === userId);
+  const myLike = likes.find((el) => el.profileid === userId)?.profileid;
 
   const handleSetReplyTo = (profileId = null, name = '') => {
     setReplyTo({ profileId, name });

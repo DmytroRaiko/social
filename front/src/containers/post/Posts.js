@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import { useInView } from 'react-intersection-observer';
 import { getPosts } from './api/crud';
-import PostComponent from './PostComponent';
+import PostMapping from './PostMapping';
 import { Loader } from '../../components/Loader';
 import './Post.css';
 
@@ -47,7 +47,7 @@ const Posts = () => {
       <div className="post-container">
         {posts
          && (
-         <PostComponent posts={posts} setPosts={setPosts} />
+         <PostMapping posts={posts} />
          )}
 
         {!lastPage && !isFetching

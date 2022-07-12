@@ -1,50 +1,60 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { useMutation } from 'react-query';
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../components/ErrorBoundary';
+import { viewPost } from './api/crud';
 import PostHeader from '../../components/post/PostHeader';
 import PostFooter from '../../components/post/PostFooter';
 import PostContent from '../../components/post/PostContent';
 
 import './Post.css';
-import ErrorBoundary from '../../components/ErrorBoundary';
-import postComponentProps from '../../services/PropTypes/PostComponentProps';
-import postComponentPropsDefault from '../../services/PropTypes/PostComponentPropsDefault';
-import postViewScroll from '../../hooks/postViewScroll';
 
-const PostComponent = ({ posts }) => {
-  postViewScroll();
+const PostComponent = ({ post }) => {
+  const { ref, inView, entry } = useInView({
+    threshold: 0,
+  });
 
-  const postsList = posts?.map((post) => (
-    <div
-      className="post-body"
-      data-id={post.postid}
-      key={`post-id-${post.postid}`}
-    >
-      <ErrorBoundary>
-        <PostHeader
-          profileId={post.profileid}
-          avatar={post.avatarlink}
-          postAuthor={post.name}
-          postId={post.postid}
-          postEdit={post.changed}
-          postTime={post.timepost}
-          changeTime={post.timechanged}
-        />
-        <PostContent
-          postId={post.postid}
-          postText={post.text}
-          postImage={post.imagelink}
-        />
-        <PostFooter
-          postId={post.postid}
-        />
-      </ErrorBoundary>
-    </div>
-  ));
+  const viewPostQuery = useMutation(
+    'view-post',
+    (id) => viewPost(id),
+  );
 
-  return postsList || <div> There are no any posts here! </div>;
+  useEffect(() => {
+    if (inView) {
+      viewPostQuery.mutate(entry?.target.dataset.id);
+    }
+  }, [inView]);
+
+  return (
+    <ErrorBoundary>
+      <div
+        data-id={post.postid}
+        ref={ref}
+      />
+      <PostHeader
+        profileId={post.profileid}
+        avatar={post.avatarlink}
+        postAuthor={post.name}
+        postId={post.postid}
+        postEdit={post.changed}
+        postTime={post.timepost}
+        changeTime={post.timechanged}
+      />
+      <PostContent
+        postId={post.postid}
+        postText={post.text}
+        postImage={post.imagelink}
+      />
+      <PostFooter
+        postId={post.postid}
+      />
+    </ErrorBoundary>
+  );
 };
 
-PostComponent.propTypes = postComponentProps;
-
-PostComponent.defaultProps = postComponentPropsDefault;
+PostComponent.propTypes = {
+  post: PropTypes.shape({}).isRequired,
+};
 
 export default PostComponent;

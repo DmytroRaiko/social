@@ -11,13 +11,20 @@ const Post = () => {
   if (/^[0-9]*$/m.exec(params.id)) {
     const postId = params.id;
 
-    const { isFetching, refetch, data } = useQuery(`post-${postId}`, () => getPost(postId));
-    const posts = data?.data.data;
+    const { isFetching, data } = useQuery(`post-${postId}`, () => getPost(postId));
+    const post = data?.data.data;
 
     return (
       <>
         {isFetching && <Loader />}
-        {posts && <PostComponent posts={posts} refetch={refetch} />}
+        {post
+          && (
+          <div
+            className="post-body"
+          >
+            <PostComponent post={post} />
+          </div>
+          )}
       </>
     );
   }

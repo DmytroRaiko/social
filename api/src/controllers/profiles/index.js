@@ -113,8 +113,11 @@ module.exports = {
   getProfilePosts: async (req, res) => {
     const profileId = req.params.profileid;
     const userProfileId = req.session.profileid;
+    const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
+    const limit = 10;
+    const offset = (page - 1) * 10;
 
-    const posts = await postsServices.getAllUserPosts(profileId, userProfileId);
+    const posts = await postsServices.getAllUserPosts(profileId, userProfileId, offset, limit);
 
     if (posts && Object.keys(posts).length) {
       res.send({
@@ -123,7 +126,7 @@ module.exports = {
         success: true,
       });
     } else {
-      res.send({ data: [] });
+      throw new NotFoundException('No any post');
     }
   },
 };

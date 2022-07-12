@@ -56,6 +56,13 @@ router.put(
   middleAsync(async (req, res) => postsControllers.putPost(req, res))
 );
 
+// view single post
+
+router.put(
+  '/view/:postId',
+  middleAsync(async (req, res) => postsControllers.viewPost(req, res))
+);
+
 // delete post
 
 router.delete(

@@ -14,7 +14,7 @@ module.exports = (io, socket) => {
 
   const addLike = async (data) => {
     const { userId } = data;
-    await likesServices.addLike({ postid: socket.postId, profileid: userId });
+    await likesServices.addLike(socket.postId, userId);
 
     await getLikes();
   };
