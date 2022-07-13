@@ -9,6 +9,9 @@ module.exports = {
   },
 
   editComment: {
-    ...this.addComment
+    text: {
+      required: true,
+      ...text,
+    },
   },
 };

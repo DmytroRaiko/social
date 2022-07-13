@@ -4,7 +4,7 @@ import { URI } from '../settings';
 export const apiClient = axios.create(
   {
     baseURL: URI,
-    responseType: 'json',
+    // responseType: 'json',
     withCredentials: true,
   },
 );
@@ -12,6 +12,8 @@ export const apiClient = axios.create(
 apiClient.interceptors.request.use((config) => {
   // eslint-disable-next-line no-param-reassign
   config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
+  // eslint-disable-next-line no-param-reassign
+  // config['Content-Type'] = 'multipart/form-data';
   return config;
 });
 
@@ -22,7 +24,9 @@ apiClient.interceptors.response.use((request) => request, async (error) => {
     originalRequest.requestIsRetry = true;
 
     try {
-      const response = await axios.post(`${URI}/auth/refresh`, {}, { withCredentials: true });
+      const response = await axios.post(`${URI}/auth/refresh`, {}, {
+        withCredentials: true,
+      });
       localStorage.setItem('token', response.data.newAccessToken);
       return apiClient.request(originalRequest);
     } catch (e) {

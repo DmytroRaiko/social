@@ -5,11 +5,17 @@ module.exports = {
     text: {
       ...text,
       minLength: 1,
+      required: true,
     },
     postavailabilityid: availability,
   },
 
   editPost: {
-    ...this.addPost
+    text: {
+      ...text,
+      minLength: 1,
+      required: true,
+    },
+    postavailabilityid: availability,
   },
 };

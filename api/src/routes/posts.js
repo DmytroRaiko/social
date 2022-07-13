@@ -40,8 +40,8 @@ router.get(
 router.post(
   '/',
   middleAcl({ resource: 'posts', action: 'create', possession: 'any' }),
-  bodyValidation(addPost, {}),
   upload.single('postImage'),
+  bodyValidation(addPost, {}),
   middleAsync(async (req, res) => postsControllers.postPost(req, res))
 );
 
@@ -56,8 +56,8 @@ router.put(
     getResource: (req) => postsServices.getPostInfo(req.params.postid),
     isOwn: (resource, profileId) => resource.profileid === profileId,
   }),
-  bodyValidation(editPost, {}),
   upload.single('postImage'),
+  bodyValidation(editPost, {}),
   middleAsync(async (req, res) => postsControllers.putPost(req, res))
 );
 

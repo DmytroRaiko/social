@@ -60,7 +60,7 @@ module.exports = (fields, resources) => async (req, res, next) => {
               } break;
 
             case 'number':
-              if (Number.isNaN(+fieldValue) || typeof fieldValue !== 'number') {
+              if (Number.isNaN(+fieldValue) || typeof +fieldValue !== 'number') {
                 error.push(`invalid type of ${paramValue}`);
               } break;
 
@@ -105,6 +105,7 @@ module.exports = (fields, resources) => async (req, res, next) => {
 
   if (Object.keys(errors).length) {
     next(new UnprocessableEntityException(errors));
+  } else {
+    next();
   }
-  next();
 };

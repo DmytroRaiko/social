@@ -11,9 +11,6 @@ export const addPost = async (data) => {
   return apiClient.post(
     '/posts',
     formData,
-    {
-      'Content-Type': 'multipart/form-data',
-    },
   );
 };
 

@@ -22,8 +22,8 @@ router.get('/images/:profileid/posts/:filename', (req, res) =>
 
 router.post(
   '/:profileid/avatar',
-  middleAcl({ resource: 'files', action: 'create', possession: 'any' }),
   auth,
+  middleAcl({ resource: 'files', action: 'create', possession: 'any' }),
   upload.single('avatar'),
   middleAsync(async (req, res) => filesControllers.postAvatar(req, res))
 );
