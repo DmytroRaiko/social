@@ -5,14 +5,17 @@ const likesServices = require('../services/store/likes.services');
 const middleAsync = require('../middlewares/async');
 const auth = require('../middlewares/auth');
 const upload = require('../services/multer/multer-post');
-const middleACL = require('../middlewares/ACL');
+const middleAcl = require('../middlewares/acl');
+const bodyValidation = require('../middlewares/bodyValidation');
 const postsControllers = require('../controllers/posts');
+const { addPost, editPost } = require('../services/validation/posts.validation');
+const { addComment, editComment } = require('../services/validation/comments.validation');
 
 router.use(auth);
 
 router.get(
   '/',
-  middleACL({ resource: 'posts', action: 'read', possession: 'any' }),
+  middleAcl({ resource: 'posts', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => postsControllers.getAllPosts(req, res))
 );
 
@@ -20,7 +23,7 @@ router.get(
 
 router.get(
   '/:postid',
-  middleACL({ resource: 'posts', action: 'read', possession: 'any' }),
+  middleAcl({ resource: 'posts', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => postsControllers.getOnePost(req, res))
 );
 
@@ -28,7 +31,7 @@ router.get(
 
 router.get(
   '/:postid/edit',
-  middleACL({ resource: 'posts', action: 'read', possession: 'any' }),
+  middleAcl({ resource: 'posts', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => postsControllers.getOnePostEdit(req, res))
 );
 
@@ -36,7 +39,8 @@ router.get(
 
 router.post(
   '/',
-  middleACL({ resource: 'posts', action: 'create', possession: 'any' }),
+  middleAcl({ resource: 'posts', action: 'create', possession: 'any' }),
+  bodyValidation(addPost, {}),
   upload.single('postImage'),
   middleAsync(async (req, res) => postsControllers.postPost(req, res))
 );
@@ -45,13 +49,14 @@ router.post(
 
 router.put(
   '/:postid',
-  middleACL({
+  middleAcl({
     resource: 'posts',
     action: 'update',
     possession: 'own',
     getResource: (req) => postsServices.getPostInfo(req.params.postid),
     isOwn: (resource, profileId) => resource.profileid === profileId,
   }),
+  bodyValidation(editPost, {}),
   upload.single('postImage'),
   middleAsync(async (req, res) => postsControllers.putPost(req, res))
 );
@@ -67,7 +72,7 @@ router.put(
 
 router.delete(
   '/:postid',
-  middleACL({
+  middleAcl({
     resource: 'posts',
     action: 'delete',
     possession: 'own',
@@ -81,7 +86,7 @@ router.delete(
 
 router.get(
   '/:postid/comments',
-  middleACL({ resource: 'posts', action: 'read', possession: 'any' }),
+  middleAcl({ resource: 'posts', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => postsControllers.getComments(req, res))
 );
 
@@ -89,7 +94,8 @@ router.get(
 
 router.post(
   '/:postid/comments',
-  middleACL({ resource: 'posts', action: 'create', possession: 'any' }),
+  middleAcl({ resource: 'posts', action: 'create', possession: 'any' }),
+  bodyValidation(addComment, {}),
   middleAsync(async (req, res) => postsControllers.postComments(req, res))
 );
 
@@ -97,13 +103,14 @@ router.post(
 
 router.put(
   '/:postid/comment/:commentid',
-  middleACL({
+  middleAcl({
     resource: 'posts',
     action: 'update',
     possession: 'own',
     getResource: (req) => commentsServices.getCommentInfo(req.params.commentid),
     isOwn: (resource, profileId) => resource.profileid === profileId,
   }),
+  bodyValidation(editComment, {}),
   middleAsync(async (req, res) => postsControllers.putComment(req, res))
 );
 
@@ -111,7 +118,7 @@ router.put(
 
 router.delete(
   '/:postid/comment/:commentId',
-  middleACL({
+  middleAcl({
     resource: 'posts',
     action: 'delete',
     possession: 'own',
@@ -125,7 +132,7 @@ router.delete(
 
 router.get(
   '/:postid/likes',
-  middleACL({
+  middleAcl({
     resource: 'posts',
     action: 'read',
     possession: 'any',
@@ -137,7 +144,7 @@ router.get(
 
 router.post(
   '/:postid/likes',
-  middleACL({ resource: 'posts', action: 'create', possession: 'any' }),
+  middleAcl({ resource: 'posts', action: 'create', possession: 'any' }),
   middleAsync(async (req, res) => postsControllers.postLike(req, res))
 );
 
@@ -145,7 +152,7 @@ router.post(
 
 router.delete(
   '/:postid/likes',
-  middleACL({
+  middleAcl({
     resource: 'posts',
     action: 'delete',
     possession: 'own',

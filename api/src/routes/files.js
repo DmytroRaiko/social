@@ -2,7 +2,7 @@ const router = require('express').Router();
 const upload = require('../services/multer/multer-avatar');
 const middleAsync = require('../middlewares/async');
 const auth = require('../middlewares/auth');
-const middleACL = require('../middlewares/ACL');
+const middleAcl = require('../middlewares/acl');
 const profilesServices = require('../services/store/profiles.services');
 const filesControllers = require('../controllers/files');
 
@@ -22,7 +22,7 @@ router.get('/images/:profileid/posts/:filename', (req, res) =>
 
 router.post(
   '/:profileid/avatar',
-  middleACL({ resource: 'files', action: 'create', possession: 'any' }),
+  middleAcl({ resource: 'files', action: 'create', possession: 'any' }),
   auth,
   upload.single('avatar'),
   middleAsync(async (req, res) => filesControllers.postAvatar(req, res))
@@ -32,7 +32,7 @@ router.post(
 
 router.delete(
   '/avatar/:profileid',
-  middleACL({
+  middleAcl({
     resource: 'files',
     action: 'delete',
     possession: 'own',

@@ -1,6 +1,8 @@
 const db = require('../db');
 
 module.exports = {
+  isUniqueEmail: async (email) => (await db.select().first().from('profile').where('email', email))?.profileid,
+
   getProfileByEmail: async (email) =>
     db.select().first().from('profile').where('email', email),
 

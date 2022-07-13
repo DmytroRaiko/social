@@ -2,14 +2,17 @@ const router = require('express').Router();
 const profilesServices = require('../services/store/profiles.services');
 const middleAsync = require('../middlewares/async');
 const auth = require('../middlewares/auth');
-const middleACL = require('../middlewares/ACL');
+const middleAcl = require('../middlewares/acl');
 const profilesControllers = require('../controllers/profiles');
+const bodyValidation = require('../middlewares/bodyValidation');
+const { add, change } = require('../services/validation/profiles.validation');
+const profileServices = require('../services/store/profiles.services');
 
 router.use(auth);
 
 router.get(
   '/',
-  middleACL({ resource: 'profiles', action: 'read', possession: 'any' }),
+  middleAcl({ resource: 'profiles', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => profilesControllers.getProfiles(req, res))
 );
 
@@ -17,7 +20,7 @@ router.get(
 
 router.get(
   '/:profileid',
-  middleACL({ resource: 'profiles', action: 'read', possession: 'any' }),
+  middleAcl({ resource: 'profiles', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => profilesControllers.getOneProfile(req, res))
 );
 
@@ -25,7 +28,7 @@ router.get(
 
 router.get(
   '/:profileid/edit',
-  middleACL({
+  middleAcl({
     resource: 'profiles',
     action: 'read',
     possession: 'own',
@@ -39,7 +42,10 @@ router.get(
 
 router.post(
   '/',
-  middleACL({ resource: 'profiles', action: 'create', possession: 'any' }),
+  middleAcl({ resource: 'profiles', action: 'create', possession: 'any' }),
+  bodyValidation(add, {
+    email: { unique: (req) => profileServices.isUniqueEmail(req?.body?.email) },
+  }),
   middleAsync(async (req, res) => profilesControllers.postProfile(req, res))
 );
 
@@ -47,12 +53,18 @@ router.post(
 
 router.put(
   '/:profileid',
-  middleACL({
+  middleAcl({
     resource: 'profiles',
     action: 'update',
     possession: 'own',
     getResource: (req) => profilesServices.getProfileById(req.params.profileid),
     isOwn: (resource, profileId) => resource.profileid === profileId,
+  }),
+  bodyValidation(change, {
+    email: {
+      unique: (req) => profileServices.isUniqueEmail(req?.body?.email),
+      uniqueSelf: (req, profileId) => req.session.profileid === profileId,
+    },
   }),
   middleAsync(async (req, res) => profilesControllers.putProfile(req, res))
 );
@@ -61,7 +73,7 @@ router.put(
 
 router.delete(
   '/:profileid',
-  middleACL({
+  middleAcl({
     resource: 'profiles',
     action: 'delete',
     possession: 'own',
@@ -75,7 +87,7 @@ router.delete(
 
 router.get(
   '/:profileid/posts',
-  middleACL({ resource: 'profiles', action: 'read', possession: 'any' }),
+  middleAcl({ resource: 'profiles', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => profilesControllers.getProfilePosts(req, res))
 );
 
