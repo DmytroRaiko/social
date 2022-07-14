@@ -1,7 +1,7 @@
 const db = require('../db');
 
 module.exports = {
-  getUniversities: async () => db.select().from('university').limit(10),
+  getUniversities: async () => db.select().from('university'),
   getProfileUniversities: async (profileId) =>
     db
       .select('university.name', 'university.universityid')
@@ -24,9 +24,11 @@ module.exports = {
         'universitylist.universityid'
       )
       .where('profileid', profileId),
-  addUniversity: async (insertData) => db('universityId').insert(insertData),
+  addUniversity: async (insertData) => db('university').insert(insertData).returning(['university.name', 'university.universityid']),
   updateUniversity: async (updateData, universityId) =>
     db('university').insert(updateData).where('universityid', universityId),
   deleteUniversity: async (universityId) =>
     db.from('university').where('universityid', universityId).delete(),
+
+  isUniqueUniversity: async (name) => (await db.select().first().from('university').where('name', name))?.universityid,
 };

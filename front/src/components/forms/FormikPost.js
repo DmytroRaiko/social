@@ -68,6 +68,8 @@ const FormikPost = ({
               name="postAvailabilityId"
               label="Visible to"
               options={availabilities}
+              optionLabel={(option) => option.label}
+              optionEqual={(option, value) => option?.label === value?.label}
               sx={projectSettings.postAvailabilityStyles}
             />
 

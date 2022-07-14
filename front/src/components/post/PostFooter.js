@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import PropTypes from 'prop-types';
 import {
   Accordion, AccordionDetails, AccordionSummary, IconButton, Typography,
@@ -13,7 +13,7 @@ import { useSocketLikes } from '../../config/socket.likes';
 import ErrorBoundary from '../ErrorBoundary';
 import useAuth from '../../containers/providers/authProvider';
 
-const PostFooter = ({ postId }) => {
+const PostFooter = memo(({ postId }) => {
   const { user } = useAuth();
   const userId = user?.user?.profileid;
   const {
@@ -154,7 +154,7 @@ const PostFooter = ({ postId }) => {
       </Accordion>
     </div>
   );
-};
+});
 
 PostFooter.propTypes = {
   postId: PropTypes.number.isRequired,

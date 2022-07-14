@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Avatar, Button, Divider, IconButton, Link, Menu, MenuItem,
@@ -12,7 +12,7 @@ import stringAvatar from '../../services/icons/avatarIcon';
 
 const ITEM_HEIGHT = 48;
 
-const Comment = ({
+const Comment = memo(({
   comment, replyToHandle, handleChange, onDeleteHandle, userId,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -175,7 +175,7 @@ const Comment = ({
       </div>
     </>
   );
-};
+});
 
 Comment.propTypes = {
   comment: PropTypes.shape({}),

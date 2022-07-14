@@ -73,8 +73,8 @@ module.exports = (fields, resources) => async (req, res, next) => {
         case 'unique': {
           const uniqueField = await resources[field].unique(req);
 
-          if (!uniqueField) {
-            if (!resources[field]?.uniqueSelf(req, uniqueField)) {
+          if (uniqueField) {
+            if (typeof resources[field]?.uniqueSelf !== 'function' || !resources[field]?.uniqueSelf(req, uniqueField)) {
               error.push(`${field} must be unique`);
             }
           }

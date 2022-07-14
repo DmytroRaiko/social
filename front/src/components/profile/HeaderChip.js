@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -16,7 +16,7 @@ import useAuth from '../../containers/providers/authProvider';
 
 const { menuPaperProps } = styleSettings;
 
-const HeaderChip = () => {
+const HeaderChip = memo(() => {
   const { isAuth, user, logoutFn } = useAuth();
   const userData = user?.user;
   const [anchorEl, setAnchorEl] = useState(null);
@@ -94,6 +94,6 @@ const HeaderChip = () => {
     </>
     )
   );
-};
+});
 
 export default HeaderChip;

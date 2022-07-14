@@ -16,9 +16,20 @@
   width: 100%;
 }
 
-.post-header a {
+.post-header a,
+.post-header .skeleton {
   display: flex;
   align-items: center;
+}
+
+.post-header .skeleton {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.post-header .skeleton .post-header-information {
+  width: 30%;
+  margin: 0 0 0 10px;
 }
 
 .post-header a img,
@@ -90,6 +101,10 @@
 
 .post-body:last-child {
   margin-bottom: 40px;
+}
+
+.post-footer .skeleton {
+  margin: 10px 0;
 }
 
 .post-footer-time {

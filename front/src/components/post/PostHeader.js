@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import {
@@ -16,7 +16,7 @@ import useAuth from '../../containers/providers/authProvider';
 
 const ITEM_HEIGHT = 48;
 
-const PostHeader = ({
+const PostHeader = memo(({
   profileId, avatar, postAuthor,
   postId,
   postEdit, postTime, changeTime,
@@ -122,7 +122,7 @@ const PostHeader = ({
         )}
     </div>
   );
-};
+});
 
 PostHeader.propTypes = {
   profileId: PropTypes.number.isRequired,

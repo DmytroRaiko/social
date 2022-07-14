@@ -8,6 +8,5 @@ module.exports = {
   getUniversities: async () =>
     db
       .select('universityid as value', 'name as label')
-      .from('university')
-      .limit(10),
+      .from('university'),
 };

@@ -10,14 +10,17 @@ import ErrorBoundary from '../../../components/ErrorBoundary';
 import EditProfileFormProps from '../../../services/PropTypes/EditProfileFormProps';
 import MyAutocomplete from '../../../components/form-elements/MyAutocomplete';
 import { editProfile } from '../../profiles/api/crud';
-import settings from '../../../settings';
+import { regex, profileAvailabilityStyles } from '../../../settings';
 import AvailabilitySchema from '../../../services/Formik/AvailabilitySchema';
-
-const phoneRegExp = /^[0-9\-\\+]{3,13}$/;
+import AddUniversityModal from '../../modals/AddUniversityModal';
 
 const EditProfileForm = ({
   profile, availabilities, university,
 }) => {
+  const [openModalAddUniversity, setOpenMAU] = React.useState({ open: false, data: null });
+  const handleOpenMAU = (data) => setOpenMAU({ open: true, data });
+  const handleCloseMAU = () => setOpenMAU({ open: false, data: null });
+
   const mutation = useMutation(
     'edit-profile',
     (formData) => editProfile(profile.profileid, formData),
@@ -63,7 +66,7 @@ const EditProfileForm = ({
     phone: Yup.string()
       .min(6, 'Too Short')
       .max(13, 'Too Long')
-      .matches(phoneRegExp, 'Phone number is not valid'),
+      .matches(regex?.phone, 'Phone number is not valid'),
     universities: Yup.array()
       .of(
         AvailabilitySchema,
@@ -125,7 +128,9 @@ const EditProfileForm = ({
                   name="emailSettingId"
                   label="Visible to"
                   options={availabilities}
-                  sx={settings.profileAvailabilityStyles}
+                  optionLabel={(option) => option.label}
+                  optionEqual={(option, value) => option?.label === value?.label}
+                  sx={profileAvailabilityStyles}
                 />
               </div>
 
@@ -147,7 +152,9 @@ const EditProfileForm = ({
                   name="phoneSettingId"
                   label="Visible to"
                   options={availabilities}
-                  sx={settings.profileAvailabilityStyles}
+                  optionLabel={(option) => option.label}
+                  optionEqual={(option, value) => option?.label === value?.label}
+                  sx={profileAvailabilityStyles}
                 />
               </div>
               <ErrorBoundary>
@@ -162,6 +169,9 @@ const EditProfileForm = ({
                       placeholder="You study at the..."
                       multiple
                       options={university}
+                      openModal={handleOpenMAU}
+                      optionLabel={(option) => option.label}
+                      optionEqual={(option, value) => option?.label === value?.label}
                     />
                   </div>
 
@@ -171,7 +181,9 @@ const EditProfileForm = ({
                     name="universitySettingId"
                     label="Visible to"
                     options={availabilities}
-                    sx={settings.profileAvailabilityStyles}
+                    optionLabel={(option) => option.label}
+                    optionEqual={(option, value) => option?.label === value?.label}
+                    sx={profileAvailabilityStyles}
                   />
                 </div>
               </ErrorBoundary>
@@ -192,6 +204,8 @@ const EditProfileForm = ({
           </Form>
         )}
       </Formik>
+
+      <AddUniversityModal open={openModalAddUniversity} handleClose={handleCloseMAU} />
     </ErrorBoundary>
   );
 };

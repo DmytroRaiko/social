@@ -1,8 +1,6 @@
 import React from 'react';
 import {
-  BrowserRouter,
-  Routes,
-  Route, Navigate,
+  BrowserRouter, Routes, Route, Navigate,
 } from 'react-router-dom';
 import SiteHeader from './containers/SiteHeader';
 import AddArticle from './components/AddArticle';
@@ -17,20 +15,20 @@ import Registration from './containers/auth/Registration';
 import ForgotPassword from './containers/auth/ForgotPassword';
 import ResetPassword from './containers/auth/ResetPassword';
 import useAuth from './containers/providers/authProvider';
-import { Loader } from './components/Loader';
+import { PageLoader } from './components/loaders/PageLoader';
 
 function App() {
-  const { isLoading, isAuth } = useAuth();
+  const { isLoading, isAuth, user } = useAuth();
 
   if (isLoading) {
     return (
       <div className="auth-page">
-        <Loader />
+        <PageLoader />
       </div>
     );
   }
 
-  if (!isAuth) {
+  if (!isLoading && !isAuth && !user?.user?.profileid) {
     return (
       <BrowserRouter>
         <div className="auth-page">

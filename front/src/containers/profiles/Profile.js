@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getProfile } from './api/crud';
 import ProfilePageContainer from './ProfilePageContainer';
-import { Loader } from '../../components/Loader';
+import { PageLoader } from '../../components/loaders/PageLoader';
 
 const Profile = () => {
   const params = useParams();
@@ -23,7 +23,7 @@ const Profile = () => {
 
     return (
       <div className="profile-main-page">
-        {isFetching && <Loader />}
+        {isFetching && <PageLoader />}
         <ProfilePageContainer profileData={profile} />
       </div>
     );

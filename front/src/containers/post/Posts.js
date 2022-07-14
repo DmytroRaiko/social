@@ -3,7 +3,7 @@ import { useInfiniteQuery } from 'react-query';
 import { useInView } from 'react-intersection-observer';
 import { getPosts } from './api/crud';
 import PostMapping from './PostMapping';
-import { Loader } from '../../components/Loader';
+import { PostSkeletonLoader } from '../../components/loaders/PostSkeletonLoader';
 import './Post.css';
 
 const Posts = () => {
@@ -42,15 +42,15 @@ const Posts = () => {
   }, [inView]);
 
   return (
-    <>
-      {isFetching && <Loader />}
-      <div className="post-container">
-        {posts
+    <div className="post-container">
+      {posts
          && (
          <PostMapping posts={posts} />
          )}
 
-        {!lastPage && !isFetching
+      <PostSkeletonLoader show={isFetching} count={3} />
+
+      {!lastPage && !isFetching
           && (
           <div
             className="load-more"
@@ -63,8 +63,7 @@ const Posts = () => {
             Load more...
           </div>
           )}
-      </div>
-    </>
+    </div>
   );
 };
 

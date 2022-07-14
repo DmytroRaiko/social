@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useMutation } from 'react-query';
 import PropTypes from 'prop-types';
@@ -10,7 +10,7 @@ import PostContent from '../../components/post/PostContent';
 
 import './Post.css';
 
-const PostComponent = ({ post }) => {
+const PostComponent = memo(({ post }) => {
   const { ref, inView, entry } = useInView({
     threshold: 0,
   });
@@ -51,7 +51,7 @@ const PostComponent = ({ post }) => {
       />
     </ErrorBoundary>
   );
-};
+});
 
 PostComponent.propTypes = {
   post: PropTypes.shape({}).isRequired,
