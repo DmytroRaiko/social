@@ -1,81 +1,60 @@
-import { useState } from 'react';
+import React, { memo, useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { useMutation } from 'react-query';
+import PropTypes from 'prop-types';
+import ErrorBoundary from '../../components/ErrorBoundary';
+import { viewPost } from './api/crud';
 import PostHeader from '../../components/post/PostHeader';
 import PostFooter from '../../components/post/PostFooter';
 import PostContent from '../../components/post/PostContent';
 
 import './Post.css';
-import ErrorBoundary from '../../components/ErrorBoundary';
-import postComponentProps from '../../services/PropTypes/PostComponentProps';
-import postComponentPropsDefault from '../../services/PropTypes/PostComponentPropsDefault';
-import { deleteLikePost, likePost } from './api/crud';
 
-const PostComponent = ({ posts, refetch }) => {
-  const [postList, setPostList] = useState(posts);
+const PostComponent = memo(({ post }) => {
+  const { ref, inView, entry } = useInView({
+    threshold: 0,
+  });
 
-  const deleteLike = useMutation(
-    'post-like',
-    (postId) => deleteLikePost(postId),
+  const viewPostQuery = useMutation(
+    'view-post',
+    (id) => viewPost(id),
   );
 
-  const postLike = useMutation(
-    'post-like',
-    (postId) => likePost(postId),
-  );
-
-  const setLikeHandle = (postId, postLikeId) => {
-    let likeTmp;
-
-    if (postLikeId) {
-      deleteLike.mutate(postId);
-
-      likeTmp = null;
-    } else {
-      postLike.mutate(postId);
-
-      likeTmp = true;
+  useEffect(() => {
+    if (inView) {
+      viewPostQuery.mutate(entry?.target.dataset.id);
     }
+  }, [inView]);
 
-    setPostList(postList.map((post) => (post.postid === postId
-      ? { ...post, postlikeid: likeTmp }
-      : post)));
-  };
+  return (
+    <ErrorBoundary>
+      <div
+        data-id={post.postid}
+        ref={ref}
+      />
+      <PostHeader
+        profileId={post.profileid}
+        avatar={post.avatarlink}
+        postAuthor={post.name}
+        postId={post.postid}
+        postEdit={post.changed}
+        postTime={post.timepost}
+        changeTime={post.timechanged}
+      />
+      <PostContent
+        postId={post.postid}
+        postText={post.text}
+        postImage={post.imagelink}
+      />
+      <PostFooter
+        postId={post.postid}
+      />
+    </ErrorBoundary>
+  );
+});
 
-  const postsList = postList?.map((post) => (
-    <div className="post-body" key={`post-id-${post.postid}`}>
-      <ErrorBoundary>
-        <PostHeader
-          profileId={post.profileid}
-          avatar={post.avatarlink}
-          postAuthor={post.name}
-          postId={post.postid}
-          refetchQuery={refetch}
-          postEdit={post.changed}
-          postTime={post.timepost}
-          changeTime={post.timechanged}
-        />
-        <PostContent
-          postId={post.postid}
-          postText={post.text}
-          postImage={post.imagelink}
-        />
-        <PostFooter
-          postId={post.postid}
-          postProfileId={post.profileid}
-          postLikes={post.totallikes}
-          setLikeHandle={setLikeHandle}
-          postComments={post.totalcomments}
-          postMyLike={Boolean(post.postlikeid)}
-        />
-      </ErrorBoundary>
-    </div>
-  ));
-
-  return postsList || <div> There are no any posts here! </div>;
+PostComponent.propTypes = {
+  post: PropTypes.shape({}).isRequired,
 };
-
-PostComponent.propTypes = postComponentProps;
-
-PostComponent.defaultProps = postComponentPropsDefault;
 
 export default PostComponent;

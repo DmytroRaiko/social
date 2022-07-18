@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { Avatar, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -7,7 +7,7 @@ import stringAvatar from '../../services/icons/avatarIcon';
 import projectSettings from '../../settings';
 import useAuth from '../../containers/providers/authProvider';
 
-const ProfileAvatar = ({ avatarlink, profileId, name }) => {
+const ProfileAvatar = memo(({ avatarlink, profileId, name }) => {
   const { user } = useAuth();
 
   return (
@@ -42,7 +42,7 @@ const ProfileAvatar = ({ avatarlink, profileId, name }) => {
       </div>
     </div>
   );
-};
+});
 
 ProfileAvatar.propTypes = {
   avatarlink: PropTypes.string,

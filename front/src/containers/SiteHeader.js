@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import AddPostModal from './modals/AddPostModal';
 import ErrorBoundary from '../components/ErrorBoundary';
 import HeaderChip from '../components/profile/HeaderChip';
 
-const SiteHeader = () => (
+const SiteHeader = memo(() => (
   <ErrorBoundary>
     <header className="site-header">
       <RouterLink to="/articles">
@@ -16,5 +16,6 @@ const SiteHeader = () => (
       <HeaderChip />
     </header>
   </ErrorBoundary>
-);
+));
+
 export default SiteHeader;

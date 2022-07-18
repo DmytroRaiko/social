@@ -1,31 +1,53 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import Autocomplete from '@mui/material/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import { fieldToTextField } from 'formik-mui';
 
+const filter = createFilterOptions();
+
 const MyAutocomplete = (props) => {
+  const {
+    optionLabel, optionEqual, openModal, ...otherProps
+  } = props;
   const {
     form: { setTouched, setFieldValue },
     label,
     placeholder,
-  } = props;
-  const { error, helperText, ...field } = fieldToTextField(props);
+  } = otherProps;
+  const { error, helperText, ...field } = fieldToTextField(otherProps);
   const { name } = field;
 
   return (
     <Autocomplete
-      /* eslint-disable-next-line react/jsx-props-no-spreading */
-      {...props}
-      /* eslint-disable-next-line react/jsx-props-no-spreading */
+      {...otherProps}
       {...field}
-      getOptionLabel={(option) => option.label}
-      isOptionEqualToValue={(option, value) => option?.label === value?.label}
-      onChange={(_, value) => setFieldValue(name, value)}
+      getOptionLabel={(option) => optionLabel(option)}
+      isOptionEqualToValue={(option, value) => optionEqual(option, value)}
+      onChange={(event, value) => {
+        if (typeof openModal === 'function' && value[value.length - 1]?.new && value[value.length - 1]?.value) {
+          openModal(value[value.length - 1].value);
+        } else {
+          setFieldValue(name, value);
+        }
+      }}
       onBlur={() => setTouched({ [name]: true })}
+      filterOptions={(options, params) => {
+        const filtered = filter(options, params);
+
+        if (params.inputValue !== '') {
+          filtered.push({
+            value: params.inputValue,
+            new: true,
+            label: `Add "${params.inputValue}"`,
+          });
+        }
+
+        return filtered;
+      }}
       renderInput={
         (params) => (
           <TextField
-            /* eslint-disable-next-line react/jsx-props-no-spreading */
             {...params}
             helperText={helperText}
             error={error}

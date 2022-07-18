@@ -23,7 +23,7 @@ const AuthContext = createContext(AuthContextType);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
   const [isAuth, setAuth] = useState(false);
 
   const getUser = useMutation(
@@ -42,6 +42,11 @@ export const AuthProvider = ({ children }) => {
     },
   );
 
+  useEffect(() => {
+    setLoading(true);
+    getUser.mutate();
+  }, []);
+
   const logoutQuery = useMutation(
     'logout',
     () => logout(),
@@ -54,11 +59,6 @@ export const AuthProvider = ({ children }) => {
       },
     },
   );
-
-  useEffect(() => {
-    setLoading(true);
-    getUser.mutate();
-  }, []);
 
   const loginFn = (success, data = null) => {
     if (data) {
@@ -83,7 +83,6 @@ export const AuthProvider = ({ children }) => {
       user,
       isLoading,
       isAuth,
-      // error,
       setLoading,
       loginFn,
       registrationFn,

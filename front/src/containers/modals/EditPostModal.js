@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Box from '@mui/material/Box';
 import { Button, Modal, MenuItem } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import PropTypes from 'prop-types';
 import EditPost from '../post/EditPost';
 
-const EditPostModal = ({
+const EditPostModal = memo(({
   id,
 }) => {
   const [open, setOpen] = React.useState(false);
@@ -37,7 +37,7 @@ const EditPostModal = ({
       </Modal>
     </div>
   );
-};
+});
 
 EditPostModal.propTypes = {
   id: PropTypes.number.isRequired,

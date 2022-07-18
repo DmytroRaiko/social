@@ -51,3 +51,45 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.flex {
+  display: flex;
+}
+
+.flex.row {
+  flex-direction: row;
+}
+
+.flex.column {
+  flex-direction: column;
+}
+
+.flex.start {
+  justify-content: start;
+  align-items: flex-start;
+}
+
+.flex.end {
+  justify-content: end;
+  align-items: flex-end;
+}
+
+.flex.center-start {
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.flex.start-center {
+  justify-content: start;
+  align-items: center;
+}
+
+.flex.center-end {
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.flex.center {
+  justify-content: center;
+  align-items: center;
+}

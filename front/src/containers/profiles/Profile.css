@@ -16,7 +16,8 @@
   margin-bottom: 40px;
 }
 
-.site-body div a.profile-card-info {
+.site-body div a.profile-card-info,
+.site-body .profile-card-info.skeleton {
   text-decoration: none;
   color: #0E0E0E;
   width: 100%;

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import EditProfileAvatar from '../../components/profile/EditProfileAvatar';
-import EditProfileForm from '../post/forms/EditProfileForm';
-import { Loader } from '../../components/Loader';
+import EditProfileForm from '../forms/EditProfileForm';
+import { PageLoader } from '../../components/loaders/PageLoader';
 
 function ProfileEditContainer({ profileData, availabilities, university }) {
   const profile = profileData[0] || null;
@@ -26,7 +26,7 @@ function ProfileEditContainer({ profileData, availabilities, university }) {
         />
       </div>
     </div>
-    )) || <Loader />
+    )) || <PageLoader />
   );
 }
 

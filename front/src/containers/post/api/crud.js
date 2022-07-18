@@ -1,15 +1,11 @@
 import { serialize } from 'object-to-formdata';
 import { apiClient } from '../../../config/axios';
 
-const header = {
-  headers: {
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9maWxlaWQiOjEyLCJpYXQiOjE2NDUzNDY2NzR9.d_qSC8vsUP7OualnwnAJKejNf7lV9-j5phHyMRMTc6A',
-  },
-};
+export const getPosts = async (page) => apiClient.get(`/posts?page=${page}`);
 
-export const getPosts = async () => apiClient.get('/posts', header);
+export const getSeenPosts = async (page) => apiClient.get(`/posts/history/seen?page=${page}`);
 
-export const getPost = async (id) => apiClient.get(`/posts/${id}`, header);
+export const getPost = async (id) => apiClient.get(`/posts/${id}`);
 
 export const addPost = async (data) => {
   const formData = serialize(data, { indices: true });
@@ -17,10 +13,6 @@ export const addPost = async (data) => {
   return apiClient.post(
     '/posts',
     formData,
-    {
-      ...header,
-      'Content-Type': 'multipart/form-data',
-    },
   );
 };
 
@@ -30,25 +22,23 @@ export const editPost = async (id, data) => {
   return apiClient.put(
     `/posts/${id}`,
     formData,
-    {
-      ...header,
-      'Content-Type': 'multipart/form-data',
-    },
   );
 };
 
-export const getPostEdit = async (id) => apiClient.get(`/posts/${id}/edit`, header);
+export const getPostEdit = async (id) => apiClient.get(`/posts/${id}/edit`);
 
-export const deletePost = async (id) => apiClient.delete(`/posts/${id}`, header);
+export const deletePost = async (id) => apiClient.delete(`/posts/${id}`);
 
-export const getPostComments = async (id) => apiClient.get(`/posts/${id}/comments`, header);
+export const getPostComments = async (id) => apiClient.get(`/posts/${id}/comments`);
 
-export const getPostLikes = async (id) => apiClient.get(`/posts/${id}/likes`, header);
+export const getPostLikes = async (id) => apiClient.get(`/posts/${id}/likes`);
 
-export const getAvailability = async () => apiClient.get('/select/availability', header);
+export const getAvailability = async () => apiClient.get('/select/availability');
 
-export const getUniversities = async () => apiClient.get('/select/universities', header);
+export const getUniversities = async () => apiClient.get('/select/universities');
 
-export const likePost = async (postId) => apiClient.post(`/posts/${postId}/likes`, {}, header);
+export const likePost = async (postId) => apiClient.post(`/posts/${postId}/likes`, {});
 
-export const deleteLikePost = async (postId) => apiClient.delete(`/posts/${postId}/likes`, header);
+export const deleteLikePost = async (postId) => apiClient.delete(`/posts/${postId}/likes`);
+
+export const viewPost = async (postId) => apiClient.put(`/posts/view/${postId}`);

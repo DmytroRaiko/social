@@ -3,7 +3,7 @@ import profileDataProps from '../../services/PropTypes/ProfileDataProps';
 import ProfilePageMainInfo from '../../components/profile/ProfilePageMainInfo';
 import ProfilePosts from './ProfilePosts';
 import ProfileAvatar from '../../components/profile/ProfileAvatar';
-import { Loader } from '../../components/Loader';
+import { PageLoader } from '../../components/loaders/PageLoader';
 
 function ProfilePageContainer({ profileData }) {
   const profile = profileData[0] || null;
@@ -28,18 +28,16 @@ function ProfilePageContainer({ profileData }) {
           email={profile.email}
           phone={profile.phone}
           universities={profile.universities}
-          profileid={profile.profileid}
-          emailsetting={profile.emailsetting}
-          phonesetting={profile.phonesetting}
-          universitysetting={profile.universitysetting}
-          avatarlink={profile.avatarlink}
-          countfriends={profile.countfriends}
-          countposts={profile.countposts}
+          emailSetting={profile.emailsetting}
+          phoneSetting={profile.phonesetting}
+          universitySetting={profile.universitysetting}
+          countFriends={profile.countfriends}
+          countPosts={profile.countposts}
         />
         <ProfilePosts profileId={profile.profileid} />
       </div>
     </div>
-    )) || <Loader />
+    )) || <PageLoader />
   );
 }
 

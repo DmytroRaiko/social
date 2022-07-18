@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getPost } from './api/crud';
 import PostComponent from './PostComponent';
-import { Loader } from '../../components/Loader';
+import { PostSkeletonLoader } from '../../components/loaders/PostSkeletonLoader';
 
 const Post = () => {
   const params = useParams();
@@ -11,13 +11,21 @@ const Post = () => {
   if (/^[0-9]*$/m.exec(params.id)) {
     const postId = params.id;
 
-    const { isFetching, refetch, data } = useQuery(`post-${postId}`, () => getPost(postId));
-    const posts = data?.data.data;
+    const { isFetching, data } = useQuery(`post-${postId}`, () => getPost(postId));
+    const post = data?.data.data;
 
     return (
       <>
-        {isFetching && <Loader />}
-        {posts && <PostComponent posts={posts} refetch={refetch} />}
+        <PostSkeletonLoader show={isFetching} />
+
+        {post
+          && (
+          <div
+            className="post-body"
+          >
+            <PostComponent post={post} />
+          </div>
+          )}
       </>
     );
   }

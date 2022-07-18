@@ -74,18 +74,35 @@ module.exports = {
   },
 
   putProfile: async (req, res) => {
-    const profileId = req.params.profileid;
+    const { profileid: profileId } = req.params;
 
-    const dataUpdateProfile = {
+    const updateProfile = await profilesServices.updateProfile({
       name: req.body.name,
-      email: req.body.email || null,
       phone: req.body.phone || null,
-    };
+    }, profileId);
 
-    const updateProfile = await profilesServices.updateProfile(
-      dataUpdateProfile,
-      profileId
-    );
+    await profilesServices.updateSettings({
+      emailsettingid: req.body.emailSettingId,
+      phonesettingid: req.body.phoneSettingId,
+      universitysettingid: req.body.universitySettingId,
+    }, profileId);
+
+    const frontArray = req.body.universities;
+    const dbArray = await profilesServices.getProfileUniversities(profileId);
+
+    // [number, number] add this university to db
+    const addToDB = frontArray.filter((u) => dbArray.indexOf(u) === -1);
+    // eslint-disable-next-line no-restricted-syntax
+    for await (const id of addToDB) {
+      await universitiesServices.addUniversityList(profileId, id);
+    }
+
+    // [number, number] add this university to db
+    const deleteFromDB = dbArray.filter((u) => frontArray.indexOf(u) === -1);
+    // eslint-disable-next-line no-restricted-syntax
+    for await (const id of deleteFromDB) {
+      await universitiesServices.deleteUniversityList(profileId, id);
+    }
 
     if (updateProfile) {
       res.send({
@@ -113,8 +130,11 @@ module.exports = {
   getProfilePosts: async (req, res) => {
     const profileId = req.params.profileid;
     const userProfileId = req.session.profileid;
+    const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
+    const limit = 10;
+    const offset = (page - 1) * 10;
 
-    const posts = await postsServices.getAllUserPosts(profileId, userProfileId);
+    const posts = await postsServices.getAllUserPosts(profileId, userProfileId, offset, limit);
 
     if (posts && Object.keys(posts).length) {
       res.send({
@@ -123,7 +143,7 @@ module.exports = {
         success: true,
       });
     } else {
-      res.send({ data: [] });
+      throw new NotFoundException('No any post');
     }
   },
 };

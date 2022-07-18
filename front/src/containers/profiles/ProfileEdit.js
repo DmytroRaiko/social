@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { getEditProfile } from './api/crud';
 import ProfileEditContainer from './ProfileEditContainer';
 import { getAvailability, getUniversities } from '../post/api/crud';
-import { Loader } from '../../components/Loader';
+import { PageLoader } from '../../components/loaders/PageLoader';
 
 const ProfileEdit = () => {
   const params = useParams();
@@ -13,15 +13,18 @@ const ProfileEdit = () => {
   if (/^[0-9]*$/m.exec(params.id)) {
     const profileId = params.id;
 
-    const profileQuery = useQuery(`profile-edit-${profileId}`, () => getEditProfile(profileId));
-    const availabilityQuery = useQuery('availabilities', () => getAvailability());
-    const universitiesQuery = useQuery('universities', () => getUniversities());
-    const profileIsFetching = profileQuery.isFetching;
-    const availabilityIsFetching = availabilityQuery.isFetching;
-    const universitiesIsFetching = universitiesQuery.isFetching;
-    const profileData = profileQuery.data;
-    const availabilityData = availabilityQuery.data;
-    const universitiesData = universitiesQuery.data;
+    const {
+      isFetching: profileIsFetching,
+      data: profileData,
+    } = useQuery(`profile-edit-${profileId}`, () => getEditProfile(profileId));
+    const {
+      isFetching: availabilityIsFetching,
+      data: availabilityData,
+    } = useQuery('availabilities', () => getAvailability());
+    const {
+      isFetching: universitiesIsFetching,
+      data: universitiesData,
+    } = useQuery('universities', () => getUniversities());
 
     const profileEdit = profileData?.data.data;
     const availabilities = availabilityData?.data.data;
@@ -31,7 +34,7 @@ const ProfileEdit = () => {
       <div className="profile-main-page">
         {
           (profileIsFetching || availabilityIsFetching || universitiesIsFetching)
-          && <Loader />
+          && <PageLoader />
         }
         { profileEdit && availabilities && universities
           && (
