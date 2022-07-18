@@ -7,6 +7,7 @@ const profilesControllers = require('../controllers/profiles');
 const bodyValidation = require('../middlewares/bodyValidation');
 const { add, change } = require('../services/validation/profiles.validation');
 const profileServices = require('../services/store/profiles.services');
+const { getAvailabilitiesIds } = require('../services/store/select.services');
 
 router.use(auth);
 
@@ -61,9 +62,14 @@ router.put(
     isOwn: (resource, profileId) => resource.profileid === profileId,
   }),
   bodyValidation(change, {
-    email: {
-      unique: (req) => profileServices.isUniqueEmail(req?.body?.email),
-      uniqueSelf: (req, profileId) => req.session.profileid === profileId,
+    emailSettingId: {
+      oneOf: getAvailabilitiesIds(),
+    },
+    phoneSettingId: {
+      oneOf: getAvailabilitiesIds(),
+    },
+    universitySettingId: {
+      oneOf: getAvailabilitiesIds(),
     },
   }),
   middleAsync(async (req, res) => profilesControllers.putProfile(req, res))

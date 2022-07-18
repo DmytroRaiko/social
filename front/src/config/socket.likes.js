@@ -5,6 +5,7 @@ import { URI } from '../settings';
 export const useSocketLikes = (roomId, userId) => {
   const socketRef = useRef(null);
   const [likes, setLikes] = useState([]);
+  const [countLikes, setCountLikes] = useState([]);
 
   useEffect(() => {
     socketRef.current = io(URI, {
@@ -17,6 +18,7 @@ export const useSocketLikes = (roomId, userId) => {
 
     socketRef.current.on('likes', (respond) => {
       setLikes(respond.likes);
+      setCountLikes(respond?.count);
     });
 
     return () => {
@@ -34,6 +36,7 @@ export const useSocketLikes = (roomId, userId) => {
 
   return {
     likes,
+    countLikes,
     addLike,
     deleteLike,
   };

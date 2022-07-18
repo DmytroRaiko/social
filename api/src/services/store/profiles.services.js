@@ -114,6 +114,9 @@ module.exports = {
   updateProfile: async (updateData, profileId) =>
     db('profile').update(updateData).where('profileid', profileId),
 
+  updateSettings: async (updateData, profileId) =>
+    db('profilesetting').update(updateData).where('profileid', profileId),
+
   deleteProfile: async (profileId) =>
     db.from('profile').where('profileid', profileId).delete(),
 
@@ -122,4 +125,11 @@ module.exports = {
 
   getRole: async (id) =>
     db.select('role').first().from('profile').where('profileid', '=', id),
+
+  getProfileUniversities: async (profileId) =>
+    db
+      .select('universityid')
+      .from('universitylist')
+      .where('profileid', profileId)
+      .pluck('universityid'),
 };

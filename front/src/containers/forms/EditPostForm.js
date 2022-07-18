@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMutation } from 'react-query';
-import ErrorBoundary from '../../../components/ErrorBoundary';
-import projectSettings from '../../../settings';
-import { editPost } from '../api/crud';
-import FormikPost from '../../../components/forms/FormikPost';
+import ErrorBoundary from '../../components/ErrorBoundary';
+import projectSettings from '../../settings';
+import { editPost } from '../post/api/crud';
+import FormikPost from '../../components/forms/FormikPost';
 
 const EditPostForm = ({
   post, availabilities, onHandleClose, postEditId,

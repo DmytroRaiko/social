@@ -22,6 +22,24 @@ module.exports = {
       .orderBy('post.timepost', 'DESC')
       .offset(offset)
       .limit(limit),
+
+  getAllSeenPosts: async (profileId, offset = 0, limit = 10) =>
+    db
+      .select(
+        'post.*',
+        'profile.profileid',
+        'profile.name',
+        'profile.avatarlink',
+        'postview.viewDate',
+      )
+      .from('profile')
+      .join('post', 'post.profileid', '=', 'profile.profileid')
+      .join('postview', 'postview.postid', '=', 'post.postid')
+      .where('postview.profileid', profileId)
+      .orderBy('postview.viewDate', 'DESC')
+      .offset(offset)
+      .limit(limit),
+
   getAllUserPosts: async (profileId, userProfileId, offset = 0, limit = 10) =>
     db
       .select(
@@ -78,5 +96,17 @@ module.exports = {
     db.select().first().from('postview').where('postid', postId)
       .andWhere('profileid', profileId),
   viewPost: async (postId, profileId) =>
-    db('postview').insert({ postid: postId, profileid: profileId })
+    db('postview').insert({ postid: postId, profileid: profileId }),
+
+  getStatistic: async (postId) =>
+    db.select().from('poststatistic').where('postId', postId).first(),
+
+  updatePostAmountViews: async (postId, data) =>
+    db.raw(`UPDATE poststatistic SET "totalViews" = "totalViews"${data}1 WHERE "postId" = ${postId}`),
+
+  updatePostAmountLikes: async (postId, data) =>
+    db.raw(`UPDATE poststatistic SET "totalLikes" = "totalLikes"${data}1 WHERE "postId" = ${postId}`),
+
+  updatePostAmountComments: async (postId, data) =>
+    db.raw(`UPDATE poststatistic SET "totalComments" = "totalComments"${data}1 WHERE "postId" = ${postId}`),
 };

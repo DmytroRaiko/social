@@ -3,6 +3,8 @@ import { apiClient } from '../../../config/axios';
 
 export const getPosts = async (page) => apiClient.get(`/posts?page=${page}`);
 
+export const getSeenPosts = async (page) => apiClient.get(`/posts/history/seen?page=${page}`);
+
 export const getPost = async (id) => apiClient.get(`/posts/${id}`);
 
 export const addPost = async (data) => {

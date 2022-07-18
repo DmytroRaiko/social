@@ -25,8 +25,8 @@ const MyAutocomplete = (props) => {
       getOptionLabel={(option) => optionLabel(option)}
       isOptionEqualToValue={(option, value) => optionEqual(option, value)}
       onChange={(event, value) => {
-        if (typeof openModal === 'function' && value[0]?.new && value[0]?.value) {
-          openModal(value[0].value);
+        if (typeof openModal === 'function' && value[value.length - 1]?.new && value[value.length - 1]?.value) {
+          openModal(value[value.length - 1].value);
         } else {
           setFieldValue(name, value);
         }

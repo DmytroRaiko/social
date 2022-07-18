@@ -5,6 +5,7 @@ import { URI } from '../settings';
 export const useSocketComments = (roomId, userId) => {
   const socketRef = useRef(null);
   const [comments, setComments] = useState([]);
+  const [countComments, setCountComments] = useState([]);
 
   useEffect(() => {
     socketRef.current = io(URI, {
@@ -16,7 +17,8 @@ export const useSocketComments = (roomId, userId) => {
     socketRef.current.emit('comments:get');
 
     socketRef.current.on('comments', (respond) => {
-      setComments(respond);
+      setComments(respond?.comments);
+      setCountComments(respond?.count);
     });
 
     return () => {
@@ -38,6 +40,7 @@ export const useSocketComments = (roomId, userId) => {
 
   return {
     comments,
+    countComments,
     addComments,
     changeComment,
     deleteComment,

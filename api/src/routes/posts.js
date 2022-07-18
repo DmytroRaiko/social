@@ -61,6 +61,14 @@ router.put(
   middleAsync(async (req, res) => postsControllers.putPost(req, res))
 );
 
+// return all posts, which has been seen by profile
+
+router.get(
+  '/history/seen',
+  middleAcl({ resource: 'posts', action: 'read', possession: 'any' }),
+  middleAsync(async (req, res) => postsControllers.getAllSeenPosts(req, res))
+);
+
 // view single post
 
 router.put(

@@ -7,7 +7,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Comment from './Comment';
-import AddCommentForm from '../../containers/post/forms/AddCommentForm';
+import AddCommentForm from '../../containers/forms/AddCommentForm';
 import { useSocketComments } from '../../config/socket.comments';
 import { useSocketLikes } from '../../config/socket.likes';
 import ErrorBoundary from '../ErrorBoundary';
@@ -17,11 +17,11 @@ const PostFooter = memo(({ postId }) => {
   const { user } = useAuth();
   const userId = user?.user?.profileid;
   const {
-    comments, addComments, changeComment, deleteComment,
+    comments, countComments, addComments, changeComment, deleteComment,
   } = useSocketComments(`comments-${postId}`, userId);
 
   const {
-    likes, addLike, deleteLike,
+    likes, countLikes, addLike, deleteLike,
   } = useSocketLikes(`likes-${postId}`, userId);
   const [expandedAccordion, setExpandedAccordion] = useState(false);
   const [replyTo, setReplyTo] = useState({
@@ -102,12 +102,12 @@ const PostFooter = memo(({ postId }) => {
             <Typography>
               Comments
               {' '}
-              {comments.length}
+              {countComments}
             </Typography>
           </AccordionSummary>
 
           <div className="footer-item">
-            {likes.length || ' '}
+            {countLikes || ' '}
             <IconButton
               onClick={handleLike}
               className="like"

@@ -72,6 +72,18 @@ const HeaderChip = memo(() => {
             My account
           </MenuItem>
         </RouterLink>
+
+        <RouterLink
+          style={{ color: 'inherit', textDecoration: 'none' }}
+          to="/history/seen"
+        >
+          <MenuItem>
+            <Avatar />
+            {' '}
+            History
+          </MenuItem>
+        </RouterLink>
+
         <RouterLink
           style={{ color: 'inherit', textDecoration: 'none' }}
           to="/profiles/"

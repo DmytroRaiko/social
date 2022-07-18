@@ -1,6 +1,6 @@
 import React from 'react';
-import CommentForm from '../../../components/forms/CommentForm';
-import { props, defaultProps } from '../../../services/PropTypes/CommentProps';
+import CommentForm from '../../components/forms/CommentForm';
+import { props, defaultProps } from '../../services/PropTypes/CommentProps';
 
 const AddCommentForm = ({
   replyTo, replyToHandle, comment, handleChange, onAddComment,

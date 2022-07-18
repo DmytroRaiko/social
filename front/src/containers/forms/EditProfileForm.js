@@ -6,13 +6,13 @@ import * as Yup from 'yup';
 import SaveIcon from '@mui/icons-material/Save';
 import { useMutation } from 'react-query';
 import LoadingButton from '@mui/lab/LoadingButton';
-import ErrorBoundary from '../../../components/ErrorBoundary';
-import EditProfileFormProps from '../../../services/PropTypes/EditProfileFormProps';
-import MyAutocomplete from '../../../components/form-elements/MyAutocomplete';
-import { editProfile } from '../../profiles/api/crud';
-import { regex, profileAvailabilityStyles } from '../../../settings';
-import AvailabilitySchema from '../../../services/Formik/AvailabilitySchema';
-import AddUniversityModal from '../../modals/AddUniversityModal';
+import ErrorBoundary from '../../components/ErrorBoundary';
+import EditProfileFormProps from '../../services/PropTypes/EditProfileFormProps';
+import MyAutocomplete from '../../components/form-elements/MyAutocomplete';
+import { editProfile } from '../profiles/api/crud';
+import { regex, profileAvailabilityStyles } from '../../settings';
+import AvailabilitySchema from '../../services/Formik/AvailabilitySchema';
+import AddUniversityModal from '../modals/AddUniversityModal';
 
 const EditProfileForm = ({
   profile, availabilities, university,
@@ -77,7 +77,15 @@ const EditProfileForm = ({
   });
 
   const onProfileEditFormSubmit = (dataSubmit, { setSubmitting }) => {
-    mutation.mutate(dataSubmit);
+    const { email, ...data } = dataSubmit;
+    mutation.mutate({
+      name: data.name,
+      phone: data.phone,
+      universities: Array.from(data?.universities, (el) => el?.value),
+      emailSettingId: data.emailSettingId.value,
+      phoneSettingId: data.phoneSettingId.value,
+      universitySettingId: data.universitySettingId.value,
+    });
 
     if (!mutation.isLoading) {
       setSubmitting(false);
@@ -119,6 +127,7 @@ const EditProfileForm = ({
                     label="E-mail"
                     placeholder="E-mail"
                     variant="standard"
+                    disabled
                     fullWidth
                   />
                 </div>

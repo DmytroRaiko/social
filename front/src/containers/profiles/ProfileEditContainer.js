@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import EditProfileAvatar from '../../components/profile/EditProfileAvatar';
-import EditProfileForm from '../post/forms/EditProfileForm';
+import EditProfileForm from '../forms/EditProfileForm';
 import { PageLoader } from '../../components/loaders/PageLoader';
 
 function ProfileEditContainer({ profileData, availabilities, university }) {

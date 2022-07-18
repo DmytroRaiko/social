@@ -5,7 +5,12 @@ module.exports = (fields, resources) => async (req, res, next) => {
 
   // eslint-disable-next-line no-restricted-syntax
   for await (const field of Object.keys(fields)) {
-    const fieldValue = req.body[field]?.trim();
+    let fieldValue;
+    if (typeof req.body[field] === 'string') {
+      fieldValue = req.body[field]?.trim();
+    } else {
+      fieldValue = req.body[field];
+    }
     const error = [];
 
     // eslint-disable-next-line no-restricted-syntax
@@ -51,6 +56,15 @@ module.exports = (fields, resources) => async (req, res, next) => {
             error.push(`max value: ${paramValue}`);
           } break;
 
+        case 'oneOf':
+          if (fieldValue) {
+            const isOneOf = (await resources[field].oneOf)?.indexOf(fieldValue);
+
+            if (isOneOf === -1) {
+              error.push(`unknown value ${fieldValue}`);
+            }
+          } break;
+
         // type
         case 'type':
           switch (paramValue) {
@@ -64,6 +78,11 @@ module.exports = (fields, resources) => async (req, res, next) => {
                 error.push(`invalid type of ${paramValue}`);
               } break;
 
+            case 'array':
+              if (!Array.isArray(fieldValue)) {
+                error.push(`invalid type of ${paramValue}`);
+              } break;
+
             default:
               error.push(`unknown type: ${paramValue}`);
               break;
@@ -71,11 +90,13 @@ module.exports = (fields, resources) => async (req, res, next) => {
 
         // unique by something
         case 'unique': {
-          const uniqueField = await resources[field].unique(req);
+          if (fieldValue) {
+            const uniqueField = await resources[field].unique(req);
 
-          if (uniqueField) {
-            if (typeof resources[field]?.uniqueSelf !== 'function' || !resources[field]?.uniqueSelf(req, uniqueField)) {
-              error.push(`${field} must be unique`);
+            if (uniqueField) {
+              if (typeof resources[field]?.uniqueSelf !== 'function' || !resources[field]?.uniqueSelf(req, uniqueField)) {
+                error.push(`${field} must be unique`);
+              }
             }
           }
           break;

@@ -16,6 +16,7 @@ import ForgotPassword from './containers/auth/ForgotPassword';
 import ResetPassword from './containers/auth/ResetPassword';
 import useAuth from './containers/providers/authProvider';
 import { PageLoader } from './components/loaders/PageLoader';
+import HistorySeen from './containers/post/HistorySeen';
 
 function App() {
   const { isLoading, isAuth, user } = useAuth();
@@ -69,6 +70,8 @@ function App() {
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/profile/:id/edit" element={<ProfileEdit />} />
           <Route path="/date/:date" element={<DateComponent />} />
+
+          <Route path="/history/seen" element={<HistorySeen />} />
 
           <Route path="*" element={<div> 404 </div>} />
         </Routes>

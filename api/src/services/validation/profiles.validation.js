@@ -1,4 +1,6 @@
-const { profileName, phoneNumber, email } = require('./index');
+const {
+  profileName, phoneNumber, email, settingAvailibility
+} = require('./index');
 
 module.exports = {
   add: {
@@ -18,11 +20,12 @@ module.exports = {
       required: true,
       ...profileName,
     },
-    email: {
-      required: true,
-      unique: true,
-      ...email,
-    },
     phone: phoneNumber,
+    universities: {
+      type: 'array',
+    },
+    emailSettingId: settingAvailibility,
+    phoneSettingId: settingAvailibility,
+    universitySettingId: settingAvailibility,
   }
 };

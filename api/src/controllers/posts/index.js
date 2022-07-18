@@ -19,6 +19,20 @@ module.exports = {
     }
   },
 
+  getAllSeenPosts: async (req, res) => {
+    const { profileid: profileId } = req.session;
+
+    const posts = await postsServices.getAllSeenPosts(profileId);
+
+    if (posts && Object.keys(posts).length) {
+      res.send({
+        message: 'Show seen posts', data: posts, success: true, count: posts.length
+      });
+    } else {
+      throw new NotFoundException('Seen posts');
+    }
+  },
+
   getOnePost: async (req, res) => {
     const postId = req.params.postid;
     const { profileid } = req.session;
@@ -84,6 +98,7 @@ module.exports = {
     const isView = await postsServices.isView(postId, profileid);
     if (!isView?.postviewid) {
       await postsServices.viewPost(postId, profileid);
+      await postsServices.updatePostAmountViews(postId, '-');
     }
 
     res.send();

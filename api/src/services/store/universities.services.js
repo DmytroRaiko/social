@@ -30,5 +30,16 @@ module.exports = {
   deleteUniversity: async (universityId) =>
     db.from('university').where('universityid', universityId).delete(),
 
+  addUniversityList: async (profileId, universityId) =>
+    db('universitylist')
+      .insert({ profileid: profileId, universityid: universityId }),
+
+  deleteUniversityList: async (profileId, universityId) =>
+    db
+      .from('universitylist')
+      .delete()
+      .where('profileid', profileId)
+      .andWhere('universityid', universityId),
+
   isUniqueUniversity: async (name) => (await db.select().first().from('university').where('name', name))?.universityid,
 };

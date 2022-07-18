@@ -1,10 +1,18 @@
 const commentServices = require('../../services/store/comments.services');
+const postsServices = require('../../services/store/posts.services');
 
 module.exports = (io, socket) => {
   const getComments = async () => {
     const comments = await commentServices.getComments(socket.postId);
+    const count = await postsServices.getStatistic(socket.postId);
 
-    io.to(`comments-${socket.postId}`).emit('comments', comments);
+    io.to(`comments-${socket.postId}`).emit(
+      'comments',
+      {
+        comments,
+        count: count?.totalComments || 0,
+      }
+    );
   };
 
   const addComment = async (data) => {
@@ -14,6 +22,7 @@ module.exports = (io, socket) => {
     await commentServices.addComment({
       text, parentProfileId, postid: postId, profileid: profileId,
     });
+    await postsServices.updatePostAmountComments(postId, '+');
 
     await getComments();
   };
@@ -27,6 +36,7 @@ module.exports = (io, socket) => {
 
   const deleteComment = async (data) => {
     await commentServices.deleteComment(data);
+    await postsServices.updatePostAmountComments(socket.postId, '-');
 
     await getComments();
   };

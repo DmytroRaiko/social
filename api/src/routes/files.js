@@ -32,6 +32,7 @@ router.post(
 
 router.delete(
   '/avatar/:profileid',
+  auth,
   middleAcl({
     resource: 'files',
     action: 'delete',
@@ -39,7 +40,6 @@ router.delete(
     getResource: (req) => profilesServices.getProfileById(req.params.profileid),
     isOwn: (resource, profileId) => resource.profileid === profileId,
   }),
-  auth,
   middleAsync(async (req, res) => filesControllers.deleteAvatar(req, res))
 );
 

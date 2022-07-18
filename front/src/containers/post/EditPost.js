@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { getPostEdit, getAvailability } from './api/crud';
-import EditPostForm from './forms/EditPostForm';
+import EditPostForm from '../forms/EditPostForm';
 import { PageLoader } from '../../components/loaders/PageLoader';
 
 const EditPost = ({ postId, handleClose }) => {
