@@ -5,7 +5,7 @@ import { URI } from '../settings';
 export const useSocketLikes = (roomId, userId) => {
   const socketRef = useRef(null);
   const [likes, setLikes] = useState([]);
-  const [countLikes, setCountLikes] = useState([]);
+  const [countLikes, setCountLikes] = useState(0);
 
   useEffect(() => {
     socketRef.current = io(URI, {

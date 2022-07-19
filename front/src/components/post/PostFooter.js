@@ -12,6 +12,7 @@ import { useSocketComments } from '../../config/socket.comments';
 import { useSocketLikes } from '../../config/socket.likes';
 import ErrorBoundary from '../ErrorBoundary';
 import useAuth from '../../containers/providers/authProvider';
+import LikePopover from './LikePopover';
 
 const PostFooter = memo(({ postId }) => {
   const { user } = useAuth();
@@ -107,7 +108,12 @@ const PostFooter = memo(({ postId }) => {
           </AccordionSummary>
 
           <div className="footer-item">
-            {countLikes || ' '}
+            <LikePopover
+              postId={postId}
+              likes={likes}
+              countLikes={countLikes}
+            />
+
             <IconButton
               onClick={handleLike}
               className="like"

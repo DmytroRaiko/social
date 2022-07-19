@@ -1,58 +1,36 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { Avatar, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
-import EditIcon from '@mui/icons-material/Edit';
+import { Avatar } from '@mui/material';
 import stringAvatar from '../../services/icons/avatarIcon';
 import projectSettings from '../../settings';
-import useAuth from '../../containers/providers/authProvider';
 
-const ProfileAvatar = memo(({ avatarlink, profileId, name }) => {
-  const { user } = useAuth();
-
-  return (
-    <div className={`profile-avatar profile-left-bar ${avatarlink}`}>
-      <div className="post-img">
-        {(avatarlink
-        && (
-          <img
-            className="avatar"
-            src={`${projectSettings.URI}/files/avatar/${profileId}`}
-            alt="avatar"
-          />
-        )
-        )
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      || <Avatar className="post-img" {...stringAvatar(name)} />}
-      </div>
-      <div className="profile-button-group">
-        {user?.user?.profileid !== profileId
-          && (
-            <Button variant="contained">Add</Button>
-
-          )}
-
-        {user?.user?.profileid === profileId
-          && (
-          <Button component={Link} to={`/profile/${profileId}/edit`} variant="outlined" className="">
-            <EditIcon fontSize="small" />
-            Edit
-          </Button>
-          )}
-      </div>
-    </div>
-  );
-});
+const ProfileAvatar = memo(({
+  avatarlink, profileId, name, image,
+}) => (
+  ((avatarlink || image)
+    && (
+      <Avatar
+        className="avatar"
+        src={image || `${projectSettings.URI}/files/avatar/${profileId}`}
+        alt="avatar"
+      />
+    )
+  )
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    || <Avatar className="post-img" {...stringAvatar(name)} />
+));
 
 ProfileAvatar.propTypes = {
   avatarlink: PropTypes.string,
   profileId: PropTypes.number.isRequired,
   name: PropTypes.string,
+  image: PropTypes.string,
 };
 
 ProfileAvatar.defaultProps = {
   avatarlink: null,
   name: 'Unknown P',
+  image: null,
 };
 
 export default ProfileAvatar;

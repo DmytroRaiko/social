@@ -93,3 +93,11 @@ code {
   justify-content: center;
   align-items: center;
 }
+
+.site-header .box-chip .MuiAvatar-root {
+  width: 28px;
+  height: 28px;
+  margin: 0 0 0 1px;
+  font-size: 16px;
+}
+

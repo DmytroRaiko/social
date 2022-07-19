@@ -1,14 +1,13 @@
 import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Avatar, Button, Divider, IconButton, Link, Menu, MenuItem,
+  Button, Divider, IconButton, Link, Menu, MenuItem,
 } from '@mui/material';
 import { NavLink, Link as DOMLink } from 'react-router-dom';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import TimeAgo from 'react-timeago';
 import ReplyIcon from '@mui/icons-material/Reply';
-import settings from '../../settings';
-import stringAvatar from '../../services/icons/avatarIcon';
+import ProfileAvatar from '../profile/ProfileAvatar';
 
 const ITEM_HEIGHT = 48;
 
@@ -37,16 +36,11 @@ const Comment = memo(({
             className="flex row start-center"
             to={`/profile/${comment.profileid}`}
           >
-            {(comment.avatarlink
-            && (
-              <img
-                className="avatar"
-                src={`${settings.URI}/files/avatar/${comment.profileid}`}
-                alt="avatar"
-              />
-            ))
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          || <Avatar className="avatar" {...stringAvatar(comment.name)} />}
+            <ProfileAvatar
+              profileId={comment.profileid}
+              name={comment.name}
+              avatarlink={comment.avatarlink}
+            />
 
             {comment.name}
             {' '}

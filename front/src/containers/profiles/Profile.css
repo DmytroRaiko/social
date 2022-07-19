@@ -93,18 +93,18 @@
   width: 250px;
 }
 
-.profile-page .profile-avatar img,
 .profile-page .profile-avatar .post-img div {
   margin-bottom: 20px;
+  margin-top: 10px;
 }
 
-.profile-page .profile-avatar img {
+.profile-page .profile-avatar .post-img {
   width: 240px;
 }
 
 .profile-page .profile-avatar .post-img div {
-  width: 200px;
-  height: 200px;
+  height: 240px;
+  width: 240px;
   font-size: 5.5rem;
 }
 

@@ -30,6 +30,6 @@ export default function stringAvatar(name) {
     sx: {
       bgcolor: stringToColor(name),
     },
-    children,
+    children: children.toUpperCase(),
   };
 }

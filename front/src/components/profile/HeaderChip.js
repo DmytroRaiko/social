@@ -9,10 +9,10 @@ import Logout from '@mui/icons-material/Logout';
 import { Chip } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import GroupIcon from '@mui/icons-material/Group';
-import projectSettings from '../../settings';
-import stringAvatar from '../../services/icons/avatarIcon';
+import HistoryIcon from '@mui/icons-material/History';
 import styleSettings from '../../services/style.settings';
 import useAuth from '../../containers/providers/authProvider';
+import ProfileAvatar from './ProfileAvatar';
 
 const { menuPaperProps } = styleSettings;
 
@@ -35,19 +35,13 @@ const HeaderChip = memo(() => {
       <Box className="box-chip">
         <Chip
           onClick={handleClick}
-          avatar={
-            (userData.avatarlink
-              && (
-                <img
-                  className="avatar"
-                  src={`${projectSettings.URI}/files/avatar/${userData.profileid}`}
-                  alt="avatar"
-                />
-              )
-            )
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            || <Avatar {...stringAvatar(userData.name)} />
-          }
+          avatar={(
+            <ProfileAvatar
+              profileId={userData.profileid}
+              name={userData.name}
+              avatarlink={userData.avatarlink}
+            />
+          )}
           label={userData.name}
           variant="outlined"
         />
@@ -78,8 +72,9 @@ const HeaderChip = memo(() => {
           to="/history/seen"
         >
           <MenuItem>
-            <Avatar />
-            {' '}
+            <ListItemIcon>
+              <HistoryIcon />
+            </ListItemIcon>
             History
           </MenuItem>
         </RouterLink>
