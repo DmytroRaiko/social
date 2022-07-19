@@ -14,7 +14,7 @@ import Login from './containers/auth/Login';
 import Registration from './containers/auth/Registration';
 import ForgotPassword from './containers/auth/ForgotPassword';
 import ResetPassword from './containers/auth/ResetPassword';
-import useAuth from './containers/providers/authProvider';
+import useAuth from './providers/authProvider';
 import { PageLoader } from './components/loaders/PageLoader';
 import HistorySeen from './containers/post/HistorySeen';
 

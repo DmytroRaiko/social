@@ -7,7 +7,7 @@ import ProfilePageMainInfo from '../../components/profile/ProfilePageMainInfo';
 import ProfilePosts from './ProfilePosts';
 import ProfileAvatar from '../../components/profile/ProfileAvatar';
 import { PageLoader } from '../../components/loaders/PageLoader';
-import useAuth from '../providers/authProvider';
+import useAuth from '../../providers/authProvider';
 
 function ProfilePageContainer({ profileData }) {
   const profile = profileData[0] || null;

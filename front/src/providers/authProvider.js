@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { useMutation } from 'react-query';
-import { getUserInfoByCookie, logout } from '../auth/api/crud';
+import { getUserInfoByCookie, logout } from '../containers/auth/api/crud';
 
 const AuthContextType = {
   user: null,

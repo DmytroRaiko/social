@@ -1,18 +1,15 @@
 import React, { useState, memo } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Accordion, AccordionDetails, AccordionSummary, IconButton, Typography,
+  Accordion, AccordionDetails, AccordionSummary, Typography,
 } from '@mui/material';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Comment from './Comment';
-import AddCommentForm from '../../containers/forms/AddCommentForm';
+import Comment from '../../components/post/Comment';
+import AddCommentForm from '../forms/AddCommentForm';
 import { useSocketComments } from '../../config/socket.comments';
-import { useSocketLikes } from '../../config/socket.likes';
-import ErrorBoundary from '../ErrorBoundary';
-import useAuth from '../../containers/providers/authProvider';
-import LikePopover from './LikePopover';
+import ErrorBoundary from '../../components/ErrorBoundary';
+import useAuth from '../../providers/authProvider';
+import PostLike from '../../components/post/PostLike';
 
 const PostFooter = memo(({ postId }) => {
   const { user } = useAuth();
@@ -21,9 +18,6 @@ const PostFooter = memo(({ postId }) => {
     comments, countComments, addComments, changeComment, deleteComment,
   } = useSocketComments(`comments-${postId}`, userId);
 
-  const {
-    likes, countLikes, addLike, deleteLike,
-  } = useSocketLikes(`likes-${postId}`, userId);
   const [expandedAccordion, setExpandedAccordion] = useState(false);
   const [replyTo, setReplyTo] = useState({
     profileId: null,
@@ -33,7 +27,6 @@ const PostFooter = memo(({ postId }) => {
     commentId: null,
     text: '',
   });
-  const myLike = likes.find((el) => el.profileid === userId)?.profileid;
 
   const handleSetReplyTo = (profileId = null, name = '') => {
     setReplyTo({ profileId, name });
@@ -73,14 +66,6 @@ const PostFooter = memo(({ postId }) => {
     deleteComment(id);
   };
 
-  const handleLike = () => {
-    if (myLike) {
-      deleteLike();
-    } else {
-      addLike();
-    }
-  };
-
   return (
     <div className="post-footer">
       <Accordion
@@ -108,21 +93,7 @@ const PostFooter = memo(({ postId }) => {
           </AccordionSummary>
 
           <div className="footer-item">
-            <LikePopover
-              postId={postId}
-              likes={likes}
-              countLikes={countLikes}
-            />
-
-            <IconButton
-              onClick={handleLike}
-              className="like"
-              color="error"
-            >
-              {myLike
-                ? <FavoriteIcon />
-                : <FavoriteBorderIcon />}
-            </IconButton>
+            <PostLike postId={postId} userId={userId} />
           </div>
         </div>
 

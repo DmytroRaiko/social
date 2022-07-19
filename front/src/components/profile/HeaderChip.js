@@ -11,7 +11,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import GroupIcon from '@mui/icons-material/Group';
 import HistoryIcon from '@mui/icons-material/History';
 import styleSettings from '../../services/style.settings';
-import useAuth from '../../containers/providers/authProvider';
+import useAuth from '../../providers/authProvider';
 import ProfileAvatar from './ProfileAvatar';
 
 const { menuPaperProps } = styleSettings;

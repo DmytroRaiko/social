@@ -6,7 +6,7 @@ import App from './App';
 import ErrorBoundary from './components/ErrorBoundary';
 
 import './index.css';
-import { AuthProvider } from './containers/providers/authProvider';
+import { AuthProvider } from './providers/authProvider';
 
 const queryClient = new QueryClient();
 

@@ -10,7 +10,7 @@ import { useMutation } from 'react-query';
 import TimeAgo from 'react-timeago';
 import EditPostModal from '../../containers/modals/EditPostModal';
 import { deletePost } from '../../containers/post/api/crud';
-import useAuth from '../../containers/providers/authProvider';
+import useAuth from '../../providers/authProvider';
 import ProfileAvatar from '../profile/ProfileAvatar';
 
 const ITEM_HEIGHT = 48;
