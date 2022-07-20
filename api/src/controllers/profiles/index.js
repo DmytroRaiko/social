@@ -23,7 +23,7 @@ module.exports = {
   },
 
   getOneProfile: async (req, res) => {
-    const profileId = req.params.profileid;
+    const { profileId } = req.params;
 
     const profile = await profilesServices.getProfile(profileId);
 
@@ -43,7 +43,7 @@ module.exports = {
   },
 
   getProfileEdit: async (req, res) => {
-    const profileId = req.params.profileid;
+    const { profileId } = req.params;
 
     const profile = await profilesServices.getEditProfile(profileId);
 
@@ -64,17 +64,17 @@ module.exports = {
   postProfile: async (req, res) => {
     const dataInsertProfile = req.body;
 
-    const addPofile = await profilesServices.addProfile(dataInsertProfile);
+    const addProfile = await profilesServices.addProfile(dataInsertProfile);
 
-    if (addPofile && Object.keys(addPofile).length) {
-      res.send({ message: 'Profile adding', data: addPofile, success: true });
+    if (addProfile && Object.keys(addProfile).length) {
+      res.send({ message: 'Profile adding', data: addProfile, success: true });
     } else {
       throw new NotFoundException('Profile not found');
     }
   },
 
   putProfile: async (req, res) => {
-    const { profileid: profileId } = req.params;
+    const { profileId } = req.params;
 
     const updateProfile = await profilesServices.updateProfile({
       name: req.body.name,
@@ -82,9 +82,9 @@ module.exports = {
     }, profileId);
 
     await profilesServices.updateSettings({
-      emailsettingid: req.body.emailSettingId,
-      phonesettingid: req.body.phoneSettingId,
-      universitysettingid: req.body.universitySettingId,
+      emailSettingId: req.body.emailSettingId,
+      phoneSettingId: req.body.phoneSettingId,
+      universitySettingId: req.body.universitySettingId,
     }, profileId);
 
     const frontArray = req.body.universities;
@@ -116,7 +116,7 @@ module.exports = {
   },
 
   deleteProfile: async (req, res) => {
-    const profileId = req.params.profileid;
+    const { profileId } = req.params;
 
     const deleteProfile = await profilesServices.deleteProfile(profileId);
 
@@ -128,8 +128,8 @@ module.exports = {
   },
 
   getProfilePosts: async (req, res) => {
-    const profileId = req.params.profileid;
-    const userProfileId = req.session.profileid;
+    const { profileId } = req.params;
+    const { profileId: userProfileId } = req.session;
     const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
     const limit = 10;
     const offset = (page - 1) * 10;

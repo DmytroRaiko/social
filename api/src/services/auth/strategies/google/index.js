@@ -22,16 +22,16 @@ passport.use(
         await profilesServices.addProfile({
           name: profile.displayName,
           email,
-          googleid: profile.id,
+          googleId: profile.id,
         });
 
         user = await authServices.google.selectProfileByGoogleTokenId(profile.id);
       } else {
-        await profilesServices.updateProfile({ googleid: profile.id }, user.profileid);
+        await profilesServices.updateProfile({ googleId: profile.id }, user.profileId);
       }
 
       done(null, {
-        profileid: user.profileid,
+        profileId: user.profileId,
         name: user.name,
         email: user.email,
       });

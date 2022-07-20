@@ -19,10 +19,10 @@ router.get(
   middleAsync(async (req, res) => postsControllers.getAllPosts(req, res))
 );
 
-// show post where postid = :postid
+// show post where postId = :postId
 
 router.get(
-  '/:postid',
+  '/:postId',
   middleAcl({ resource: 'posts', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => postsControllers.getOnePost(req, res))
 );
@@ -30,7 +30,7 @@ router.get(
 // show post for edit
 
 router.get(
-  '/:postid/edit',
+  '/:postId/edit',
   middleAcl({ resource: 'posts', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => postsControllers.getOnePostEdit(req, res))
 );
@@ -48,13 +48,13 @@ router.post(
 // update post
 
 router.put(
-  '/:postid',
+  '/:postId',
   middleAcl({
     resource: 'posts',
     action: 'update',
     possession: 'own',
-    getResource: (req) => postsServices.getPostInfo(req.params.postid),
-    isOwn: (resource, profileId) => resource.profileid === profileId,
+    getResource: (req) => postsServices.getPostInfo(req.params.postId),
+    isOwn: (resource, profileId) => resource.profileId === profileId,
   }),
   upload.single('postImage'),
   bodyValidation(editPost, {}),
@@ -79,13 +79,13 @@ router.put(
 // delete post
 
 router.delete(
-  '/:postid',
+  '/:postId',
   middleAcl({
     resource: 'posts',
     action: 'delete',
     possession: 'own',
-    getResource: (req) => postsServices.getPostInfo(req.params.postid),
-    isOwn: (resource, profileId) => resource.profileid === profileId,
+    getResource: (req) => postsServices.getPostInfo(req.params.postId),
+    isOwn: (resource, profileId) => resource.profileId === profileId,
   }),
   middleAsync(async (req, res) => postsControllers.deletePost(req, res))
 );
@@ -93,7 +93,7 @@ router.delete(
 // show all comments
 
 router.get(
-  '/:postid/comments',
+  '/:postId/comments',
   middleAcl({ resource: 'posts', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => postsControllers.getComments(req, res))
 );
@@ -101,7 +101,7 @@ router.get(
 // add comment
 
 router.post(
-  '/:postid/comments',
+  '/:postId/comments',
   middleAcl({ resource: 'posts', action: 'create', possession: 'any' }),
   bodyValidation(addComment, {}),
   middleAsync(async (req, res) => postsControllers.postComments(req, res))
@@ -110,13 +110,13 @@ router.post(
 // change comment
 
 router.put(
-  '/:postid/comment/:commentid',
+  '/:postId/comment/:commentId',
   middleAcl({
     resource: 'posts',
     action: 'update',
     possession: 'own',
-    getResource: (req) => commentsServices.getCommentInfo(req.params.commentid),
-    isOwn: (resource, profileId) => resource.profileid === profileId,
+    getResource: (req) => commentsServices.getCommentInfo(req.params.commentId),
+    isOwn: (resource, profileId) => resource.profileId === profileId,
   }),
   bodyValidation(editComment, {}),
   middleAsync(async (req, res) => postsControllers.putComment(req, res))
@@ -125,13 +125,13 @@ router.put(
 // delete comment
 
 router.delete(
-  '/:postid/comment/:commentId',
+  '/:postId/comment/:commentId',
   middleAcl({
     resource: 'posts',
     action: 'delete',
     possession: 'own',
-    getResource: (req) => commentsServices.getCommentInfo(req.params.commentid),
-    isOwn: (resource, profileId) => resource.profileid === profileId,
+    getResource: (req) => commentsServices.getCommentInfo(req.params.commentId),
+    isOwn: (resource, profileId) => resource.profileId === profileId,
   }),
   middleAsync(async (req, res) => postsControllers.deleteComment(req, res))
 );
@@ -139,7 +139,7 @@ router.delete(
 // show all likes
 
 router.get(
-  '/:postid/likes',
+  '/:postId/likes',
   middleAcl({
     resource: 'posts',
     action: 'read',
@@ -151,7 +151,7 @@ router.get(
 // post like
 
 router.post(
-  '/:postid/likes',
+  '/:postId/likes',
   middleAcl({ resource: 'posts', action: 'create', possession: 'any' }),
   middleAsync(async (req, res) => postsControllers.postLike(req, res))
 );
@@ -159,14 +159,14 @@ router.post(
 // post unlike
 
 router.delete(
-  '/:postid/likes',
+  '/:postId/likes',
   middleAcl({
     resource: 'posts',
     action: 'delete',
     possession: 'own',
     getResource: async (req) =>
-      likesServices.getLikeInfo(req.session.profileid, req.params.postid),
-    isOwn: (resource, profileId) => resource.profileid === profileId,
+      likesServices.getLikeInfo(req.session.profileId, req.params.postId),
+    isOwn: (resource, profileId) => resource.profileId === profileId,
   }),
   middleAsync(async (req, res) => postsControllers.deleteLike(req, res))
 );

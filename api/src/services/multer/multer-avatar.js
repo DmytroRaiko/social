@@ -5,7 +5,7 @@ const filter = require('./fileFilter');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const path = `images/${req.params.profileid}/`;
+    const path = `images/${req.params.profileId}/`;
 
     fs.stat('images/', (errorImages) => {
       if (errorImages) {

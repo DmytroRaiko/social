@@ -9,7 +9,7 @@ import FormikPost from '../../components/forms/FormikPost';
 const EditPostForm = ({
   post, availabilities, onHandleClose, postEditId,
 }) => {
-  const photo = post.imagelink ? `${projectSettings.URI}/files/${post.imagelink}` : null;
+  const photo = post.imageLink ? `${projectSettings.URI}/files/${post.imageLink}` : null;
   const [loadedPhoto, setLoadedPhoto] = useState(photo);
   const [editImage, setEditImage] = useState(photo);
 
@@ -23,14 +23,14 @@ const EditPostForm = ({
       text: post.text,
       postAvailabilityId: {
         label: post.availability,
-        value: post.availabilityid,
+        value: post.availabilityId,
       },
     };
 
   const onFormSubmit = (dataSubmit) => {
     const onFormData = {
       text: dataSubmit.text,
-      postavailabilityid: dataSubmit.postAvailabilityId.value,
+      postAvailabilityId: dataSubmit.postAvailabilityId.value,
     };
 
     if (loadedPhoto) {
@@ -74,7 +74,7 @@ EditPostForm.propTypes = {
 EditPostForm.defaultProps = {
   post: {
     text: '',
-    postavailabilityid: projectSettings.availability,
+    postAvailabilityId: projectSettings.availability,
   },
   availabilities: [],
 };

@@ -1,135 +1,135 @@
 const db = require('../db');
 
 module.exports = {
-  isUniqueEmail: async (email) => (await db.select().first().from('profile').where('email', email))?.profileid,
+  isUniqueEmail: async (email) => (await db.select().first().from('Profile').where('email', email))?.profileId,
 
   getProfileByEmail: async (email) =>
-    db.select().first().from('profile').where('email', email),
+    db.select().first().from('Profile').where('email', email),
 
   getProfiles: async (offset = 0, limit = 30) =>
     db
-      .select('profile.profileid', 'profile.avatarlink', 'profile.name')
-      .from('profile')
+      .select('Profile.profileId', 'Profile.avatarLink', 'Profile.name')
+      .from('Profile')
       .offset(offset)
       .limit(limit),
 
   getProfile: async (profileId) =>
     db
       .select(
-        'profile.*',
-        'a1.availability as emailsetting',
-        'a2.availability as phonesetting',
-        'a3.availability as universitysetting',
+        'Profile.*',
+        'a1.availability as emailSetting',
+        'a2.availability as phoneSetting',
+        'a3.availability as universitySetting',
         db
           .count()
-          .from('friend')
+          .from('Friend')
           .leftJoin(
-            'accessfriend',
-            'friend.accessfriendid',
+            'AccessFriend',
+            'Friend.accessFriendId',
             '=',
-            'accessfriend.accessfriendid'
+            'AccessFriend.accessFriendId'
           )
-          .where('accessfriend.role', '=', 'Friends')
-          .andWhere('friend.requestuserid', '=', profileId)
-          .orWhere('friend.responduserid', '=', profileId)
-          .as('countfriends'),
+          .where('AccessFriend.role', '=', 'Friends')
+          .andWhere('Friend.requestUserId', '=', profileId)
+          .orWhere('Friend.respondUserId', '=', profileId)
+          .as('countFriends'),
         db
           .count()
-          .from('post')
-          .where('post.profileid', '=', profileId)
-          .as('countposts')
+          .from('Post')
+          .where('Post.profileId', '=', profileId)
+          .as('countPosts')
       )
-      .from('profile')
+      .from('Profile')
       .join(
-        'profilesetting',
-        'profilesetting.profileid',
+        'ProfileSetting',
+        'ProfileSetting.profileId',
         '=',
-        'profile.profileid'
+        'Profile.profileId'
       )
       .as('settingsTable')
       .join(
-        'availability as a1',
-        'profilesetting.emailsettingid',
+        'Availability as a1',
+        'ProfileSetting.emailSettingId',
         '=',
-        'a1.availabilityid'
+        'a1.availabilityId'
       )
       .join(
-        'availability as a2',
-        'profilesetting.phonesettingid',
+        'Availability as a2',
+        'ProfileSetting.phoneSettingId',
         '=',
-        'a2.availabilityid'
+        'a2.availabilityId'
       )
       .join(
-        'availability as a3',
-        'profilesetting.universitysettingid',
+        'Availability as a3',
+        'ProfileSetting.universitySettingId',
         '=',
-        'a3.availabilityid'
+        'a3.availabilityId'
       )
-      .where('profile.profileid', profileId),
+      .where('Profile.profileId', profileId),
 
   getEditProfile: async (profileId) =>
     db
       .select(
-        'profile.name',
-        'profile.phone',
-        'profile.email',
-        'profile.avatarlink',
-        'profile.profileid',
-        'a1.availabilityid as emailsettingid',
-        'a1.availability as emailsetting',
-        'a2.availabilityid as phonesettingid',
-        'a2.availability as phonesetting',
-        'a3.availabilityid as universitysettingid',
-        'a3.availability as universitysetting'
+        'Profile.name',
+        'Profile.phone',
+        'Profile.email',
+        'Profile.avatarLink',
+        'Profile.profileId',
+        'a1.availabilityId as emailSettingId',
+        'a1.availability as emailSetting',
+        'a2.availabilityId as phoneSettingId',
+        'a2.availability as phoneSetting',
+        'a3.availabilityId as universitySettingId',
+        'a3.availability as universitySetting'
       )
-      .from('profile')
+      .from('Profile')
       .join(
-        'profilesetting',
-        'profilesetting.profileid',
+        'ProfileSetting',
+        'ProfileSetting.profileId',
         '=',
-        'profile.profileid'
+        'Profile.profileId'
       )
       .as('settingsTable')
       .join(
-        'availability as a1',
-        'profilesetting.emailsettingid',
+        'Availability as a1',
+        'ProfileSetting.emailSettingId',
         '=',
-        'a1.availabilityid'
+        'a1.availabilityId'
       )
       .join(
-        'availability as a2',
-        'profilesetting.phonesettingid',
+        'Availability as a2',
+        'ProfileSetting.phoneSettingId',
         '=',
-        'a2.availabilityid'
+        'a2.availabilityId'
       )
       .join(
-        'availability as a3',
-        'profilesetting.universitysettingid',
+        'Availability as a3',
+        'ProfileSetting.universitySettingId',
         '=',
-        'a3.availabilityid'
+        'a3.availabilityId'
       )
-      .where('profile.profileid', profileId),
-  addProfile: async (insertData) => db('profile').insert(insertData).returning(['profileid', 'email', 'name', 'isActivated', 'avatarlink']),
+      .where('Profile.profileId', profileId),
+  addProfile: async (insertData) => db('Profile').insert(insertData).returning(['profileId', 'email', 'name', 'isActivated', 'avatarLink']),
 
   updateProfile: async (updateData, profileId) =>
-    db('profile').update(updateData).where('profileid', profileId),
+    db('Profile').update(updateData).where('profileId', profileId),
 
   updateSettings: async (updateData, profileId) =>
-    db('profilesetting').update(updateData).where('profileid', profileId),
+    db('ProfileSetting').update(updateData).where('profileId', profileId),
 
   deleteProfile: async (profileId) =>
-    db.from('profile').where('profileid', profileId).delete(),
+    db.from('Profile').where('profileId', profileId).delete(),
 
   getProfileById: async (id) =>
-    db.select().first().from('profile').where('profileid', '=', id),
+    db.select().first().from('Profile').where('profileId', '=', id),
 
   getRole: async (id) =>
-    db.select('role').first().from('profile').where('profileid', '=', id),
+    db.select('role').first().from('Profile').where('profileId', '=', id),
 
   getProfileUniversities: async (profileId) =>
     db
-      .select('universityid')
-      .from('universitylist')
-      .where('profileid', profileId)
-      .pluck('universityid'),
+      .select('universityId')
+      .from('UniversityList')
+      .where('profileId', profileId)
+      .pluck('universityId'),
 };

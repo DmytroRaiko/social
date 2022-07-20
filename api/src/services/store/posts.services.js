@@ -4,109 +4,109 @@ module.exports = {
   getAllPosts: async (profileId, offset = 0, limit = 10) =>
     db
       .select(
-        'post.*',
-        'profile.profileid',
-        'profile.name',
-        'profile.avatarlink',
+        'Post.*',
+        'Profile.profileId',
+        'Profile.name',
+        'Profile.avatarLink',
       )
-      .from('profile')
-      .join('post', 'post.profileid', '=', 'profile.profileid')
+      .from('Profile')
+      .join('Post', 'Post.profileId', '=', 'Profile.profileId')
       .whereNotIn(
-        'post.postid',
+        'Post.postId',
         db
           .distinct()
-          .select('postid')
-          .from('postview')
-          .where('profileid', profileId)
+          .select('postId')
+          .from('PostView')
+          .where('profileId', profileId)
       )
-      .orderBy('post.timepost', 'DESC')
+      .orderBy('Post.timePost', 'DESC')
       .offset(offset)
       .limit(limit),
 
   getAllSeenPosts: async (profileId, offset = 0, limit = 10) =>
     db
       .select(
-        'post.*',
-        'profile.profileid',
-        'profile.name',
-        'profile.avatarlink',
-        'postview.viewDate',
+        'Post.*',
+        'Profile.profileId',
+        'Profile.name',
+        'Profile.avatarLink',
+        'PostView.viewDate',
       )
-      .from('profile')
-      .join('post', 'post.profileid', '=', 'profile.profileid')
-      .join('postview', 'postview.postid', '=', 'post.postid')
-      .where('postview.profileid', profileId)
-      .orderBy('postview.viewDate', 'DESC')
+      .from('Profile')
+      .join('Post', 'Post.profileId', '=', 'Profile.profileId')
+      .join('PostView', 'PostView.postId', '=', 'Post.postId')
+      .where('PostView.profileId', profileId)
+      .orderBy('PostView.viewDate', 'DESC')
       .offset(offset)
       .limit(limit),
 
   getAllUserPosts: async (profileId, userProfileId, offset = 0, limit = 10) =>
     db
       .select(
-        'post.*',
-        'profile.profileid',
-        'profile.name',
-        'profile.avatarlink',
+        'Post.*',
+        'Profile.profileId',
+        'Profile.name',
+        'Profile.avatarLink',
       )
-      .from('post')
-      .join('profile', 'post.profileid', '=', 'profile.profileid')
-      .where('post.profileid', '=', profileId)
-      .orderBy('post.timepost', 'DESC')
+      .from('Post')
+      .join('Profile', 'Post.profileId', '=', 'Profile.profileId')
+      .where('Post.profileId', '=', profileId)
+      .orderBy('Post.timePost', 'DESC')
       .offset(offset)
       .limit(limit),
   getPost: async (profileId, postId) =>
     db
       .select(
-        'profile.profileid',
-        'profile.name',
-        'profile.avatarlink',
-        'post.*',
+        'Profile.profileId',
+        'Profile.name',
+        'Profile.avatarLink',
+        'Post.*',
       )
       .first()
-      .from('profile')
-      .join('post', 'post.profileid', '=', 'profile.profileid')
-      .where('post.postid', '=', postId),
+      .from('Profile')
+      .join('Post', 'Post.profileId', '=', 'Profile.profileId')
+      .where('Post.postId', '=', postId),
   getPostInfo: async (postId) =>
-    db.select().first().from('post').where('postid', '=', postId),
+    db.select().first().from('Post').where('postId', '=', postId),
   getPostEdit: async (postId) =>
     db
       .select(
-        'post.text',
-        'post.imagelink',
-        'availability.availabilityid',
-        'availability.availability'
+        'Post.text',
+        'Post.imageLink',
+        'Availability.availabilityId',
+        'Availability.availability'
       )
       .first()
-      .from('post')
+      .from('Post')
       .join(
-        'availability',
-        'post.postavailabilityid',
+        'Availability',
+        'Post.postAvailabilityId',
         '=',
-        'availability.availabilityid'
+        'Availability.availabilityId'
       )
-      .where('postid', postId),
-  addPost: async (insertData) => db('post').insert(insertData),
+      .where('postId', postId),
+  addPost: async (insertData) => db('Post').insert(insertData),
   getPostImageName: async (postId) =>
-    db.select('imagelink').first().from('post').where('postid', '=', postId),
+    db.select('imageLink').first().from('Post').where('postId', '=', postId),
   updatePost: async (updateData, postId) =>
-    db('post').update(updateData).where('postid', '=', postId),
+    db('Post').update(updateData).where('postId', '=', postId),
   deletePost: async (postId) =>
-    db.from('post').where('postid', postId).delete(),
+    db.from('Post').where('postId', postId).delete(),
   isView: async (postId, profileId) =>
-    db.select().first().from('postview').where('postid', postId)
-      .andWhere('profileid', profileId),
+    db.select().first().from('PostView').where('postId', postId)
+      .andWhere('profileId', profileId),
   viewPost: async (postId, profileId) =>
-    db('postview').insert({ postid: postId, profileid: profileId }),
+    db('PostView').insert({ postId, profileId }),
 
   getStatistic: async (postId) =>
-    db.select().from('poststatistic').where('postId', postId).first(),
+    db.select().from('PostStatistic').where('postId', postId).first(),
 
   updatePostAmountViews: async (postId, data) =>
-    db.raw(`UPDATE poststatistic SET "totalViews" = "totalViews"${data}1 WHERE "postId" = ${postId}`),
+    db.raw(`UPDATE "PostStatistic" SET "totalViews" = "totalViews"${data}1 WHERE "postId" = ${postId}`),
 
   updatePostAmountLikes: async (postId, data) =>
-    db.raw(`UPDATE poststatistic SET "totalLikes" = "totalLikes"${data}1 WHERE "postId" = ${postId}`),
+    db.raw(`UPDATE "PostStatistic" SET "totalLikes" = "totalLikes"${data}1 WHERE "postId" = ${postId}`),
 
   updatePostAmountComments: async (postId, data) =>
-    db.raw(`UPDATE poststatistic SET "totalComments" = "totalComments"${data}1 WHERE "postId" = ${postId}`),
+    db.raw(`UPDATE "PostStatistic" SET "totalComments" = "totalComments"${data}1 WHERE "postId" = ${postId}`),
 };

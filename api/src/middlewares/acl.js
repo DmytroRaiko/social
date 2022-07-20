@@ -9,9 +9,9 @@ module.exports = (rule) => async (req, res, next) => {
   const rules = Array.isArray(rule) ? rule : [rule];
   let isAllow = false;
 
-  const { profileid } = req.session;
+  const { profileId } = req.session;
 
-  const user = await profilesServices.getRole(profileid);
+  const user = await profilesServices.getRole(profileId);
 
   if (user) {
     // eslint-disable-next-line no-restricted-syntax
@@ -34,7 +34,7 @@ module.exports = (rule) => async (req, res, next) => {
           } else {
             const resource = await checkRule.getResource(req);
 
-            if (checkRule.isOwn(resource, profileid)) {
+            if (checkRule.isOwn(resource, profileId)) {
               isAllow = true;
             }
           }

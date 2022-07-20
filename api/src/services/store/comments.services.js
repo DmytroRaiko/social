@@ -4,26 +4,26 @@ module.exports = {
   getComments: async (postId) =>
     db
       .select(
-        'profile.profileid',
-        'profile.name',
-        'profile.avatarlink',
-        'comment.*',
+        'Profile.profileId',
+        'Profile.name',
+        'Profile.avatarLink',
+        'Comment.*',
         'parentProfileId',
         'p.name as parentName'
       )
-      .from('comment')
-      .join('profile', 'profile.profileid', '=', 'comment.profileid')
-      .leftJoin('profile as p', 'p.profileid', '=', 'comment.parentProfileId')
-      .where('comment.postid', postId)
-      .orderBy('comment.timesend', 'DESC'),
+      .from('Comment')
+      .join('Profile', 'Profile.profileId', '=', 'Comment.profileId')
+      .leftJoin('Profile as p', 'p.profileId', '=', 'Comment.parentProfileId')
+      .where('Comment.postId', postId)
+      .orderBy('Comment.timeSend', 'DESC'),
   getCommentInfo: async (commentId) =>
-    db.select().first().from('comment').where('commentid', '=', commentId),
-  addComment: async (insertData) => db('comment').insert(insertData),
+    db.select().first().from('Comment').where('commentId', '=', commentId),
+  addComment: async (insertData) => db('Comment').insert(insertData),
   updateComment: async (updateData, commentId) =>
-    db('comment').update(updateData).where('commentid', commentId),
+    db('Comment').update(updateData).where('commentId', commentId),
   deleteComment: async (commentId) =>
     db
-      .from('comment')
-      .where('commentid', commentId)
+      .from('Comment')
+      .where('commentId', commentId)
       .delete(),
 };

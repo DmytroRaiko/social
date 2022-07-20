@@ -9,7 +9,7 @@ const ImageLoadPost = ({
     {!image
   && (
     <Button
-      variant="contained"
+      variant="outlined"
       component="label"
       startIcon={<Attachment />}
     >

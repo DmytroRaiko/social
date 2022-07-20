@@ -8,12 +8,12 @@ module.exports = {
     universities: PropTypes.arrayOf(
       PropTypes.shape({}),
     ),
-    emailsettingid: PropTypes.number.isRequired,
-    emailsetting: PropTypes.string.isRequired,
-    phonesettingid: PropTypes.number.isRequired,
-    phonesetting: PropTypes.string.isRequired,
-    universitysettingid: PropTypes.number.isRequired,
-    universitysetting: PropTypes.string.isRequired,
+    emailSettingId: PropTypes.number.isRequired,
+    emailSetting: PropTypes.string.isRequired,
+    phoneSettingId: PropTypes.number.isRequired,
+    phoneSetting: PropTypes.string.isRequired,
+    universitySettingId: PropTypes.number.isRequired,
+    universitySetting: PropTypes.string.isRequired,
   }).isRequired,
   availabilities: PropTypes.arrayOf(
     PropTypes.shape({

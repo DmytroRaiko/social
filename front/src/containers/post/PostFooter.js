@@ -14,7 +14,7 @@ import PostLike from '../../components/post/PostLike';
 
 const PostFooter = memo(({ postId }) => {
   const { user } = useAuth();
-  const userId = user?.user?.profileid;
+  const userId = user?.user?.profileId;
   const params = useParams();
   const { postId: paramId } = params;
   const {
@@ -109,7 +109,7 @@ const PostFooter = memo(({ postId }) => {
               <ErrorBoundary>
                 <div className="comments flex column">
                   {comments?.map((comment) => (
-                    <div className="comment" key={`post-${comment.postid}-comment-${comment.commentid}`}>
+                    <div className="comment" key={`post-${comment.postId}-comment-${comment.commentId}`}>
                       <Comment
                         handleChange={handleSetChange}
                         comment={comment}

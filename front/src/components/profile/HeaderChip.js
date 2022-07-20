@@ -37,9 +37,9 @@ const HeaderChip = memo(() => {
           onClick={handleClick}
           avatar={(
             <ProfileAvatar
-              profileId={userData.profileid}
+              profileId={userData.profileId}
               name={userData.name}
-              avatarlink={userData.avatarlink}
+              avatarLink={userData.avatarLink}
             />
           )}
           label={userData.name}
@@ -58,7 +58,7 @@ const HeaderChip = memo(() => {
       >
         <RouterLink
           style={{ color: 'inherit', textDecoration: 'none' }}
-          to={`/profile/${userData.profileid}`}
+          to={`/profile/${userData.profileId}`}
         >
           <MenuItem>
             <Avatar />

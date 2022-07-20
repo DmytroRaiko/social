@@ -34,12 +34,12 @@ const Comment = memo(({
               fontWeight: 500,
             }}
             className="flex row start-center"
-            to={`/profile/${comment.profileid}`}
+            to={`/profile/${comment.profileId}`}
           >
             <ProfileAvatar
-              profileId={comment.profileid}
+              profileId={comment.profileId}
               name={comment.name}
-              avatarlink={comment.avatarlink}
+              avatarLink={comment.avatarLink}
             />
 
             {comment.name}
@@ -78,7 +78,7 @@ const Comment = memo(({
             {' '}
 
             <small>
-              <TimeAgo date={comment.timesend} />
+              <TimeAgo date={comment.timeSend} />
 
               {comment.changed && '(edited)'}
             </small>
@@ -93,12 +93,12 @@ const Comment = memo(({
             sx={{
               fontSize: 'small',
             }}
-            onClick={() => replyToHandle(comment.profileid, comment.name)}
+            onClick={() => replyToHandle(comment.profileId, comment.name)}
           >
             reply
           </Button>
 
-          {userId === comment.profileid
+          {userId === comment.profileId
           && (
             <>
               <IconButton
@@ -139,7 +139,7 @@ const Comment = memo(({
                 <MenuItem
                   onClick={() => {
                     handleClose();
-                    handleChange(comment.commentid, comment.text);
+                    handleChange(comment.commentId, comment.text);
                   }}
                   sx={{
                     width: '100%',
@@ -150,7 +150,7 @@ const Comment = memo(({
                 </MenuItem>
                 <Divider />
                 <MenuItem
-                  onClick={() => onDeleteHandle(comment.commentid)}
+                  onClick={() => onDeleteHandle(comment.commentId)}
                   sx={{
                     width: '100%',
                     textTransform: 'capitalize',

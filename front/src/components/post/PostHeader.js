@@ -47,7 +47,7 @@ const PostHeader = memo(({
         <ProfileAvatar
           profileId={profileId}
           name={postAuthor}
-          avatarlink={avatar}
+          avatarLink={avatar}
         />
 
         <div className="post-header-information">
@@ -67,7 +67,7 @@ const PostHeader = memo(({
         </div>
       </NavLink>
 
-      {user?.user?.profileid === profileId
+      {user?.user?.profileId === profileId
         && (
           <>
             <IconButton

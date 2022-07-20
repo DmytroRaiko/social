@@ -5,9 +5,9 @@ import stringAvatar from '../../services/icons/avatarIcon';
 import projectSettings from '../../settings';
 
 const ProfileAvatar = memo(({
-  avatarlink, profileId, name, image,
+  avatarLink, profileId, name, image,
 }) => (
-  ((avatarlink || image)
+  ((avatarLink || image)
     && (
       <Avatar
         className="avatar"
@@ -21,14 +21,14 @@ const ProfileAvatar = memo(({
 ));
 
 ProfileAvatar.propTypes = {
-  avatarlink: PropTypes.string,
+  avatarLink: PropTypes.string,
   profileId: PropTypes.number.isRequired,
   name: PropTypes.string,
   image: PropTypes.string,
 };
 
 ProfileAvatar.defaultProps = {
-  avatarlink: null,
+  avatarLink: null,
   name: 'Unknown P',
   image: null,
 };

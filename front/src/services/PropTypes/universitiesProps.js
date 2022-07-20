@@ -4,7 +4,7 @@ module.exports = {
   universities: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
-      universityid: PropTypes.number.isRequired,
+      universityId: PropTypes.number.isRequired,
     }),
   ),
 };

@@ -15,8 +15,8 @@ import ProfileAvatar from '../../components/profile/ProfileAvatar';
 function ProfileEditContainer({ profileData, availabilities, university }) {
   const profile = profileData[0] || null;
   const [image, setImage] = useState(
-    profile.avatarlink
-      ? `${projectSettings.URI}/files/avatar/${profile.profileid}`
+    profile.avatarLink
+      ? `${projectSettings.URI}/files/avatar/${profile.profileId}`
       : null,
   );
   const [loadedImage, setLoadedImage] = useState();
@@ -27,12 +27,12 @@ function ProfileEditContainer({ profileData, availabilities, university }) {
 
   const mutation = useMutation(
     'edit-avatar',
-    (avatar) => editProfileAvatar(profile.profileid, avatar),
+    (avatar) => editProfileAvatar(profile.profileId, avatar),
   );
 
   const mutationDelete = useMutation(
     'delete-avatar',
-    () => deleteProfileAvatar(profile.profileid),
+    () => deleteProfileAvatar(profile.profileId),
   );
 
   const handleImageChange = (e) => {
@@ -89,9 +89,9 @@ function ProfileEditContainer({ profileData, availabilities, university }) {
 
         <div className="post-img">
           <ProfileAvatar
-            profileId={profile.profileid}
+            profileId={profile.profileId}
             name={profile.name}
-            avatarlink={image}
+            avatarLink={image}
             image={image}
           />
 

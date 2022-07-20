@@ -23,14 +23,14 @@ const EditProfileForm = ({
 
   const mutation = useMutation(
     'edit-profile',
-    (formData) => editProfile(profile.profileid, formData),
+    (formData) => editProfile(profile.profileId, formData),
   );
 
   // variable for autocomplete
   const profileUniversities = [];
   profile.universities?.map((universityItem) => profileUniversities
     .push({
-      value: universityItem.universityid,
+      value: universityItem.universityId,
       label: universityItem.name,
     }));
 
@@ -41,16 +41,16 @@ const EditProfileForm = ({
     phone: profile.phone || '',
     universities: profileUniversities,
     emailSettingId: {
-      value: profile.emailsettingid,
-      label: profile.emailsetting,
+      value: profile.emailSettingId,
+      label: profile.emailSetting,
     },
     phoneSettingId: {
-      value: profile.phonesettingid,
-      label: profile.phonesetting,
+      value: profile.phoneSettingId,
+      label: profile.phoneSetting,
     },
     universitySettingId: {
-      value: profile.universitysettingid,
-      label: profile.universitysetting,
+      value: profile.universitySettingId,
+      label: profile.universitySetting,
     },
   };
 

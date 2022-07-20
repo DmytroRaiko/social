@@ -20,7 +20,7 @@ module.exports = (io, socket) => {
       parentProfileId, postId, profileId, text
     } = data;
     await commentServices.addComment({
-      text, parentProfileId, postid: postId, profileid: profileId,
+      text, parentProfileId, postId, profileId,
     });
     await postsServices.updatePostAmountComments(postId, '+');
 

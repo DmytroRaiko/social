@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     () => getUserInfoByCookie(),
     {
       onSuccess: (data) => {
-        if (!data?.data?.user?.profileid) {
+        if (!data?.data?.user?.profileId) {
           setAuth(false);
         } else {
           setUser({ user: data?.data?.user, ...user });

@@ -24,7 +24,7 @@ module.exports = {
     type: 'string',
     regex: validationConfig.regex.phone,
   },
-  settingAvailibility: {
+  settingAvailability: {
     type: 'number',
     oneOf: true,
   }

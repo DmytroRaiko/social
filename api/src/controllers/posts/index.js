@@ -6,9 +6,9 @@ const likesServices = require('../../services/store/likes.services');
 
 module.exports = {
   getAllPosts: async (req, res) => {
-    const { profileid } = req.session;
+    const { profileId } = req.session;
 
-    const posts = await postsServices.getAllPosts(profileid);
+    const posts = await postsServices.getAllPosts(profileId);
 
     if (posts && Object.keys(posts).length) {
       res.send({
@@ -20,7 +20,7 @@ module.exports = {
   },
 
   getAllSeenPosts: async (req, res) => {
-    const { profileid: profileId } = req.session;
+    const { profileId } = req.session;
 
     const posts = await postsServices.getAllSeenPosts(profileId);
 
@@ -34,10 +34,10 @@ module.exports = {
   },
 
   getOnePost: async (req, res) => {
-    const postId = req.params.postid;
-    const { profileid } = req.session;
+    const { postId } = req.params;
+    const { profileId } = req.session;
 
-    const post = await postsServices.getPost(profileid, postId);
+    const post = await postsServices.getPost(profileId, postId);
 
     if (post && Object.keys(post).length) {
       res.send({ message: 'Post fetching', data: post, success: true });
@@ -47,7 +47,7 @@ module.exports = {
   },
 
   getOnePostEdit: async (req, res) => {
-    const postId = req.params.postid;
+    const { postId } = req.params;
 
     const post = await postsServices.getPostEdit(postId);
 
@@ -59,12 +59,12 @@ module.exports = {
   },
 
   postPost: async (req, res) => {
-    const { profileid } = req.session;
+    const { profileId } = req.session;
     const path = req.file ? req.file.path : null;
 
     const dataInsertPost = req.body;
-    dataInsertPost.profileid = profileid;
-    dataInsertPost.imagelink = path;
+    dataInsertPost.profileId = profileId;
+    dataInsertPost.imageLink = path;
 
     const addPost = await postsServices.addPost(dataInsertPost);
 
@@ -76,9 +76,9 @@ module.exports = {
   },
 
   putPost: async (req, res) => {
-    const postId = req.params.postid;
+    const { postId } = req.params;
     const dataUpdatePost = req.body;
-    dataUpdatePost.imagelink = req.file ? req.file.path : null;
+    dataUpdatePost.imageLink = req.file ? req.file.path : null;
 
     await deletePostImage(postId);
 
@@ -92,12 +92,12 @@ module.exports = {
   },
 
   viewPost: async (req, res) => {
-    const { profileid } = req.session;
+    const { profileId } = req.session;
     const { postId } = req.params;
 
-    const isView = await postsServices.isView(postId, profileid);
-    if (!isView?.postviewid) {
-      await postsServices.viewPost(postId, profileid);
+    const isView = await postsServices.isView(postId, profileId);
+    if (!isView?.postViewId) {
+      await postsServices.viewPost(postId, profileId);
       await postsServices.updatePostAmountViews(postId, '-');
     }
 
@@ -105,7 +105,7 @@ module.exports = {
   },
 
   deletePost: async (req, res) => {
-    const postId = req.params.postid;
+    const { postId } = req.params;
     await deletePostImage(postId);
 
     const deletePost = await postsServices.deletePost(postId);
@@ -122,7 +122,7 @@ module.exports = {
   },
 
   getComments: async (req, res) => {
-    const postId = req.params.postid;
+    const { postId } = req.params;
 
     const commentsForPost = await commentsServices.getComments(
       postId,
@@ -140,11 +140,11 @@ module.exports = {
   },
 
   postComments: async (req, res) => {
-    const { profileid } = req.session;
+    const { profileId } = req.session;
 
     const dataInsertComment = req.body;
-    dataInsertComment.profileid = profileid;
-    dataInsertComment.postid = req.params.postid;
+    dataInsertComment.profileId = profileId;
+    dataInsertComment.postId = req.params.postId;
 
     const addComment = await commentsServices.addComment(dataInsertComment);
 
@@ -156,7 +156,7 @@ module.exports = {
   },
 
   putComment: async (req, res) => {
-    const commentId = req.params.commentid;
+    const { commentId } = req.params;
 
     const dataInsertComment = req.body;
 
@@ -177,12 +177,12 @@ module.exports = {
   },
 
   deleteComment: async (req, res) => {
-    const { profileid } = req.session;
+    const { profileId } = req.session;
     const { commentId } = req.params;
 
     const deleteComment = await commentsServices.deleteComment(
       commentId,
-      profileid
+      profileId
     );
 
     if (deleteComment) {
@@ -197,15 +197,15 @@ module.exports = {
   },
 
   getLikes: async (req, res) => {
-    const { profileid } = req.session;
-    const postId = req.params.postid;
+    const { profileId } = req.session;
+    const { postId } = req.params;
 
     const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
     const limit = page * 50;
     const offset = (page - 1) * 50;
 
     const likesForPost = await likesServices.getLikes(postId, offset, limit);
-    const myLike = await likesServices.getMyLike(postId, profileid);
+    const myLike = await likesServices.getMyLike(postId, profileId);
 
     if (likesForPost && Object.keys(likesForPost).length) {
       res.send({
@@ -213,7 +213,7 @@ module.exports = {
         myLike,
         data: likesForPost,
         success: true,
-        postid: postId,
+        postId,
       });
     } else {
       throw new NotFoundException('Likes not found');
@@ -221,10 +221,10 @@ module.exports = {
   },
 
   postLike: async (req, res) => {
-    const { profileid } = req.session;
-    const { postid } = req.params;
+    const { profileId } = req.session;
+    const { postId } = req.params;
 
-    const likePost = await likesServices.addLike(postid, profileid);
+    const likePost = await likesServices.addLike(postId, profileId);
 
     if (likePost && Object.keys(likePost).length) {
       res.send({ message: 'Like adding', data: likePost, success: true });
@@ -234,8 +234,8 @@ module.exports = {
   },
 
   deleteLike: async (req, res) => {
-    const profileId = req.session.profileid;
-    const postId = req.params.postid;
+    const { profileId } = req.session;
+    const { postId } = req.params;
 
     const unlikePost = await likesServices.deleteLike(postId, profileId);
 

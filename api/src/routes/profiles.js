@@ -17,10 +17,10 @@ router.get(
   middleAsync(async (req, res) => profilesControllers.getProfiles(req, res))
 );
 
-// show profile, where profileid = :profileid
+// show profile, where profileId = :profileId
 
 router.get(
-  '/:profileid',
+  '/:profileId',
   middleAcl({ resource: 'profiles', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => profilesControllers.getOneProfile(req, res))
 );
@@ -28,13 +28,13 @@ router.get(
 // show profile for edit
 
 router.get(
-  '/:profileid/edit',
+  '/:profileId/edit',
   middleAcl({
     resource: 'profiles',
     action: 'read',
     possession: 'own',
-    getResource: (req) => profilesServices.getProfileById(req.params.profileid),
-    isOwn: (resource, profileId) => resource.profileid === profileId,
+    getResource: (req) => profilesServices.getProfileById(req.params.profileId),
+    isOwn: (resource, profileId) => resource.profileId === profileId,
   }),
   middleAsync(async (req, res) => profilesControllers.getProfileEdit(req, res))
 );
@@ -53,13 +53,13 @@ router.post(
 // change profile
 
 router.put(
-  '/:profileid',
+  '/:profileId',
   middleAcl({
     resource: 'profiles',
     action: 'update',
     possession: 'own',
-    getResource: (req) => profilesServices.getProfileById(req.params.profileid),
-    isOwn: (resource, profileId) => resource.profileid === profileId,
+    getResource: (req) => profilesServices.getProfileById(req.params.profileId),
+    isOwn: (resource, profileId) => resource.profileId === profileId,
   }),
   bodyValidation(change, {
     emailSettingId: {
@@ -78,13 +78,13 @@ router.put(
 // delete profile
 
 router.delete(
-  '/:profileid',
+  '/:profileId',
   middleAcl({
     resource: 'profiles',
     action: 'delete',
     possession: 'own',
-    getResource: (req) => profilesServices.getProfileById(req.params.profileid),
-    isOwn: (resource, profileId) => resource.profileid === profileId,
+    getResource: (req) => profilesServices.getProfileById(req.params.profileId),
+    isOwn: (resource, profileId) => resource.profileId === profileId,
   }),
   middleAsync(async (req, res) => profilesControllers.deleteProfile(req, res))
 );
@@ -92,7 +92,7 @@ router.delete(
 // show all post for profile
 
 router.get(
-  '/:profileid/posts',
+  '/:profileId/posts',
   middleAcl({ resource: 'profiles', action: 'read', possession: 'any' }),
   middleAsync(async (req, res) => profilesControllers.getProfilePosts(req, res))
 );

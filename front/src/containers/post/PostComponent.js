@@ -29,25 +29,25 @@ const PostComponent = memo(({ post }) => {
   return (
     <ErrorBoundary>
       <div
-        data-id={post.postid}
+        data-id={post.postId}
         ref={ref}
       />
       <PostHeader
-        profileId={post.profileid}
-        avatar={post.avatarlink}
+        profileId={post.profileId}
+        avatar={post.avatarLink}
         postAuthor={post.name}
-        postId={post.postid}
+        postId={post.postId}
         postEdit={post.changed}
-        postTime={post.timepost}
-        changeTime={post.timechanged}
+        postTime={post.timePost}
+        changeTime={post.timeChanged}
       />
       <PostContent
-        postId={post.postid}
+        postId={post.postId}
         postText={post.text}
-        postImage={post.imagelink}
+        postImage={post.imageLink}
       />
       <PostFooter
-        postId={post.postid}
+        postId={post.postId}
       />
     </ErrorBoundary>
   );

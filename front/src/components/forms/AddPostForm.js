@@ -23,7 +23,7 @@ const AddPostForm = ({ availabilities, onHandleClose }) => {
   const onFormSubmit = (dataSubmit) => {
     const onFormData = {
       text: dataSubmit.text,
-      postavailabilityid: dataSubmit.postAvailabilityId.value,
+      postAvailabilityId: dataSubmit.postAvailabilityId.value,
     };
 
     if (newPhoto) {

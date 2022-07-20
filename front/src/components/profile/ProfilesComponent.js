@@ -6,13 +6,13 @@ import ProfileAvatar from './ProfileAvatar';
 
 const ProfilesComponent = memo(({ profiles }) => {
   const profilesList = profiles?.map((profile) => (
-    <div className="profile-card" key={`profile-${profile.profileid}`}>
-      <Link className="profile-card-info" to={`/profile/${profile.profileid}`}>
+    <div className="profile-card" key={`profile-${profile.profileId}`}>
+      <Link className="profile-card-info" to={`/profile/${profile.profileId}`}>
         <div className="post-img">
           <ProfileAvatar
-            profileId={profile.profileid}
+            profileId={profile.profileId}
             name={profile.name}
-            avatarlink={profile.avatarlink}
+            avatarLink={profile.avatarLink}
           />
         </div>
 
@@ -31,8 +31,8 @@ const ProfilesComponent = memo(({ profiles }) => {
 ProfilesComponent.propTypes = {
   profiles: PropTypes.arrayOf(
     PropTypes.shape({
-      profileid: PropTypes.number.isRequired,
-      avatarlink: PropTypes.string,
+      profileId: PropTypes.number.isRequired,
+      avatarLink: PropTypes.string,
       name: PropTypes.string.isRequired,
     }).isRequired,
   ),

@@ -29,7 +29,7 @@ function App() {
     );
   }
 
-  if (!isLoading && !isAuth && !user?.user?.profileid) {
+  if (!isLoading && !isAuth && !user?.user?.profileId) {
     return (
       <BrowserRouter>
         <div className="auth-page">

@@ -21,21 +21,21 @@ function ProfilePageContainer({ profileData }) {
         <div className="profile-avatar profile-left-bar">
           <div className="post-img">
             <ProfileAvatar
-              avatarlink={profile.avatarlink}
-              profileId={profile.profileid}
+              avatarLink={profile.avatarLink}
+              profileId={profile.profileId}
               name={profile.name}
             />
           </div>
 
           <div className="profile-button-group">
-            {user?.user?.profileid !== profile.profileid
+            {user?.user?.profileId !== profile.profileId
               && (
                 <Button variant="contained">Add</Button>
               )}
 
-            {user?.user?.profileid === profile.profileid
+            {user?.user?.profileId === profile.profileId
               && (
-                <Button component={Link} to={`/profile/${profile.profileid}/edit`} variant="outlined" className="">
+                <Button component={Link} to={`/profile/${profile.profileId}/edit`} variant="outlined" className="">
                   <EditIcon fontSize="small" />
                   Edit
                 </Button>
@@ -53,13 +53,13 @@ function ProfilePageContainer({ profileData }) {
           email={profile.email}
           phone={profile.phone}
           universities={profile.universities}
-          emailSetting={profile.emailsetting}
-          phoneSetting={profile.phonesetting}
-          universitySetting={profile.universitysetting}
-          countFriends={profile.countfriends}
-          countPosts={profile.countposts}
+          emailSetting={profile.emailSetting}
+          phoneSetting={profile.phoneSetting}
+          universitySetting={profile.universitySetting}
+          countFriends={profile.countFriends}
+          countPosts={profile.countPosts}
         />
-        <ProfilePosts profileId={profile.profileid} />
+        <ProfilePosts profileId={profile.profileId} />
       </div>
     </div>
     )) || <PageLoader />

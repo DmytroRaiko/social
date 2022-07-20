@@ -18,14 +18,14 @@ passport.use(
       if (!user) {
         await profilesServices.addProfile({
           name: profile.displayName,
-          facebookid: profile.id,
+          facebookId: profile.id,
         });
 
         user = await authServices.facebook.selectProfileByFacebookTokenId(profile.id);
       }
 
       done(null, {
-        profileid: user.profileid,
+        profileId: user.profileId,
         name: user.name,
         email: user.email,
       });

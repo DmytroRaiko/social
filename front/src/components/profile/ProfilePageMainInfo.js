@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import profileProps from '../../services/PropTypes/ProfileProps';
 
 const universitysBlock = (universities) => universities?.map((university) => (
-  <div className={`value ${university.universityid}`} key={`university-${university.universityid}`}>
+  <div className={`value ${university.universityId}`} key={`university-${university.universityId}`}>
     {university.name}
   </div>
 ));

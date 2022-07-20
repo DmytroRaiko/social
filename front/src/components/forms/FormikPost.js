@@ -84,6 +84,7 @@ const FormikPost = ({
             <Button
               variant="text"
               onClick={onHandleClose}
+              color="error"
             >
               Close
             </Button>

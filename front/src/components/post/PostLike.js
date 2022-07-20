@@ -16,7 +16,7 @@ const PostLike = memo(({ userId, postId }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openLikeModal, setOpenLikeModal] = useState(false);
 
-  const myLike = likes.find((el) => el.profileid === userId)?.profileid;
+  const myLike = likes.find((el) => el.profileId === userId)?.profileId;
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -40,11 +40,11 @@ const PostLike = memo(({ userId, postId }) => {
   const handleClose = () => setOpenLikeModal(false);
 
   const popover = likes?.map((like) => (
-    <div key={`${postId}-like-${like.postlikeid}`}>
+    <div key={`${postId}-like-${like.postLikeId}`}>
       <ProfileAvatar
-        profileId={like.profileid}
+        profileId={like.profileId}
         name={like.name}
-        avatarlink={like.avatarlink}
+        avatarLink={like.avatarLink}
       />
     </div>
   ));

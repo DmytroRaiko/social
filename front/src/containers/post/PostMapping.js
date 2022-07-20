@@ -9,7 +9,7 @@ const PostMapping = ({ posts }) => {
   const postsList = posts?.map((post) => (
     <div
       className="post-body"
-      key={`post-id-${post.postid}`}
+      key={`post-id-${post.postId}`}
     >
       <PostComponent post={post} />
     </div>
