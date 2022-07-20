@@ -64,11 +64,11 @@ function App() {
           <Route path="reset-password/:hash" element={<Navigate replace to="/articles" />} />
 
           <Route path="/articles" element={<Posts />} />
-          <Route path="/article/:id" element={<Post />} />
+          <Route path="/article/:postId" element={<Post />} />
           <Route path="/articleAdd" element={<AddArticle />} />
           <Route path="/profiles" element={<Profiles />} />
-          <Route path="/profile/:id" element={<Profile />} />
-          <Route path="/profile/:id/edit" element={<ProfileEdit />} />
+          <Route path="/profile/:profileId" element={<Profile />} />
+          <Route path="/profile/:profileId/edit" element={<ProfileEdit />} />
           <Route path="/date/:date" element={<DateComponent />} />
 
           <Route path="/history/seen" element={<HistorySeen />} />

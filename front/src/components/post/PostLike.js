@@ -1,17 +1,20 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { Popover, AvatarGroup, IconButton } from '@mui/material';
+import {
+  Popover, AvatarGroup, IconButton, Link,
+} from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ProfileAvatar from '../profile/ProfileAvatar';
 import { useSocketLikes } from '../../config/socket.likes';
+import LikesModal from '../../containers/modals/LikesModal';
 
 const PostLike = memo(({ userId, postId }) => {
   const {
     likes, countLikes, addLike, deleteLike,
   } = useSocketLikes(`likes-${postId}`, userId);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openLikeModal, setOpenLikeModal] = useState(false);
 
   const myLike = likes.find((el) => el.profileid === userId)?.profileid;
 
@@ -33,6 +36,9 @@ const PostLike = memo(({ userId, postId }) => {
     }
   };
 
+  const handleOpen = () => setOpenLikeModal(true);
+  const handleClose = () => setOpenLikeModal(false);
+
   const popover = likes?.map((like) => (
     <div key={`${postId}-like-${like.postlikeid}`}>
       <ProfileAvatar
@@ -46,10 +52,19 @@ const PostLike = memo(({ userId, postId }) => {
   return (
     <>
       {(countLikes && (
+      // eslint-disable-next-line jsx-a11y/anchor-is-valid
       <Link
-        to={`/post/${postId}/likes`}
+        src=""
+        component="button"
+        onClick={() => handleOpen()}
         aria-owns={open ? 'mouse-over-popover' : undefined}
+        sx={{
+          fontSize: '16px',
+          outline: 'none !important',
+        }}
         aria-haspopup="true"
+        color="inherit"
+        underline="hover"
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
       >
@@ -89,6 +104,8 @@ const PostLike = memo(({ userId, postId }) => {
           ? <FavoriteIcon />
           : <FavoriteBorderIcon />}
       </IconButton>
+
+      <LikesModal handleClose={handleClose} likes={likes} open={openLikeModal} />
     </>
   );
 });

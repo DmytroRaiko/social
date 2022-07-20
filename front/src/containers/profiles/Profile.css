@@ -1,4 +1,4 @@
-.site-body .profile-card {
+.profile-card {
   text-decoration: none;
   color: #0E0E0E;
   width: 50%;
@@ -12,12 +12,24 @@
   align-items: center;
 }
 
+.like-list {
+  max-height: calc(100vh - 120px);
+  overflow: auto;
+}
+
+.like-list .profile-card {
+  width: 100%;
+  margin-top: 1px;
+  box-shadow: none;
+  padding: 5px 0;
+}
+
 .site-body .profile-card:last-child {
   margin-bottom: 40px;
 }
 
-.site-body div a.profile-card-info,
-.site-body .profile-card-info.skeleton {
+a.profile-card-info,
+.profile-card-info.skeleton {
   text-decoration: none;
   color: #0E0E0E;
   width: 100%;
@@ -27,11 +39,11 @@
   align-items: center;
 }
 
-.site-body div.profile-card .post-img {
+div.profile-card .post-img {
   margin: 0;
 }
 
-.site-body div.profile-card .post-img img,
+div.profile-card .post-img img,
 .site-body div.profile-card .post-img div.MuiAvatar-root {
   width: 75px;
   height: 75px;
@@ -39,11 +51,14 @@
   font-size: 2rem;
 }
 
-.site-body div.profile-card div.profile-list-name {
-  font-size: 30px;
+div.profile-card div.profile-list-name {
   padding-left: 20px;
   margin-left: 10px;
   border-left: 1px solid #e4e4e4;
+}
+
+.site-body div.profile-card div.profile-list-name {
+  font-size: 30px;
   height: 75px;
   display: flex;
   align-items: center;

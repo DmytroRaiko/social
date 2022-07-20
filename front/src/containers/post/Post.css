@@ -122,7 +122,8 @@
   color: rgba(0, 0, 0, 0.58)
 }
 
-.post-body a {
+.post-body a,
+.post-body .post-content {
   color: #0E0E0E;
   text-decoration: none;
 }
@@ -289,14 +290,22 @@
 
 .like-popover .MuiPaper-root {
   background: none;
+  height: 39px;
 }
 
 .like-popover .MuiAvatarGroup-avatar:last-child {
   margin-left: 0;
 }
 
+.like-popover .MuiAvatarGroup-avatar .MuiAvatar-root {
+  width: 35px;
+  height: 35px;
+}
+
 .like-popover .MuiAvatarGroup-avatar {
   margin-left: -8px;
+  width: 35px;
+  height: 35px;
 }
 
 .like-popover .MuiAvatarGroup-avatar .MuiAvatar-root {

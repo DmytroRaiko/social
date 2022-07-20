@@ -4,6 +4,7 @@ import {
   Accordion, AccordionDetails, AccordionSummary, Typography,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useParams } from 'react-router-dom';
 import Comment from '../../components/post/Comment';
 import AddCommentForm from '../forms/AddCommentForm';
 import { useSocketComments } from '../../config/socket.comments';
@@ -14,11 +15,13 @@ import PostLike from '../../components/post/PostLike';
 const PostFooter = memo(({ postId }) => {
   const { user } = useAuth();
   const userId = user?.user?.profileid;
+  const params = useParams();
+  const { postId: paramId } = params;
   const {
     comments, countComments, addComments, changeComment, deleteComment,
   } = useSocketComments(`comments-${postId}`, userId);
 
-  const [expandedAccordion, setExpandedAccordion] = useState(false);
+  const [expandedAccordion, setExpandedAccordion] = useState(paramId ? 'panel1' : null);
   const [replyTo, setReplyTo] = useState({
     profileId: null,
     name: '',
