@@ -101,3 +101,116 @@ code {
   font-size: 16px;
 }
 
+.box-header {
+  text-transform: capitalize;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.friend-box,
+.friend-box .content {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.friend-box.horizontal {
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.friend-box.horizontal .content {
+  flex-direction: column;
+  margin-left: 5px;
+  padding-left: 5px;
+}
+
+.friend-box.horizontal .content:first-child {
+  margin-left: 0;
+  border-left: none;
+}
+
+.friend-box.vertical {
+  flex-direction: column;
+  width: 100%;
+}
+
+.friend-box.vertical .content{
+  flex-direction: row;
+  width: 100%;
+  margin-top: 5px;
+  border-top: 1px solid #e4e4e4;
+  padding-top: 5px;
+}
+
+.friend-box.vertical .content:first-child {
+  margin-top: 0;
+  border-top: none;
+  padding-top: 0;
+}
+
+.friend-box .post-img,
+.friend-box .avatar {
+  width: 60px !important;
+  height: 60px !important;
+  margin: 0 0 5px 0 !important;
+}
+
+.friend-box.horizontal .post-img,
+.friend-box.horizontal .avatar {
+  width: 100px !important;
+  height: 100px !important;
+}
+
+.friend-box .profile-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+
+.friend-box .action-btns {
+  display: flex;
+  justify-content: space-around;
+}
+
+.friend-box.horizontal .action-btns {
+  flex-direction: row;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.friend-box.vertical .action-btns {
+  flex-direction: column;
+  height: 100%;
+}
+
+.friend-box.vertical .action-btns button {
+  margin-top: 15px;
+}
+
+.friend-box.horizontal .action-btns button {
+  margin-left: 15px;
+}
+
+.action-btns button:first-child {
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+}
+
+.main-content-friend-box div.block-shadow {
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.main-content-friend-box .friend-box .content {
+  border-radius: 3px;
+  padding: 10px;
+  box-shadow: 0 5px 11px 1px #e4e4e4;
+  background: white;
+  width: 150px;
+}

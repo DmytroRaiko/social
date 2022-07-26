@@ -12,6 +12,20 @@
   align-items: center;
 }
 
+.profile-card .action-btns {
+  width: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-card .action-btns button {
+  margin-top: 10px;
+}
+
+.profile-card .action-btns button:first-child {
+  margin-top: 0;
+}
+
 .like-list {
   max-height: calc(100vh - 120px);
   overflow: auto;
@@ -72,6 +86,14 @@ div.profile-card div.profile-list-name {
   justify-content: space-around;
 }
 
+.profile-button-group .action-btns button {
+  margin-left: 15px;
+}
+
+.profile-button-group .action-btns button:first-child {
+  margin-left: 0;
+}
+
 .profile-main-page {
   display: flex;
   flex-direction: column;
@@ -92,6 +114,7 @@ div.profile-card div.profile-list-name {
   border-radius: 3px;
   padding: 10px;
   box-shadow: 0 5px 11px 1px #e4e4e4;
+  background: white;
 }
 
 .profile-page .profile-avatar {
@@ -104,8 +127,13 @@ div.profile-card div.profile-list-name {
   margin-bottom: 15px;
 }
 
+.profile-page .profile-avatar.profile-left-bar {
+  margin-top: 0;
+}
+
 .profile-page .profile-left-bar {
   width: 250px;
+  margin-top: 20px;
 }
 
 .profile-page .profile-avatar .post-img div {

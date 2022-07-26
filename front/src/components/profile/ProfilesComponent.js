@@ -1,10 +1,10 @@
 import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Button } from '@mui/material';
 import ProfileAvatar from './ProfileAvatar';
+import FriendActionButtons from '../friends/FriendActionButtons';
 
-const ProfilesComponent = memo(({ profiles }) => {
+const ProfilesComponent = memo(({ profiles, like }) => {
   const profilesList = profiles?.map((profile) => (
     <div className="profile-card" key={`profile-${profile.profileId}`}>
       <Link className="profile-card-info" to={`/profile/${profile.profileId}`}>
@@ -21,7 +21,10 @@ const ProfilesComponent = memo(({ profiles }) => {
         </div>
       </Link>
 
-      <Button variant="contained">Add</Button>
+      {!like
+        && (
+          <FriendActionButtons profileId={profile.profileId} />
+        )}
     </div>
   ));
 
@@ -29,6 +32,7 @@ const ProfilesComponent = memo(({ profiles }) => {
 });
 
 ProfilesComponent.propTypes = {
+  like: PropTypes.bool,
   profiles: PropTypes.arrayOf(
     PropTypes.shape({
       profileId: PropTypes.number.isRequired,
@@ -39,6 +43,7 @@ ProfilesComponent.propTypes = {
 };
 
 ProfilesComponent.defaultProps = {
+  like: false,
   profiles: [],
 };
 

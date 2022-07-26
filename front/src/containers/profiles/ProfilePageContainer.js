@@ -8,6 +8,8 @@ import ProfilePosts from './ProfilePosts';
 import ProfileAvatar from '../../components/profile/ProfileAvatar';
 import { PageLoader } from '../../components/loaders/PageLoader';
 import useAuth from '../../providers/authProvider';
+import FriendBox from '../friends/FriendBox';
+import FriendActionButtons from '../../components/friends/FriendActionButtons';
 
 function ProfilePageContainer({ profileData }) {
   const profile = profileData[0] || null;
@@ -30,7 +32,7 @@ function ProfilePageContainer({ profileData }) {
           <div className="profile-button-group">
             {user?.user?.profileId !== profile.profileId
               && (
-                <Button variant="contained">Add</Button>
+              <FriendActionButtons profileId={profile.profileId} />
               )}
 
             {user?.user?.profileId === profile.profileId
@@ -43,7 +45,11 @@ function ProfilePageContainer({ profileData }) {
           </div>
         </div>
         <div className="profile-left-bar">
-          {null}
+          <FriendBox type="request" direction="vertical" />
+        </div>
+
+        <div className="profile-left-bar">
+          <FriendBox direction="vertical" />
         </div>
       </div>
 
@@ -59,6 +65,11 @@ function ProfilePageContainer({ profileData }) {
           countFriends={profile.countFriends}
           countPosts={profile.countPosts}
         />
+
+        <div className="main-content-friend-box">
+          <FriendBox direction="horizontal" />
+        </div>
+
         <ProfilePosts profileId={profile.profileId} />
       </div>
     </div>

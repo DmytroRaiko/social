@@ -2,6 +2,7 @@ const profilesServices = require('../../services/store/profiles.services');
 const NotFoundException = require('../../services/errors/NotFoundException');
 const universitiesServices = require('../../services/store/universities.services');
 const postsServices = require('../../services/store/posts.services');
+const friendsServices = require('../../services/store/friends.services');
 
 module.exports = {
   getProfiles: async (req, res) => {
@@ -24,10 +25,16 @@ module.exports = {
 
   getOneProfile: async (req, res) => {
     const { profileId } = req.params;
+    const { profileId: authId } = req.session;
 
-    const profile = await profilesServices.getProfile(profileId);
+    const profile = await profilesServices.getProfile(profileId, authId);
 
     if (profile && Object.keys(profile).length) {
+      let friend = {};
+      if (authId !== profileId) {
+        friend = await friendsServices.checkFriend(profile[0].profileId, authId);
+      }
+
       const universityList = await universitiesServices.getProfileUniversities(
         profileId
       );
@@ -36,7 +43,14 @@ module.exports = {
         profile[0].universities = universityList;
       }
 
-      res.send({ message: 'Fetching profile', data: profile, success: true });
+      res.send({
+        message: 'Fetching profile',
+        data: [{
+          ...profile[0],
+          friendly: friend,
+        }],
+        success: true
+      });
     } else {
       throw new NotFoundException('Profile not found');
     }

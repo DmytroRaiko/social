@@ -18,7 +18,7 @@ const LikeList = ({ likes, handleClose }) => (
       </IconButton>
     </header>
     <div className="like-list">
-      <ProfilesComponent profiles={likes} />
+      <ProfilesComponent profiles={likes} like />
     </div>
   </>
 );
