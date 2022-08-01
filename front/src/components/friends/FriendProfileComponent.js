@@ -23,7 +23,9 @@ const FriendProfileComponent = ({ profiles }) => profiles?.map((profile) => (
         name={profile.name}
       />
 
-      {profile.name}
+      <div className="name">
+        {profile.name}
+      </div>
     </Link>
 
     <FriendActionButtons profile={profile} />

@@ -1,5 +1,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from '@mui/material';
+import { Link as DOMLink } from 'react-router-dom';
 import profileProps from '../../services/PropTypes/ProfileProps';
 
 const universitysBlock = (universities) => universities?.map((university) => (
@@ -48,11 +50,16 @@ const ProfilePageMainInfo = memo(({
         ) }
 
         <div className="profile-statistics info-item">
-          <div>
+          <Link
+            component={DOMLink}
+            to="friends"
+            color="inherit"
+            underline="hover"
+          >
             Friends:
             {' '}
             {countFriends || 0}
-          </div>
+          </Link>
           <span className="span-hr" />
           <div>
             Posts:

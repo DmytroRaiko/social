@@ -14,10 +14,10 @@ module.exports = {
       .whereNotIn(
         'Post.postId',
         db
-          .distinct()
           .select('postId')
           .from('PostView')
           .where('profileId', profileId)
+          .andWhereRaw('"PostView"."postId" = "Post"."postId"')
       )
       .orderBy('Post.timePost', 'DESC')
       .offset(offset)

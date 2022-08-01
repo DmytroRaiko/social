@@ -16,6 +16,27 @@ module.exports = {
         builder.where('Friend.requestUserId', '=', profileId)
           .orWhere('Friend.respondUserId', '=', profileId)),
 
+  recommendations: async (profileId) =>
+    db
+      .distinct()
+      .select(
+        'Profile.profileId',
+        'Profile.avatarLink',
+        'Profile.name',
+        'Friend.friendId'
+      )
+      .from('Profile')
+      // eslint-disable-next-line func-names
+      .leftJoin('Friend', function () {
+        this
+          // eslint-disable-next-line func-names
+          .on(function () { this.on('Friend.requestUserId', '=', 'Profile.profileId').andOn('Friend.respondUserId', '=', profileId); })
+          // eslint-disable-next-line func-names
+          .orOn(function () { this.on('Friend.respondUserId', '=', 'Profile.profileId').andOn('Friend.requestUserId', '=', profileId); });
+      })
+      .whereNull('Friend.friendId')
+      .andWhere('Profile.profileId', '!=', profileId),
+
   getFriendById: async (friendId) =>
     db
       .select()

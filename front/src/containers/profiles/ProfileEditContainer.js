@@ -11,6 +11,7 @@ import projectSettings from '../../settings';
 import { deleteProfileAvatar, editProfileAvatar } from './api/crud';
 import AvatarCropModal from '../modals/AvatarCropModal';
 import ProfileAvatar from '../../components/profile/ProfileAvatar';
+import FriendBox from '../friends/FriendBox';
 
 function ProfileEditContainer({ profileData, availabilities, university }) {
   const profile = profileData[0] || null;
@@ -120,6 +121,18 @@ function ProfileEditContainer({ profileData, availabilities, university }) {
           availabilities={availabilities}
           university={university}
         />
+
+        <div className="main-content-friend-box">
+          <FriendBox recommendation />
+        </div>
+
+        <div className="main-content-friend-box">
+          <FriendBox type="request" />
+        </div>
+
+        <div className="main-content-friend-box">
+          <FriendBox type="respond" />
+        </div>
       </div>
     </div>
     )) || <PageLoader />

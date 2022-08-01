@@ -102,12 +102,19 @@ div.profile-card div.profile-list-name {
 .profile-page {
   width: 1000px;
   display: grid;
-  grid-column-gap: 30px;
+  grid-column-gap: 20px;
   grid-template-columns: 250px 1fr;
 }
 
 .profile-page .profile-page-right-colmn {
-  margin-top: 10px;
+  padding-top: 10px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.profile-page .profile-page-right-colmn .profile-page-right-colmn {
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .profile-page div.block-shadow {
@@ -115,6 +122,10 @@ div.profile-card div.profile-list-name {
   padding: 10px;
   box-shadow: 0 5px 11px 1px #e4e4e4;
   background: white;
+}
+
+.profile-page .main-content-friend-box {
+  padding: 0 10px;
 }
 
 .profile-page .profile-avatar {
@@ -197,7 +208,9 @@ div.profile-card div.profile-list-name {
 }
 
 .profile-page .profile-page-right-colmn .post-body {
-  width: calc(100% - 24px);
+  width: calc(100% - 20px);
+  box-sizing: border-box;
+  margin: 20px 10px 20px 10px;
 }
 
 .profile-page .profile-page-right-colmn .post-body:last-child {
@@ -211,7 +224,8 @@ div.profile-card div.profile-list-name {
   border-top: 1px solid #e4e4e4;
 }
 
-.profile-page .profile-page-info .profile-information .profile-statistics div {
+.profile-page .profile-page-info .profile-information .profile-statistics div,
+.profile-page .profile-page-info .profile-information .profile-statistics a {
   padding: 10px;
   text-align: center;
   margin: 0 40px;

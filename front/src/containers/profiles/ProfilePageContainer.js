@@ -67,7 +67,7 @@ function ProfilePageContainer({ profileData }) {
         />
 
         <div className="main-content-friend-box">
-          <FriendBox direction="horizontal" />
+          <FriendBox recommendation />
         </div>
 
         <ProfilePosts profileId={profile.profileId} />

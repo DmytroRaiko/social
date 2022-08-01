@@ -6,6 +6,12 @@ const middleAcl = require('../middlewares/acl');
 const { getFriendById } = require('../services/store/friends.services');
 
 router.get(
+  '/recommendations',
+  auth,
+  middleAsync(async (req, res) => friendsController.getRecommendations(req, res))
+);
+
+router.get(
   '/:profileId',
   middleAsync(async (req, res) => friendsController.profileFriends(req, res))
 );
@@ -35,7 +41,7 @@ router.delete(
     resource: 'friends',
     action: 'delete ',
     possession: 'own',
-    getResource: (req) => getFriendById(req.params.requestId),
+    getResource: (req) => getFriendById(req.params.friendId),
     isOwn: (resource, profileId) =>
       resource.requestUserId === profileId
       || resource.respondUserId === profileId,
@@ -47,6 +53,12 @@ router.put(
   '/send-request',
   auth,
   middleAsync(async (req, res) => friendsController.sendRequest(req, res))
+);
+
+router.put(
+  '/ban/:type',
+  auth,
+  middleAsync(async (req, res) => friendsController.banOrUnban(req, res))
 );
 
 router.put(

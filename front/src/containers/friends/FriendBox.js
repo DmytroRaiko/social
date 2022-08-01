@@ -1,22 +1,37 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-query';
-import { getRequestsByType } from './api/crud';
+import { getRequestsByType, getRecommendation } from './api/crud';
 import ErrorBoundary from '../../components/ErrorBoundary';
 import FriendProfileComponent from '../../components/friends/FriendProfileComponent';
 
-const FriendBox = memo(({ type, direction }) => {
-  const { data } = useQuery(
-    `request-query-${type}-}`,
-    () => getRequestsByType(type),
-  );
+const FriendBox = memo(({ type, direction, recommendation }) => {
+  let list;
 
-  const list = data?.data?.data;
+  if (!recommendation) {
+    const { data } = useQuery(
+      `request-query-${type}-}`,
+      () => getRequestsByType(type),
+    );
+    list = data?.data?.data;
+  } else {
+    const { data } = useQuery(
+      'request-recommendations',
+      () => getRecommendation(),
+    );
+    list = data?.data?.data;
+  }
 
   return (list && (
     <ErrorBoundary>
       <div className="block-shadow">
-        <div className="box-header">{`${type}s`}</div>
+        <div className="box-header">
+          {`${
+            recommendation
+              ? 'Recommendation'
+              : type}s`}
+          <hr />
+        </div>
 
         <div className={`friend-box ${direction}`}>
           {list
@@ -30,11 +45,13 @@ const FriendBox = memo(({ type, direction }) => {
 FriendBox.propTypes = {
   direction: PropTypes.oneOf(['horizontal', 'vertical']),
   type: PropTypes.oneOf(['request', 'respond']),
+  recommendation: PropTypes.bool,
 };
 
 FriendBox.defaultProps = {
   direction: 'horizontal',
   type: 'respond',
+  recommendation: false,
 };
 
 export default FriendBox;

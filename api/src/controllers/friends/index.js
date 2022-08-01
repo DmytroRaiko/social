@@ -15,6 +15,22 @@ module.exports = {
     }
   },
 
+  getRecommendations: async (req, res) => {
+    const { profileId } = req.session;
+
+    const recommended = await friendsServices.recommendations(profileId);
+
+    if (recommended && Object.keys(recommended).length) {
+      res.send({
+        countRaws: recommended.length,
+        message: 'People recommendations',
+        data: recommended
+      });
+    } else {
+      throw new NotFoundException('Recommendations not found');
+    }
+  },
+
   profileFriendsRequests: async (req, res) => {
     const { profileId } = req.session;
 
@@ -63,6 +79,42 @@ module.exports = {
       res.send({ message: 'Friend has been deleted', success: true });
     } else {
       throw new NotFoundException('Friend not found');
+    }
+  },
+
+  banOrUnban: async (req, res) => {
+    const { type } = req.params;
+    const { profileId: respondUserId } = req.body;
+    const { profileId: requestUserId } = req.session;
+
+    const checkFriendly = await friendsServices.checkFriend(respondUserId, requestUserId);
+
+    let changeBan;
+    switch (type) {
+      case 'ban':
+        if (checkFriendly?.friendId) {
+          changeBan = await friendsServices.changeFriendRequest(checkFriendly?.friendId, 2);
+        } else {
+          changeBan = await friendsServices.addRequest({
+            requestUserId,
+            respondUserId,
+            accessFriendId: 3
+          });
+        }
+        break;
+      case 'unban':
+        if (checkFriendly?.friendId) {
+          changeBan = await friendsServices.deleteFriend(checkFriendly?.friendId);
+        }
+        break;
+      default:
+        throw new BadRequestException();
+    }
+
+    if (changeBan) {
+      res.send({ message: 'ban or unban' });
+    } else {
+      throw new BadRequestException();
     }
   },
 

@@ -105,6 +105,8 @@ code {
   text-transform: capitalize;
   font-size: 20px;
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .friend-box,
@@ -117,6 +119,8 @@ code {
 .friend-box.horizontal {
   flex-direction: row;
   justify-content: flex-start;
+  overflow: auto;
+  padding: 10px;
 }
 
 .friend-box.horizontal .content {
@@ -162,12 +166,21 @@ code {
   height: 100px !important;
 }
 
+.friend-box .name {
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
 .friend-box .profile-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: auto;
+  width: 100%;
 }
 
 
@@ -212,5 +225,20 @@ code {
   padding: 10px;
   box-shadow: 0 5px 11px 1px #e4e4e4;
   background: white;
-  width: 150px;
+  min-width: 150px;
+  box-sizing: border-box;
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: linear-gradient(135deg, #21c6f5, #2063c7);
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: 10px;
 }
