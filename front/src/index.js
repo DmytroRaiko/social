@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { SnackbarProvider } from 'notistack';
 import App from './App';
-import ErrorBoundary from './components/ErrorBoundary';
+import ErrorBoundary from './Services/Errors/ErrorBoundary';
 
-import './index.css';
-import { AuthProvider } from './providers/authProvider';
+import './Assets/Styles/index.css';
+import { AuthProvider } from './Services/Providers/authProvider';
 
 const queryClient = new QueryClient();
 

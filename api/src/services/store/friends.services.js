@@ -29,10 +29,8 @@ module.exports = {
       // eslint-disable-next-line func-names
       .leftJoin('Friend', function () {
         this
-          // eslint-disable-next-line func-names
-          .on(function () { this.on('Friend.requestUserId', '=', 'Profile.profileId').andOn('Friend.respondUserId', '=', profileId); })
-          // eslint-disable-next-line func-names
-          .orOn(function () { this.on('Friend.respondUserId', '=', 'Profile.profileId').andOn('Friend.requestUserId', '=', profileId); });
+          .on(() => { this.on('Friend.requestUserId', '=', 'Profile.profileId').andOn('Friend.respondUserId', '=', profileId); })
+          .orOn(() => { this.on('Friend.respondUserId', '=', 'Profile.profileId').andOn('Friend.requestUserId', '=', profileId); });
       })
       .whereNull('Friend.friendId')
       .andWhere('Profile.profileId', '!=', profileId),

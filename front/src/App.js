@@ -1,23 +1,12 @@
 import React from 'react';
 import {
-  BrowserRouter, Routes, Route, Navigate,
+  BrowserRouter,
 } from 'react-router-dom';
-import SiteHeader from './containers/SiteHeader';
-import AddArticle from './components/AddArticle';
-import Profiles from './containers/profiles/Profiles';
-import DateComponent from './components/DateComponent';
-import Posts from './containers/post/Posts';
-import Post from './containers/post/Post';
-import Profile from './containers/profiles/Profile';
-import ProfileEdit from './containers/profiles/ProfileEdit';
-import Login from './containers/auth/Login';
-import Registration from './containers/auth/Registration';
-import ForgotPassword from './containers/auth/ForgotPassword';
-import ResetPassword from './containers/auth/ResetPassword';
-import useAuth from './providers/authProvider';
-import { PageLoader } from './components/loaders/PageLoader';
-import HistorySeen from './containers/post/HistorySeen';
-import FriendsPageContainer from './containers/friends/FriendsPageContainer';
+import Index from './Layouts/Header';
+import useAuth from './Services/Providers/authProvider';
+import { PageLoader } from './Layouts/Loaders/PageLoader';
+import PublicRouters from './Routes/PublicRouters';
+import PrivateRouters from './Routes/PrivateRouters';
 
 function App() {
   const { isLoading, isAuth, user } = useAuth();
@@ -34,21 +23,7 @@ function App() {
     return (
       <BrowserRouter>
         <div className="auth-page">
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <Navigate replace to="/sign-in" />
-            }
-            />
-
-            <Route path="sign-in" index element={<Login />} />
-            <Route path="sign-up" element={<Registration />} />
-            <Route path="forgot-password" element={<ForgotPassword />} />
-            <Route path="reset-password/:hash" element={<ResetPassword />} />
-
-            <Route path="*" element={<Navigate replace to="/sign-in" />} />
-          </Routes>
+          <PublicRouters />
         </div>
       </BrowserRouter>
     );
@@ -56,27 +31,9 @@ function App() {
 
   return (
     <BrowserRouter>
-      <SiteHeader />
+      <Index />
       <div className="site-body">
-        <Routes>
-          <Route path="sign-in" index element={<Navigate replace to="/articles" />} />
-          <Route path="sign-up" element={<Navigate replace to="/articles" />} />
-          <Route path="forgot-password" element={<Navigate replace to="/articles" />} />
-          <Route path="reset-password/:hash" element={<Navigate replace to="/articles" />} />
-
-          <Route path="/articles" element={<Posts />} />
-          <Route path="/article/:postId" element={<Post />} />
-          <Route path="/articleAdd" element={<AddArticle />} />
-          <Route path="/profiles" element={<Profiles />} />
-          <Route path="/profile/:profileId" element={<Profile />} />
-          <Route path="/profile/:profileId/edit" element={<ProfileEdit />} />
-          <Route path="/profile/:profileId/friends" element={<FriendsPageContainer />} />
-          <Route path="/date/:date" element={<DateComponent />} />
-
-          <Route path="/history/seen" element={<HistorySeen />} />
-
-          <Route path="*" element={<div> 404 </div>} />
-        </Routes>
+        <PrivateRouters />
       </div>
     </BrowserRouter>
   );
