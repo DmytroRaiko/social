@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { getPostEdit, getAvailability } from '../../Services/ CRUD/Posts';
 import EditPostForm from '../Forms/EditPostForm';
 import { PageLoader } from '../../Layouts/Loaders/PageLoader';
+import { modals } from '../../Services/Constants';
 
 const EditPost = ({ postId, handleClose }) => {
   const postQuery = useQuery(`post-edit-${postId}`, () => getPostEdit(postId));
@@ -30,7 +31,7 @@ const EditPost = ({ postId, handleClose }) => {
                     fontWeight: '500',
                   }}
                 >
-                  Edit article
+                  {modals.articles.title.editArticles}
                 </Typography>
                 <IconButton className="button-close" onClick={handleClose}>
                   <CloseIcon />

@@ -7,6 +7,7 @@ import { Button } from '@mui/material';
 import * as Yup from 'yup';
 import ErrorBoundary from '../../../Services/Errors/ErrorBoundary';
 import { addUniversities } from '../../../Services/ CRUD/Profiles';
+import { buttons, textFieldMessages } from '../../../Services/Constants/index';
 
 const AddUniversityForm = ({ data, handleClose }) => {
   const queryClient = useQueryClient();
@@ -16,7 +17,7 @@ const AddUniversityForm = ({ data, handleClose }) => {
   };
 
   const schema = Yup.object().shape({
-    name: Yup.string().required('University name is required'),
+    name: Yup.string().required(textFieldMessages.requiredField),
   });
 
   const mutation = useMutation(
@@ -58,14 +59,14 @@ const AddUniversityForm = ({ data, handleClose }) => {
                 variant="text"
                 onClick={handleClose}
               >
-                Close
+                {buttons.close}
               </Button>
 
               <Button
                 type="submit"
                 variant="contained"
               >
-                Add
+                {buttons.add}
               </Button>
             </div>
           </Form>

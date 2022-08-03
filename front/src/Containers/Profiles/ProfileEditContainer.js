@@ -4,7 +4,6 @@ import { useMutation } from 'react-query';
 import { Button } from '@mui/material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import DeleteIcon from '@mui/icons-material/Delete';
-// import EditProfileAvatar from '../../components/profile/EditProfileAvatar';
 import EditProfileForm from '../Forms/EditProfileForm';
 import { PageLoader } from '../../Layouts/Loaders/PageLoader';
 import projectSettings from '../../Config';
@@ -12,6 +11,7 @@ import { deleteProfileAvatar, editProfileAvatar } from '../../Services/ CRUD/Pro
 import AvatarCropModal from '../Modals/AvatarCropModal';
 import ProfileAvatar from '../../Components/Profile/ProfileAvatar';
 import FriendBox from '../Friends/FriendBox';
+import { buttons } from '../../Services/Constants';
 
 function ProfileEditContainer({ profileData, availabilities, university }) {
   const profile = profileData[0] || null;
@@ -103,7 +103,7 @@ function ProfileEditContainer({ profileData, availabilities, university }) {
               startIcon={<AddAPhotoIcon />}
             >
               <input type="file" hidden onChange={handleImageChange} />
-              set new photo
+              {buttons.setNewPhoto}
             </Button>
 
             {image && (

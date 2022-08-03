@@ -13,6 +13,7 @@ import { editProfile } from '../../Services/ CRUD/Profiles';
 import { regex, profileAvailabilityStyles } from '../../Config';
 import AvailabilitySchema from '../../Services/Schemas/AvailabilitySchema';
 import AddUniversityModal from '../Modals/AddUniversityModal';
+import { buttons, textFieldMessages } from '../../Services/Constants';
 
 const EditProfileForm = ({
   profile, availabilities, university,
@@ -57,23 +58,23 @@ const EditProfileForm = ({
   // variable [formik schema]
   const schemaEditProfile = Yup.object().shape({
     name: Yup.string()
-      .min(2, 'Too Short')
-      .max(256, 'Too Long')
-      .required('Profile name is required'),
+      .min(2, textFieldMessages.tooShort)
+      .max(256, textFieldMessages.tooLong)
+      .required(textFieldMessages.requiredField),
     email: Yup.string()
-      .max(255, 'Too Long')
-      .email('Invalid email'),
+      .max(255, textFieldMessages.tooLong)
+      .email(textFieldMessages.emailIsNotValid),
     phone: Yup.string()
-      .min(6, 'Too Short')
-      .max(13, 'Too Long')
-      .matches(regex?.phone, 'Phone number is not valid'),
+      .min(6, textFieldMessages.tooShort)
+      .max(13, textFieldMessages.tooLong)
+      .matches(regex?.phone, textFieldMessages.phoneIsNotValid),
     universities: Yup.array()
       .of(
         AvailabilitySchema,
       ),
-    emailSettingId: AvailabilitySchema.required('E-mail availability is required'),
-    phoneSettingId: AvailabilitySchema.required('Phone availability is required'),
-    universitySettingId: AvailabilitySchema.required('Universities availability is required'),
+    emailSettingId: AvailabilitySchema.required(textFieldMessages.requiredField),
+    phoneSettingId: AvailabilitySchema.required(textFieldMessages.requiredField),
+    universitySettingId: AvailabilitySchema.required(textFieldMessages.requiredField),
   });
 
   const onProfileEditFormSubmit = (dataSubmit, { setSubmitting }) => {
@@ -206,7 +207,7 @@ const EditProfileForm = ({
                   startIcon={<SaveIcon />}
                   disabled={!(dirty && isValid && !isSubmitting)}
                 >
-                  Save
+                  {buttons.save}
                 </LoadingButton>
               </div>
             </div>

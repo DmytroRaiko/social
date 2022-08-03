@@ -8,19 +8,18 @@ import { getPost } from '../../Services/ CRUD/Posts';
 import '../../Assets/Styles/Post.css';
 
 const Post = () => {
-  const params = useParams();
+  const { postId } = useParams();
 
-  if (/^[0-9]*$/m.exec(params.postId)) {
-    const { postId } = params;
+  if (!/^[0-9]*$/m.exec(postId)) return <div>Error id</div>;
 
-    const { isFetching, data } = useQuery(`post-${postId}`, () => getPost(postId));
-    const post = data?.data.data;
+  const { isFetching, data } = useQuery(`post-${postId}`, () => getPost(postId));
+  const post = data?.data.data;
 
-    return (
-      <>
-        <PostSkeletonLoader show={isFetching} />
+  return (
+    <>
+      <PostSkeletonLoader show={isFetching} />
 
-        {post
+      {post
           && (
           <div
             className="post-body"
@@ -28,11 +27,8 @@ const Post = () => {
             <PostComponent post={post} />
           </div>
           )}
-      </>
-    );
-  }
-
-  return <div>Error id</div>;
+    </>
+  );
 };
 
 export default Post;

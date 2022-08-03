@@ -5,8 +5,7 @@ import settings from '../../Config';
 const PostContent = ({
   postId, postText, postImage,
 }) => {
-  const params = useParams();
-  const { postId: paramId } = params;
+  const { postId: paramId } = useParams();
 
   return (
     <>

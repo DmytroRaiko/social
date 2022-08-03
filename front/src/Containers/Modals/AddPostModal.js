@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import Box from '@mui/material/Box';
 import { Button, Modal, MenuItem } from '@mui/material';
 import AddPost from '../Post/AddPost';
+import { buttons } from '../../Services/Constants/index';
 
 const AddPostModal = memo(() => {
   const [open, setOpen] = React.useState(false);
@@ -18,7 +19,7 @@ const AddPostModal = memo(() => {
           textTransform: 'capitalize',
         }}
       >
-        Add post
+        {buttons.addPost}
       </MenuItem>
       <Modal
         open={open}

@@ -10,6 +10,7 @@ import RegistrationForm from '../../Components/Forms/Auth/RegistrationForm';
 import { registration, facebookOAuth, googleOAuth } from '../../Services/ CRUD/Auth';
 import SocialBtns from '../../Components/Auth/SocialBtns';
 import useAuth from '../../Services/Providers/authProvider';
+import { createdAccount, pleaseActivate, youLogin } from '../../Services/Constants/Messages';
 
 const Registration = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -25,8 +26,8 @@ const Registration = () => {
     {
       onSuccess: (data) => {
         if (data.status === 200) {
-          handleSnack('Account created!', 'success');
-          handleSnack('Please, activate your account! We send you mail!', 'success');
+          handleSnack(createdAccount, 'success');
+          handleSnack(pleaseActivate, 'success');
 
           setTimeout(() => {
             navigate('/sign-in');
@@ -43,7 +44,7 @@ const Registration = () => {
     {
       onSuccess: (data) => {
         if (data.status === 200) {
-          handleSnack('You are log in!', 'success');
+          handleSnack(youLogin, 'success');
           loginFn(true, data?.data);
         } else {
           handleSnack(data?.data?.message, 'error');
@@ -57,7 +58,7 @@ const Registration = () => {
     {
       onSuccess: (data) => {
         if (data.status === 200) {
-          handleSnack('You are log in!', 'success');
+          handleSnack(youLogin, 'success');
           loginFn(true, data?.data);
         } else {
           handleSnack(data?.data?.message, 'error');

@@ -12,7 +12,8 @@ import GroupIcon from '@mui/icons-material/Group';
 import HistoryIcon from '@mui/icons-material/History';
 import styleSettings from '../../Assets/Styles/style.settings';
 import useAuth from '../../Services/Providers/authProvider';
-import ProfileAvatar from './ProfileAvatar';
+import ProfileAvatar from '../Profile/ProfileAvatar';
+import { headerChip } from '../../Services/Constants/Header';
 
 const { menuPaperProps } = styleSettings;
 
@@ -63,7 +64,7 @@ const HeaderChip = memo(() => {
           <MenuItem>
             <Avatar />
             {' '}
-            My account
+            {headerChip.myAccount}
           </MenuItem>
         </RouterLink>
 
@@ -75,7 +76,7 @@ const HeaderChip = memo(() => {
             <ListItemIcon>
               <HistoryIcon />
             </ListItemIcon>
-            History
+            {headerChip.history}
           </MenuItem>
         </RouterLink>
 
@@ -87,7 +88,7 @@ const HeaderChip = memo(() => {
             <ListItemIcon>
               <GroupIcon />
             </ListItemIcon>
-            Profiles
+            {headerChip.profiles}
           </MenuItem>
         </RouterLink>
         <Divider />
@@ -95,7 +96,7 @@ const HeaderChip = memo(() => {
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          Logout
+          {headerChip.logout}
         </MenuItem>
       </Menu>
     </>

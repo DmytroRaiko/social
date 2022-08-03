@@ -20,6 +20,7 @@ import {
   deleteFriend,
   banOrUnban,
 } from '../../Services/ CRUD/Friends';
+import { buttons } from '../../Services/Constants';
 
 const FriendActionButtons = ({ profile, profileId }) => {
   const { user } = useAuth();
@@ -133,7 +134,7 @@ const FriendActionButtons = ({ profile, profileId }) => {
             variant="contained"
             size="small"
           >
-            friend
+            {buttons.friend}
           </Button>
 
           <Button
@@ -166,11 +167,11 @@ const FriendActionButtons = ({ profile, profileId }) => {
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList id="split-button-menu" autoFocusItem>
                     <MenuItem onClick={() => handleMenuItemClick('ban', profileId)}>
-                      Ban
+                      {buttons.ban}
                     </MenuItem>
 
                     <MenuItem onClick={() => handleMenuItemClick('friend-', friendly?.friendId)}>
-                      Remove friend
+                      {buttons.removeFriend}
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
@@ -189,7 +190,7 @@ const FriendActionButtons = ({ profile, profileId }) => {
             variant="contained"
             size="small"
           >
-            banned
+            {buttons.banned}
           </Button>
 
           <Button
@@ -222,7 +223,7 @@ const FriendActionButtons = ({ profile, profileId }) => {
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList id="split-button-menu" autoFocusItem>
                     <MenuItem onClick={() => handleMenuItemClick('unban', profileId)}>
-                      Unban
+                      {buttons.unban}
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
@@ -241,7 +242,7 @@ const FriendActionButtons = ({ profile, profileId }) => {
             variant="contained"
             size="small"
           >
-            Subscriber
+            {buttons.subscriber}
           </Button>
 
           <Button
@@ -274,11 +275,11 @@ const FriendActionButtons = ({ profile, profileId }) => {
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList id="split-button-menu" autoFocusItem>
                     <MenuItem onClick={() => handleMenuItemClick('ban', profileId)}>
-                      Ban
+                      {buttons.ban}
                     </MenuItem>
 
                     <MenuItem onClick={() => handleMenuItemClick('friend+', friendly?.friendId)}>
-                      Accept friend
+                      {buttons.acceptFriend}
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
@@ -302,7 +303,7 @@ const FriendActionButtons = ({ profile, profileId }) => {
             onClick={() => handleAddRequest(profile?.profileId || profileId)}
             endIcon={<AddRoundedIcon />}
           >
-            Add
+            {buttons.add}
           </Button>
         )}
 

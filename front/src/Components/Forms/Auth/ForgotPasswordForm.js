@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { TextField } from 'formik-mui';
 import { Button, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
+import { textFieldMessages, buttons } from '../../../Services/Constants';
 
 const ForgotPasswordForm = ({ onForgot }) => {
   const initialValues = {
@@ -11,7 +12,10 @@ const ForgotPasswordForm = ({ onForgot }) => {
   };
 
   const schema = Yup.object().shape({
-    email: Yup.string().email('Please, enter correct email!').required('Email is required!'),
+    email: Yup
+      .string()
+      .email(textFieldMessages.emailIsNotValid)
+      .required(textFieldMessages.requiredField),
   });
 
   const login = (formData, { resetForm }) => {
@@ -45,7 +49,7 @@ const ForgotPasswordForm = ({ onForgot }) => {
               variant="contained"
               className="form-element btn"
             >
-              Send mail
+              {buttons.sendMail}
             </Button>
           </Form>
         )}

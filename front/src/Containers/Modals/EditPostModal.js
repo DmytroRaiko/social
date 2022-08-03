@@ -4,6 +4,7 @@ import { Button, Modal, MenuItem } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import PropTypes from 'prop-types';
 import EditPost from '../Post/EditPost';
+import { buttons } from '../../Services/Constants';
 
 const EditPostModal = memo(({
   id,
@@ -23,7 +24,7 @@ const EditPostModal = memo(({
         }}
       >
         <EditOutlinedIcon style={{ marginRight: '10px' }} />
-        Edit
+        {buttons.edit}
       </MenuItem>
       <Modal
         open={open}

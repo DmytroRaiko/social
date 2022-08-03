@@ -8,6 +8,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import TimeAgo from 'react-timeago';
 import ReplyIcon from '@mui/icons-material/Reply';
 import ProfileAvatar from '../Profile/ProfileAvatar';
+import { buttons } from '../../Services/Constants';
 
 const ITEM_HEIGHT = 48;
 
@@ -95,7 +96,7 @@ const Comment = memo(({
             }}
             onClick={() => replyToHandle(comment.profileId, comment.name)}
           >
-            reply
+            {buttons.reply}
           </Button>
 
           {userId === comment.profileId
@@ -146,7 +147,7 @@ const Comment = memo(({
                     textTransform: 'capitalize',
                   }}
                 >
-                  Edit
+                  {buttons.edit}
                 </MenuItem>
                 <Divider />
                 <MenuItem
@@ -156,7 +157,7 @@ const Comment = memo(({
                     textTransform: 'capitalize',
                   }}
                 >
-                  Remove
+                  {buttons.remove}
                 </MenuItem>
               </Menu>
             </>

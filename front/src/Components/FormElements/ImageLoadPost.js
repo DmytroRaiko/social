@@ -1,6 +1,7 @@
 import { Button, CardMedia, IconButton } from '@mui/material';
 import { Attachment, Delete } from '@mui/icons-material';
 import React from 'react';
+import { buttons } from '../../Services/Constants';
 
 const ImageLoadPost = ({
   image, onAttachPhoto, onDeletePhoto, setFieldValue,
@@ -14,7 +15,7 @@ const ImageLoadPost = ({
       startIcon={<Attachment />}
     >
       <input type="file" name="image" hidden onChange={(e) => onAttachPhoto(e, setFieldValue)} />
-      Attach photo
+      {buttons.attach}
     </Button>
   )}
     {image

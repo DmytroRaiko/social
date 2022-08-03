@@ -2,7 +2,6 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Posts from '../Pages/Post/Posts';
 import Post from '../Pages/Post';
-import AddArticle from '../Components/AddArticle';
 import Profiles from '../Pages/Profile/Profiles';
 import Profile from '../Pages/Profile';
 import ProfileEdit from '../Pages/Profile/ProfileEdit';
@@ -18,7 +17,6 @@ const PrivateRouters = () => (
 
     <Route path="/articles" element={<Posts />} />
     <Route path="/article/:postId" element={<Post />} />
-    <Route path="/articleAdd" element={<AddArticle />} />
     <Route path="/profiles" element={<Profiles />} />
     <Route path="/profile/:profileId" element={<Profile />} />
     <Route path="/profile/:profileId/edit" element={<ProfileEdit />} />

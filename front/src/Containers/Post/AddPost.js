@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { getAvailability } from '../../Services/ CRUD/Posts';
 import AddPostForm from '../../Components/Forms/Posts/AddPostForm';
 import { PageLoader } from '../../Layouts/Loaders/PageLoader';
+import { articles } from '../../Services/Constants/Modals';
 
 const EditPost = ({ handleClose }) => {
   const availabilityQuery = useQuery('availabilities', () => getAvailability());
@@ -25,7 +26,7 @@ const EditPost = ({ handleClose }) => {
               fontWeight: '500',
             }}
           >
-            Add article
+            {articles.title.addArticles}
           </Typography>
           <IconButton className="button-close" onClick={handleClose}>
             <CloseIcon />

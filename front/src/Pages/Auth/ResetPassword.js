@@ -8,11 +8,12 @@ import { useSnackbar } from 'notistack';
 import { useNavigate, useParams } from 'react-router-dom';
 import ResetPasswordForm from '../../Components/Forms/Auth/ResetPasswordForm';
 import { resetPassword } from '../../Services/ CRUD/Auth';
+import { resetPassword as message } from '../../Services/Constants/Messages';
 
 const ResetPassword = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const handleSnack = (message, variant) => {
-    enqueueSnackbar(message, { variant });
+  const handleSnack = (m, variant) => {
+    enqueueSnackbar(m, { variant });
   };
   const navigate = useNavigate();
   const { hash } = useParams();
@@ -23,7 +24,7 @@ const ResetPassword = () => {
     {
       onSuccess: (data) => {
         if (data.status === 200) {
-          handleSnack('Your password reset!', 'success');
+          handleSnack(message, 'success');
           setTimeout(() => {
             navigate('/sign-in');
           }, 1500);

@@ -5,6 +5,7 @@ import { TextField } from 'formik-mui';
 import { Button, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { props, defaultProps } from '../../../Services/PropTypes/CommentProps';
+import { buttons, textFieldMessages } from '../../../Services/Constants/index';
 
 const CommentForm = ({
   onAddComment, replyTo, replyToHandle, comment, handleChange,
@@ -14,7 +15,7 @@ const CommentForm = ({
   };
 
   const schema = Yup.object().shape({
-    commentText: Yup.string().required(''),
+    commentText: Yup.string().required(textFieldMessages.requiredField),
   });
 
   let label = 'Your message';
@@ -68,9 +69,9 @@ const CommentForm = ({
               marginLeft: '5px',
             }}
           >
-            {(replyTo.profileId && 'reply')
-              || (comment.commentId && 'save')
-              || 'comment'}
+            {(replyTo.profileId && buttons.reply)
+              || (comment.commentId && buttons.save)
+              || buttons.comment}
           </Button>
         </Form>
       )}

@@ -1,6 +1,4 @@
 import React from 'react';
-// import axios from 'axios';
-
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import '../../Assets/Styles/Authorization.css';
@@ -12,6 +10,7 @@ import LoginForm from '../../Components/Forms/Auth/LoginForm';
 import { login, facebookOAuth, googleOAuth } from '../../Services/ CRUD/Auth';
 import SocialBtns from '../../Components/Auth/SocialBtns';
 import useAuth from '../../Services/Providers/authProvider';
+import { youLogin } from '../../Services/Constants/Messages';
 
 const Login = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -26,7 +25,7 @@ const Login = () => {
     {
       onSuccess: (data) => {
         if (data.status === 200) {
-          handleSnack('You are log in!', 'success');
+          handleSnack(youLogin, 'success');
           loginFn(true, data?.data);
         } else {
           handleSnack(data?.data?.message, 'error');
@@ -45,7 +44,7 @@ const Login = () => {
     {
       onSuccess: (data) => {
         if (data.status === 200) {
-          handleSnack('You are log in!', 'success');
+          handleSnack(youLogin, 'success');
           loginFn(true, data?.data);
         } else {
           handleSnack(data?.data?.message, 'error');
@@ -59,7 +58,7 @@ const Login = () => {
     {
       onSuccess: (data) => {
         if (data.status === 200) {
-          handleSnack('You are log in!', 'success');
+          handleSnack(youLogin, 'success');
           loginFn(true, data?.data);
         } else {
           handleSnack(data?.data?.message, 'error');

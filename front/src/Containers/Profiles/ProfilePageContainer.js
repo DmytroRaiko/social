@@ -10,6 +10,7 @@ import { PageLoader } from '../../Layouts/Loaders/PageLoader';
 import useAuth from '../../Services/Providers/authProvider';
 import FriendBox from '../Friends/FriendBox';
 import FriendActionButtons from '../../Components/Friends/FriendActionButtons';
+import { buttons } from '../../Services/Constants';
 
 function ProfilePageContainer({ profileData }) {
   const profile = profileData[0] || null;
@@ -39,7 +40,7 @@ function ProfilePageContainer({ profileData }) {
               && (
                 <Button component={Link} to={`/profile/${profile.profileId}/edit`} variant="outlined" className="">
                   <EditIcon fontSize="small" />
-                  Edit
+                  {buttons.edit}
                 </Button>
               )}
           </div>

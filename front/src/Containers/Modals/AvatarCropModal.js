@@ -3,6 +3,7 @@ import Cropper from 'react-cropper';
 import { Button, Modal } from '@mui/material';
 import PropTypes from 'prop-types';
 import 'cropperjs/dist/cropper.css';
+import { buttons } from '../../Services/Constants';
 
 const AvatarCropModal = memo(({
   openCroppedModal,
@@ -31,9 +32,11 @@ const AvatarCropModal = memo(({
           variant="text"
           onClick={closeCroppedModalHandle}
         >
-          Close
+          {buttons.close}
         </Button>
-        <Button variant="contained" onClick={cropImage}>Crop</Button>
+        <Button variant="contained" onClick={cropImage}>
+          {buttons.crop}
+        </Button>
       </div>
     </div>
   </Modal>

@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { TextField } from 'formik-mui';
 import { Button, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
+import { textFieldMessages, buttons } from '../../../Services/Constants';
 
 const RegistrationForm = ({ onRegister }) => {
   const initialValues = {
@@ -14,10 +15,19 @@ const RegistrationForm = ({ onRegister }) => {
   };
 
   const schema = Yup.object().shape({
-    name: Yup.string().required('Name is required!'),
-    email: Yup.string().email('Please, enter correct email!').required('Email is required!'),
-    password: Yup.string().min(8, 'Too short!').required('Password is required!'),
-    passwordRepeat: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords do not match').required('Please, repeat your password!'),
+    name: Yup.string().required(textFieldMessages.requiredField),
+    email: Yup
+      .string()
+      .email(textFieldMessages.emailIsNotValid)
+      .required(textFieldMessages.requiredField),
+    password: Yup
+      .string()
+      .min(8, textFieldMessages.tooShort)
+      .required(textFieldMessages.requiredField),
+    passwordRepeat: Yup
+      .string()
+      .oneOf([Yup.ref('password'), null], 'Passwords do not match')
+      .required(textFieldMessages.requiredField),
   });
 
   const login = (formData, { setSubmitting }) => {
@@ -99,7 +109,7 @@ const RegistrationForm = ({ onRegister }) => {
               variant="contained"
               className="form-element btn"
             >
-              Sign up
+              {buttons.signUp}
             </Button>
           </Form>
         )}

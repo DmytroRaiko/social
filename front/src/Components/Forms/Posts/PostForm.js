@@ -8,6 +8,7 @@ import ImageLoadPost from '../../FormElements/ImageLoadPost';
 import MyAutocomplete from '../../FormElements/MyAutocomplete';
 import projectSettings from '../../../Config';
 import AvailabilitySchema from '../../../Services/Schemas/AvailabilitySchema';
+import { buttons, textFieldMessages } from '../../../Services/Constants/index';
 
 const PostForm = ({
   initialValues, onFormSubmit,
@@ -20,8 +21,8 @@ const PostForm = ({
   };
 
   const schema = Yup.object().shape({
-    text: Yup.string().required('Article text is required'),
-    postAvailabilityId: AvailabilitySchema.required('Article availability is required'),
+    text: Yup.string().required(textFieldMessages.requiredField),
+    postAvailabilityId: AvailabilitySchema.required(textFieldMessages.requiredField),
   });
 
   const onAttachPhoto = (e) => {
@@ -86,14 +87,14 @@ const PostForm = ({
               onClick={onHandleClose}
               color="error"
             >
-              Close
+              {buttons.close}
             </Button>
             <Button
               type="submit"
               variant="contained"
               startIcon={<PublishIcon />}
             >
-              Publish
+              {buttons.publish}
             </Button>
           </div>
         </Form>

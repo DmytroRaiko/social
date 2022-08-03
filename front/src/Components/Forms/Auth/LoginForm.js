@@ -5,6 +5,7 @@ import { TextField } from 'formik-mui';
 import { Button, Link, Typography } from '@mui/material';
 import { Link as DomLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { textFieldMessages, buttons } from '../../../Services/Constants';
 
 const LoginForm = ({ onLogin }) => {
   const initialValues = {
@@ -13,8 +14,13 @@ const LoginForm = ({ onLogin }) => {
   };
 
   const schema = Yup.object().shape({
-    email: Yup.string().email('Please, enter correct email!').required('Email is required!'),
-    password: Yup.string().required('Password is required!').min(8, 'Too short'),
+    email: Yup
+      .string()
+      .email(textFieldMessages.emailIsNotValid)
+      .required(textFieldMessages.requiredField),
+    password: Yup.string()
+      .required(textFieldMessages.requiredField)
+      .min(8, textFieldMessages.tooShort),
   });
 
   const login = (formData, { setSubmitting }) => {
@@ -59,7 +65,7 @@ const LoginForm = ({ onLogin }) => {
                     fontSize: '14px',
                   }}
                 >
-                  Forgot password?
+                  {buttons.forgotPassword}
                 </Link>
               </div>
               <Field
@@ -76,7 +82,7 @@ const LoginForm = ({ onLogin }) => {
               variant="contained"
               className="form-element btn"
             >
-              Sign in
+              {buttons.signIn}
             </Button>
           </Form>
         )}

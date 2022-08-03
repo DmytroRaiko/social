@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { TextField } from 'formik-mui';
 import { Button, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
+import { textFieldMessages, buttons } from '../../../Services/Constants';
 
 const ForgotPasswordForm = ({ onReset }) => {
   const initialValues = {
@@ -12,8 +13,14 @@ const ForgotPasswordForm = ({ onReset }) => {
   };
 
   const schema = Yup.object().shape({
-    password: Yup.string().min(8, 'Too short!').required('Password is required!'),
-    passwordRepeat: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords do not match').required('Please, repeat your password!'),
+    password: Yup
+      .string()
+      .min(8, textFieldMessages.tooShort)
+      .required(textFieldMessages.requiredField),
+    passwordRepeat: Yup
+      .string()
+      .oneOf([Yup.ref('password'), null], 'Passwords do not match')
+      .required(textFieldMessages.requiredField),
   });
 
   const login = (formData, { resetForm }) => {
@@ -63,7 +70,7 @@ const ForgotPasswordForm = ({ onReset }) => {
               variant="contained"
               className="form-element btn"
             >
-              Reset
+              {buttons.reset}
             </Button>
           </Form>
         )}
