@@ -6,6 +6,13 @@ module.exports = {
   getProfileByEmail: async (email) =>
     db.select().first().from('Profile').where('email', email),
 
+  search: async (searchRow) =>
+    db
+      .select('Profile.profileId', 'Profile.avatarLink', 'Profile.name')
+      .from('Profile')
+      .where('Profile.name', 'like', `%${searchRow}%`)
+      .limit(50),
+
   getProfiles: async (offset = 0, limit = 30) =>
     db
       .select('Profile.profileId', 'Profile.avatarLink', 'Profile.name')

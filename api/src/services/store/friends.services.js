@@ -3,13 +3,31 @@ const db = require('../db');
 module.exports = {
   getFriends: async (profileId) =>
     db
-      .select()
+      .select(
+        'Friend.*',
+        'P1.name as requestName',
+        'P1.avatarLink as requestAvatarLink',
+        'P2.name as respondName',
+        'P2.avatarLink as respondAvatarLink',
+      )
       .from('Friend')
       .leftJoin(
         'AccessFriend',
         'Friend.accessFriendId',
         '=',
         'AccessFriend.accessFriendId'
+      )
+      .join(
+        'Profile as P1',
+        'Friend.requestUserId',
+        '=',
+        'P1.profileId',
+      )
+      .join(
+        'Profile as P2',
+        'Friend.respondUserId',
+        '=',
+        'P2.profileId',
       )
       .where('AccessFriend.role', '=', 'Friends')
       .andWhere((builder) =>

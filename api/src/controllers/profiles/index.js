@@ -6,11 +6,17 @@ const friendsServices = require('../../services/store/friends.services');
 
 module.exports = {
   getProfiles: async (req, res) => {
+    const { searchRow } = req.query;
     const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
     const limit = page * 50;
     const offset = (page - 1) * 50;
 
-    const profiles = await profilesServices.getProfiles(offset, limit);
+    let profiles;
+    if (searchRow) {
+      profiles = await profilesServices.search(searchRow);
+    } else {
+      profiles = await profilesServices.getProfiles(offset, limit);
+    }
 
     if (profiles && Object.keys(profiles).length) {
       res.send({
