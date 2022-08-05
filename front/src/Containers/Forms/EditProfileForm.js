@@ -9,7 +9,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import ErrorBoundary from '../../Services/Errors/ErrorBoundary';
 import EditProfileFormProps from '../../Services/PropTypes/EditProfileFormProps';
 import MyAutocomplete from '../../Components/FormElements/MyAutocomplete';
-import { editProfile } from '../../Services/ CRUD/Profiles';
+import { editProfile } from '../../Services/CRUD/Profiles';
 import { regex, profileAvailabilityStyles } from '../../Config';
 import AvailabilitySchema from '../../Services/Schemas/AvailabilitySchema';
 import AddUniversityModal from '../Modals/AddUniversityModal';

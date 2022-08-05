@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useMutation } from 'react-query';
 import ErrorBoundary from '../../../Services/Errors/ErrorBoundary';
 import projectSettings from '../../../Config';
-import { addPost } from '../../../Services/ CRUD/Posts';
+import { addPost } from '../../../Services/CRUD/Posts';
 import PostForm from './PostForm';
 
 const AddPostForm = ({ availabilities, onHandleClose }) => {

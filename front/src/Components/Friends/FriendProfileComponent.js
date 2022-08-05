@@ -30,7 +30,7 @@ const FriendProfileComponent = ({ profiles }) => profiles?.map((profile) => (
 
     <FriendActionButtons profile={profile} />
   </div>
-));
+)) || null;
 
 FriendProfileComponent.propTypes = {
   profiles: PropTypes.arrayOf(

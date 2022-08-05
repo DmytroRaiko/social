@@ -7,7 +7,7 @@ import { useSnackbar } from 'notistack';
 // import { Link } from 'react-router-dom';
 import { useNavigate, useParams } from 'react-router-dom';
 import ResetPasswordForm from '../../Components/Forms/Auth/ResetPasswordForm';
-import { resetPassword } from '../../Services/ CRUD/Auth';
+import { resetPassword } from '../../Services/CRUD/Auth';
 import { resetPassword as message } from '../../Services/Constants/Messages';
 
 const ResetPassword = () => {

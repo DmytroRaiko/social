@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import PropTypes from 'prop-types';
 import { IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { getPostEdit, getAvailability } from '../../Services/ CRUD/Posts';
+import { getPostEdit, getAvailability } from '../../Services/CRUD/Posts';
 import EditPostForm from '../Forms/EditPostForm';
 import { PageLoader } from '../../Layouts/Loaders/PageLoader';
 import { modals } from '../../Services/Constants';

@@ -19,10 +19,10 @@ import {
   sendRequest,
   deleteFriend,
   banOrUnban,
-} from '../../Services/ CRUD/Friends';
+} from '../../Services/CRUD/Friends';
 import { buttons } from '../../Services/Constants';
 
-const FriendActionButtons = ({ profile, profileId }) => {
+const FriendActionButtons = ({ profile, profileId, showButtons }) => {
   const { user } = useAuth();
   // 1 - just add friend, 2 - i requested, 3 - i should answer
   const [action, setAction] = React.useState(1);
@@ -38,12 +38,15 @@ const FriendActionButtons = ({ profile, profileId }) => {
   });
 
   React.useEffect(() => {
+    const controller = new AbortController();
     setFriendly(profile);
     if (profile) {
       setFriendly(profile);
     } else {
       mutate();
     }
+
+    return () => controller.abort();
   }, [profile]);
 
   React.useEffect(() => {
@@ -129,13 +132,16 @@ const FriendActionButtons = ({ profile, profileId }) => {
     return (
       <>
         <ButtonGroup variant="text" ref={anchorRef} aria-label="split button">
-          <Button
-            disabled
-            variant="contained"
-            size="small"
-          >
-            {buttons.friend}
-          </Button>
+          {showButtons
+            && (
+            <Button
+              disabled
+              variant="contained"
+              size="small"
+            >
+              {buttons.friend}
+            </Button>
+            )}
 
           <Button
             size="small"
@@ -154,6 +160,7 @@ const FriendActionButtons = ({ profile, profileId }) => {
           role={undefined}
           transition
           disablePortal
+          style={{ zIndex: 50 }}
         >
           {({ TransitionProps, placement }) => (
             <Grow
@@ -185,13 +192,16 @@ const FriendActionButtons = ({ profile, profileId }) => {
     return (
       <>
         <ButtonGroup variant="text" ref={anchorRef} aria-label="split button">
-          <Button
-            disabled
-            variant="contained"
-            size="small"
-          >
-            {buttons.banned}
-          </Button>
+          {showButtons
+            && (
+            <Button
+              disabled
+              variant="contained"
+              size="small"
+            >
+              {buttons.banned}
+            </Button>
+            )}
 
           <Button
             size="small"
@@ -210,6 +220,7 @@ const FriendActionButtons = ({ profile, profileId }) => {
           role={undefined}
           transition
           disablePortal
+          style={{ zIndex: 50 }}
         >
           {({ TransitionProps, placement }) => (
             <Grow
@@ -237,13 +248,16 @@ const FriendActionButtons = ({ profile, profileId }) => {
     return (
       <>
         <ButtonGroup variant="text" ref={anchorRef} aria-label="split button">
-          <Button
-            disabled
-            variant="contained"
-            size="small"
-          >
-            {buttons.subscriber}
-          </Button>
+          {showButtons
+            && (
+            <Button
+              disabled
+              variant="contained"
+              size="small"
+            >
+              {buttons.subscriber}
+            </Button>
+            )}
 
           <Button
             size="small"
@@ -262,6 +276,7 @@ const FriendActionButtons = ({ profile, profileId }) => {
           role={undefined}
           transition
           disablePortal
+          style={{ zIndex: 50 }}
         >
           {({ TransitionProps, placement }) => (
             <Grow
@@ -345,11 +360,13 @@ const FriendActionButtons = ({ profile, profileId }) => {
 };
 
 FriendActionButtons.propTypes = {
+  showButtons: PropTypes.bool,
   profile: PropTypes.shape({}),
   profileId: PropTypes.number,
 };
 
 FriendActionButtons.defaultProps = {
+  showButtons: true,
   profile: null,
   profileId: null,
 };

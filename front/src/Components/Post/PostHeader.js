@@ -9,7 +9,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import { useMutation } from 'react-query';
 import TimeAgo from 'react-timeago';
 import EditPostModal from '../../Containers/Modals/EditPostModal';
-import { deletePost } from '../../Services/ CRUD/Posts';
+import { deletePost } from '../../Services/CRUD/Posts';
 import useAuth from '../../Services/Providers/authProvider';
 import ProfileAvatar from '../Profile/ProfileAvatar';
 

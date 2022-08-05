@@ -1,5 +1,5 @@
 import React from 'react';
-import { getPosts } from '../../Services/ CRUD/Posts';
+import { getPosts } from '../../Services/CRUD/Posts';
 import '../../Assets/Styles/Post.css';
 import InfinityPostScroll from '../../Layouts/InfinityPost/InfinityPostScroll';
 

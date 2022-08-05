@@ -7,7 +7,7 @@ import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import LoginForm from '../../Components/Forms/Auth/LoginForm';
-import { login, facebookOAuth, googleOAuth } from '../../Services/ CRUD/Auth';
+import { login, facebookOAuth, googleOAuth } from '../../Services/CRUD/Auth';
 import SocialBtns from '../../Components/Auth/SocialBtns';
 import useAuth from '../../Services/Providers/authProvider';
 import { youLogin } from '../../Services/Constants/Messages';

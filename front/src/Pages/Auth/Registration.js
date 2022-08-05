@@ -7,7 +7,7 @@ import { Button } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { Link, useNavigate } from 'react-router-dom';
 import RegistrationForm from '../../Components/Forms/Auth/RegistrationForm';
-import { registration, facebookOAuth, googleOAuth } from '../../Services/ CRUD/Auth';
+import { registration, facebookOAuth, googleOAuth } from '../../Services/CRUD/Auth';
 import SocialBtns from '../../Components/Auth/SocialBtns';
 import useAuth from '../../Services/Providers/authProvider';
 import { createdAccount, pleaseActivate, youLogin } from '../../Services/Constants/Messages';

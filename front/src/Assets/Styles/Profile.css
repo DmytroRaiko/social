@@ -1,7 +1,7 @@
 .profile-card {
   text-decoration: none;
   color: #0E0E0E;
-  width: 50%;
+  width: 575px;
   background: white;
   margin-top: 20px;
   padding: 12px;
@@ -10,6 +10,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .profile-card .action-btns {

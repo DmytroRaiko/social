@@ -3,6 +3,8 @@ import { apiClient } from '../../../Config/axios';
 
 export const getProfiles = async () => apiClient.get('/profiles');
 
+export const search = async (row) => apiClient.get(`/profiles?searchRow=${row}`);
+
 export const getProfile = async (id) => apiClient.get(`/profiles/${id}`);
 
 export const editProfile = async (id, data) => apiClient.put(`/profiles/${id}`, data);

@@ -83,7 +83,8 @@
 .post-body {
   text-decoration: none;
   color: #0E0E0E;
-  width: 55%;
+  width: 575px;
+  box-sizing: border-box;
   background: white;
   margin-top: 20px;
   padding: 5px 12px 3px 12px;

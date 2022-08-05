@@ -2,16 +2,15 @@ import React from 'react';
 import '../../Assets/Styles/Profile.css';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { getEditProfile } from '../../Services/ CRUD/Profiles';
+import { getEditProfile } from '../../Services/CRUD/Profiles';
 import ProfileEditContainer from '../../Containers/Profiles/ProfileEditContainer';
-import { getAvailability, getUniversities } from '../../Services/ CRUD/Posts';
+import { getAvailability, getUniversities } from '../../Services/CRUD/Posts';
 import { PageLoader } from '../../Layouts/Loaders/PageLoader';
 
 const ProfileEdit = () => {
-  const params = useParams();
-  const { profileId } = params;
+  const { profileId } = useParams();
 
-  if (/^[0-9]*$/m.exec(profileId)) return <div>Error id</div>;
+  if (!/^[0-9]*$/m.exec(profileId)) return <div>Error id</div>;
 
   const {
     isFetching: profileIsFetching,

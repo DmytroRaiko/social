@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { PostSkeletonLoader } from '../../Layouts/Loaders/PostSkeletonLoader';
 import PostComponent from '../../Containers/Post/PostComponent';
-import { getPost } from '../../Services/ CRUD/Posts';
+import { getPost } from '../../Services/CRUD/Posts';
 
 import '../../Assets/Styles/Post.css';
 

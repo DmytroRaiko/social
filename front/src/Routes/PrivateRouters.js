@@ -5,8 +5,8 @@ import Post from '../Pages/Post';
 import Profiles from '../Pages/Profile/Profiles';
 import Profile from '../Pages/Profile';
 import ProfileEdit from '../Pages/Profile/ProfileEdit';
-import FriendsPageContainer from '../Containers/Friends/FriendsPageContainer';
 import HistorySeen from '../Containers/Post/HistorySeen';
+import Friends from '../Pages/Friends';
 
 const PrivateRouters = () => (
   <Routes>
@@ -15,12 +15,13 @@ const PrivateRouters = () => (
     <Route path="forgot-password" element={<Navigate replace to="/articles" />} />
     <Route path="reset-password/:hash" element={<Navigate replace to="/articles" />} />
 
+    <Route path="/" element={<Posts />} />
     <Route path="/articles" element={<Posts />} />
     <Route path="/article/:postId" element={<Post />} />
     <Route path="/profiles" element={<Profiles />} />
     <Route path="/profile/:profileId" element={<Profile />} />
     <Route path="/profile/:profileId/edit" element={<ProfileEdit />} />
-    <Route path="/profile/:profileId/friends" element={<FriendsPageContainer />} />
+    <Route path="/profile/:profileId/friends" element={<Friends />} />
 
     <Route path="/history/seen" element={<HistorySeen />} />
 

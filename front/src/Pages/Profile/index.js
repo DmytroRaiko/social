@@ -2,7 +2,7 @@ import React from 'react';
 import '../../Assets/Styles/Profile.css';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { getProfile } from '../../Services/ CRUD/Profiles';
+import { getProfile } from '../../Services/CRUD/Profiles';
 import ProfilePageContainer from '../../Containers/Profiles/ProfilePageContainer';
 import { PageLoader } from '../../Layouts/Loaders/PageLoader';
 

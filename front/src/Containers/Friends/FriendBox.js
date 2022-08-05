@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-query';
-import { getRequestsByType, getRecommendation } from '../../Services/ CRUD/Friends';
+import { getRequestsByType, getRecommendation } from '../../Services/CRUD/Friends';
 import ErrorBoundary from '../../Services/Errors/ErrorBoundary';
 import FriendProfileComponent from '../../Components/Friends/FriendProfileComponent';
 

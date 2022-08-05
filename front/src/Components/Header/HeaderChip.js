@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import Logout from '@mui/icons-material/Logout';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import { Chip } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import GroupIcon from '@mui/icons-material/Group';
@@ -63,10 +64,36 @@ const HeaderChip = memo(() => {
         >
           <MenuItem>
             <Avatar />
-            {' '}
+
             {headerChip.myAccount}
           </MenuItem>
         </RouterLink>
+
+        <RouterLink
+          style={{ color: 'inherit', textDecoration: 'none' }}
+          to="/profiles/"
+        >
+          <MenuItem>
+            <ListItemIcon>
+              <PersonSearchIcon />
+            </ListItemIcon>
+            {headerChip.profiles}
+          </MenuItem>
+        </RouterLink>
+
+        <RouterLink
+          style={{ color: 'inherit', textDecoration: 'none' }}
+          to={`/profile/${user.user.profileId}/friends`}
+        >
+          <MenuItem>
+            <ListItemIcon>
+              <GroupIcon />
+            </ListItemIcon>
+            {headerChip.friends}
+          </MenuItem>
+        </RouterLink>
+
+        <Divider />
 
         <RouterLink
           style={{ color: 'inherit', textDecoration: 'none' }}
@@ -80,18 +107,8 @@ const HeaderChip = memo(() => {
           </MenuItem>
         </RouterLink>
 
-        <RouterLink
-          style={{ color: 'inherit', textDecoration: 'none' }}
-          to="/profiles/"
-        >
-          <MenuItem>
-            <ListItemIcon>
-              <GroupIcon />
-            </ListItemIcon>
-            {headerChip.profiles}
-          </MenuItem>
-        </RouterLink>
         <Divider />
+
         <MenuItem onClick={() => logoutFn()}>
           <ListItemIcon>
             <Logout fontSize="small" />

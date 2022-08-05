@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer';
 import { useMutation } from 'react-query';
 import PropTypes from 'prop-types';
 import ErrorBoundary from '../../Services/Errors/ErrorBoundary';
-import { viewPost } from '../../Services/ CRUD/Posts';
+import { viewPost } from '../../Services/CRUD/Posts';
 import PostHeader from '../../Components/Post/PostHeader';
 import PostFooter from './PostFooter';
 import PostContent from '../../Components/Post/PostContent';

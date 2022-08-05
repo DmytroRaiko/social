@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditProfileForm from '../Forms/EditProfileForm';
 import { PageLoader } from '../../Layouts/Loaders/PageLoader';
 import projectSettings from '../../Config';
-import { deleteProfileAvatar, editProfileAvatar } from '../../Services/ CRUD/Profiles';
+import { deleteProfileAvatar, editProfileAvatar } from '../../Services/CRUD/Profiles';
 import AvatarCropModal from '../Modals/AvatarCropModal';
 import ProfileAvatar from '../../Components/Profile/ProfileAvatar';
 import FriendBox from '../Friends/FriendBox';

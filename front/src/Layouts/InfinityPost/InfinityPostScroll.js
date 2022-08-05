@@ -41,15 +41,26 @@ const InfinityPostScroll = ({
   );
 
   useEffect(() => {
+    const controller = new AbortController();
     if (inView) {
       fetchNextPage({
         pageParam: page,
       });
     }
+
+    return () => controller.abort();
   }, [inView]);
 
   return (
     <>
+      {(!isFetching && !posts.length && lastPage)
+        && (
+        <h3 style={{ marginTop: '30px' }}>
+          <span style={{ marginRight: '10px' }}>&#9989;</span>
+          You have viewed all posts
+        </h3>
+        )}
+
       {posts
         && (
           <PostMapping posts={posts} />

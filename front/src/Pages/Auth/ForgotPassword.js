@@ -7,7 +7,7 @@ import { useSnackbar } from 'notistack';
 // import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import ForgotPasswordForm from '../../Components/Forms/Auth/ForgotPasswordForm';
-import { forgotPassword } from '../../Services/ CRUD/Auth';
+import { forgotPassword } from '../../Services/CRUD/Auth';
 
 const ForgotPassword = () => {
   const { enqueueSnackbar } = useSnackbar();

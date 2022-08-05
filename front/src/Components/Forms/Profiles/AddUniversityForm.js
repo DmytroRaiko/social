@@ -6,7 +6,7 @@ import { TextField } from 'formik-mui';
 import { Button } from '@mui/material';
 import * as Yup from 'yup';
 import ErrorBoundary from '../../../Services/Errors/ErrorBoundary';
-import { addUniversities } from '../../../Services/ CRUD/Profiles';
+import { addUniversities } from '../../../Services/CRUD/Profiles';
 import { buttons, textFieldMessages } from '../../../Services/Constants/index';
 
 const AddUniversityForm = ({ data, handleClose }) => {

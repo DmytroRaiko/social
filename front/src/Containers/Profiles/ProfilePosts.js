@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getProfilePosts } from '../../Services/ CRUD/Profiles';
+import { getProfilePosts } from '../../Services/CRUD/Profiles';
 import InfinityPostScroll from '../../Layouts/InfinityPost/InfinityPostScroll';
 
 import '../../Assets/Styles/Profile.css';
