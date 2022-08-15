@@ -7,7 +7,7 @@ module.exports = {
       minLength: 1,
       required: true,
     },
-    postavailabilityid: availability,
+    postAvailabilityId: availability,
   },
 
   editPost: {
@@ -16,6 +16,6 @@ module.exports = {
       minLength: 1,
       required: true,
     },
-    postavailabilityid: availability,
+    postAvailabilityId: availability,
   },
 };

@@ -2,14 +2,21 @@ const profilesServices = require('../../services/store/profiles.services');
 const NotFoundException = require('../../services/errors/NotFoundException');
 const universitiesServices = require('../../services/store/universities.services');
 const postsServices = require('../../services/store/posts.services');
+const friendsServices = require('../../services/store/friends.services');
 
 module.exports = {
   getProfiles: async (req, res) => {
+    const { searchRow } = req.query;
     const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
     const limit = page * 50;
     const offset = (page - 1) * 50;
 
-    const profiles = await profilesServices.getProfiles(offset, limit);
+    let profiles;
+    if (searchRow) {
+      profiles = await profilesServices.search(searchRow);
+    } else {
+      profiles = await profilesServices.getProfiles(offset, limit);
+    }
 
     if (profiles && Object.keys(profiles).length) {
       res.send({
@@ -23,11 +30,17 @@ module.exports = {
   },
 
   getOneProfile: async (req, res) => {
-    const profileId = req.params.profileid;
+    const { profileId } = req.params;
+    const { profileId: authId } = req.session;
 
-    const profile = await profilesServices.getProfile(profileId);
+    const profile = await profilesServices.getProfile(profileId, authId);
 
     if (profile && Object.keys(profile).length) {
+      let friend = {};
+      if (authId !== profileId) {
+        friend = await friendsServices.checkFriend(profile[0].profileId, authId);
+      }
+
       const universityList = await universitiesServices.getProfileUniversities(
         profileId
       );
@@ -36,14 +49,21 @@ module.exports = {
         profile[0].universities = universityList;
       }
 
-      res.send({ message: 'Fetching profile', data: profile, success: true });
+      res.send({
+        message: 'Fetching profile',
+        data: [{
+          ...profile[0],
+          friendly: friend,
+        }],
+        success: true
+      });
     } else {
       throw new NotFoundException('Profile not found');
     }
   },
 
   getProfileEdit: async (req, res) => {
-    const profileId = req.params.profileid;
+    const { profileId } = req.params;
 
     const profile = await profilesServices.getEditProfile(profileId);
 
@@ -64,17 +84,17 @@ module.exports = {
   postProfile: async (req, res) => {
     const dataInsertProfile = req.body;
 
-    const addPofile = await profilesServices.addProfile(dataInsertProfile);
+    const addProfile = await profilesServices.addProfile(dataInsertProfile);
 
-    if (addPofile && Object.keys(addPofile).length) {
-      res.send({ message: 'Profile adding', data: addPofile, success: true });
+    if (addProfile && Object.keys(addProfile).length) {
+      res.send({ message: 'Profile adding', data: addProfile, success: true });
     } else {
       throw new NotFoundException('Profile not found');
     }
   },
 
   putProfile: async (req, res) => {
-    const { profileid: profileId } = req.params;
+    const { profileId } = req.params;
 
     const updateProfile = await profilesServices.updateProfile({
       name: req.body.name,
@@ -82,9 +102,9 @@ module.exports = {
     }, profileId);
 
     await profilesServices.updateSettings({
-      emailsettingid: req.body.emailSettingId,
-      phonesettingid: req.body.phoneSettingId,
-      universitysettingid: req.body.universitySettingId,
+      emailSettingId: req.body.emailSettingId,
+      phoneSettingId: req.body.phoneSettingId,
+      universitySettingId: req.body.universitySettingId,
     }, profileId);
 
     const frontArray = req.body.universities;
@@ -116,7 +136,7 @@ module.exports = {
   },
 
   deleteProfile: async (req, res) => {
-    const profileId = req.params.profileid;
+    const { profileId } = req.params;
 
     const deleteProfile = await profilesServices.deleteProfile(profileId);
 
@@ -128,8 +148,8 @@ module.exports = {
   },
 
   getProfilePosts: async (req, res) => {
-    const profileId = req.params.profileid;
-    const userProfileId = req.session.profileid;
+    const { profileId } = req.params;
+    const { profileId: userProfileId } = req.session;
     const page = req.query.page && req.query.page > 0 ? req.query.page : 1;
     const limit = 10;
     const offset = (page - 1) * 10;

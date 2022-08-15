@@ -10,6 +10,7 @@ const config = require('./services/config');
 
 // require route directory
 const profilesRoutes = require('./routes/profiles');
+const friendsRoutes = require('./routes/friends');
 const postsRoutes = require('./routes/posts');
 const fileRoutes = require('./routes/files');
 const selectRoutes = require('./routes/select');
@@ -38,6 +39,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use('/profiles', profilesRoutes);
+app.use('/friends', friendsRoutes);
 app.use('/posts', postsRoutes);
 app.use('/files', fileRoutes);
 app.use('/select', selectRoutes);

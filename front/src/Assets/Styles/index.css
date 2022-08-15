@@ -1,0 +1,244 @@
+body {
+  margin: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #f9f9f9;
+}
+
+.site-header {
+  display: flex;
+  border-bottom: 1px solid #282c34;
+  justify-content: space-between;
+  padding: 3px 30px;
+}
+.site-header .box-chip {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.site-header .css-1haevf0-MuiButtonBase-root-MuiChip-root .MuiChip-avatar {
+  color: white;
+}
+
+.header-button-block {
+  display: flex;
+  justify-content: center;
+}
+
+.header-button-block  a {
+  padding: 6px 8px;
+  margin: 3px 0;
+  cursor: pointer;
+  color: #0E0E0E;
+  text-decoration: none;
+  border-left: 1px solid #e4e4e4;
+}
+
+.header-button-block  a:hover {
+  background: rgba(227, 227, 227, 0.83);
+}
+
+.header-button-block  a:first-child {
+  border-left: none;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex.row {
+  flex-direction: row;
+}
+
+.flex.column {
+  flex-direction: column;
+}
+
+.flex.start {
+  justify-content: start;
+  align-items: flex-start;
+}
+
+.flex.end {
+  justify-content: end;
+  align-items: flex-end;
+}
+
+.flex.center-start {
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.flex.start-center {
+  justify-content: start;
+  align-items: center;
+}
+
+.flex.center-end {
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.flex.center {
+  justify-content: center;
+  align-items: center;
+}
+
+.site-header .box-chip .MuiAvatar-root {
+  width: 28px;
+  height: 28px;
+  margin: 0 0 0 1px;
+  font-size: 16px;
+}
+
+.box-header {
+  text-transform: capitalize;
+  font-size: 20px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.friend-box,
+.friend-box .content {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.friend-box.horizontal {
+  flex-direction: row;
+  justify-content: flex-start;
+  overflow: auto;
+  padding: 10px;
+}
+
+.friend-box.horizontal .content {
+  flex-direction: column;
+  margin-left: 5px;
+  padding-left: 5px;
+}
+
+.friend-box.horizontal .content:first-child {
+  margin-left: 0;
+  border-left: none;
+}
+
+.friend-box.vertical {
+  flex-direction: column;
+  width: 100%;
+}
+
+.friend-box.vertical .content{
+  flex-direction: row;
+  width: 100%;
+  margin-top: 5px;
+  border-top: 1px solid #e4e4e4;
+  padding-top: 5px;
+}
+
+.friend-box.vertical .content:first-child {
+  margin-top: 0;
+  border-top: none;
+  padding-top: 0;
+}
+
+.friend-box .post-img,
+.friend-box .avatar {
+  width: 60px !important;
+  height: 60px !important;
+  margin: 0 0 5px 0 !important;
+}
+
+.friend-box.horizontal .post-img,
+.friend-box.horizontal .avatar {
+  width: 100px !important;
+  height: 100px !important;
+}
+
+.friend-box .name {
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.friend-box .profile-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  width: 100%;
+}
+
+
+.friend-box .action-btns {
+  display: flex;
+  justify-content: space-around;
+}
+
+.friend-box.horizontal .action-btns {
+  flex-direction: row;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.friend-box.vertical .action-btns {
+  flex-direction: column;
+  height: 100%;
+}
+
+.friend-box.vertical .action-btns button {
+  margin-top: 15px;
+}
+
+.friend-box.horizontal .action-btns button {
+  margin-left: 15px;
+}
+
+.action-btns button:first-child {
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+}
+
+.main-content-friend-box div.block-shadow {
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.main-content-friend-box .friend-box .content {
+  border-radius: 3px;
+  padding: 10px;
+  box-shadow: 0 5px 11px 1px #e4e4e4;
+  background: white;
+  min-width: 150px;
+  box-sizing: border-box;
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: linear-gradient(135deg, #21c6f5, #2063c7);
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: 10px;
+}

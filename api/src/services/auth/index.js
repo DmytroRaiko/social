@@ -18,7 +18,7 @@ module.exports = {
       email, password: hashPassword, activateLink, name,
     });
 
-    if (!createProfile[0]?.profileid) {
+    if (!createProfile[0]?.profileId) {
       throw new BadRequestException('Unknown error');
     }
 
@@ -43,15 +43,15 @@ module.exports = {
     }
     const passwordsIsEquals = await bcrypt.compareSync(password, loginData?.password);
 
-    if (!loginData?.profileid || !passwordsIsEquals) {
+    if (!loginData?.profileId || !passwordsIsEquals) {
       throw new BadRequestException('Invalid password');
     }
 
     const tokens = tokenService.generateToken(loginData);
 
     await authService.addSession({
-      profileid: loginData.profileid,
-      accesstoken: tokens.newRefreshToken,
+      profileId: loginData.profileId,
+      accessToken: tokens.newRefreshToken,
     });
 
     return { ...tokens, user: loginData };
@@ -60,7 +60,7 @@ module.exports = {
   forgotPassword: async (email) => {
     const profile = await profileServices.getProfileByEmail(email);
 
-    if (profile?.profileid) {
+    if (profile?.profileId) {
       const link = `${config.clientUrl}/reset-password/${profile?.activateLink}`;
 
       transporter.sendMail({
@@ -85,17 +85,17 @@ module.exports = {
     }
     const validate = tokenService.validateToken(refreshToken);
 
-    const userData = await authService.getUserById(session.profileid);
+    const userData = await authService.getUserById(session.profileId);
     if (!validate || !userData) {
       throw new UnauthorizedException();
     }
 
     const tokens = tokenService.generateToken(userData);
 
-    await authService.deleteSessionByToken(session.accesstoken);
+    await authService.deleteSessionByToken(session.accessToken);
     await authService.addSession({
-      profileid: session.profileid,
-      accesstoken: tokens.newRefreshToken,
+      profileId: session.profileId,
+      accessToken: tokens.newRefreshToken,
     });
 
     return { ...tokens, user: userData };
@@ -110,12 +110,12 @@ module.exports = {
 
     if (user) {
       const tokens = tokenService.generateToken({
-        profileid: user.profileid,
+        profileId: user.profileId,
       });
 
       await authService.addSession({
-        profileid: user.profileid,
-        accesstoken: tokens.newRefreshToken,
+        profileId: user.profileId,
+        accessToken: tokens.newRefreshToken,
       });
 
       return { ...tokens, user };

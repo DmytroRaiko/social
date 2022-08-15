@@ -1,5 +1,5 @@
 const {
-  profileName, phoneNumber, email, settingAvailibility
+  profileName, phoneNumber, email, settingAvailability
 } = require('./index');
 
 module.exports = {
@@ -24,8 +24,8 @@ module.exports = {
     universities: {
       type: 'array',
     },
-    emailSettingId: settingAvailibility,
-    phoneSettingId: settingAvailibility,
-    universitySettingId: settingAvailibility,
+    emailSettingId: settingAvailability,
+    phoneSettingId: settingAvailability,
+    universitySettingId: settingAvailability,
   }
 };

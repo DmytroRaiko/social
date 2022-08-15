@@ -2,25 +2,36 @@ const db = require('../db');
 
 module.exports = {
   getUserByEmail: async (email) =>
-    db.first().select('profileid', 'name', 'email', 'password', 'avatarlink').from('profile').where('email', '=', email),
+    db
+      .first()
+      .select('profileId', 'name', 'email', 'password', 'avatarLink')
+      .from('Profile').where('email', '=', email),
   getUserById: async (profileId) =>
-    db.first().select('profileid', 'name', 'email', 'avatarlink').from('profile').where('profileid', profileId),
+    db
+      .first()
+      .select('profileId', 'name', 'email', 'avatarLink')
+      .from('Profile')
+      .where('profileId', profileId),
   getSessionByToken: async (token) =>
-    db.select().first().from('oauthlist').where('accesstoken', '=', token),
-  addSession: async (data) => db('oauthlist').insert(data),
+    db.select().first().from('OAuthList').where('accessToken', '=', token),
+  addSession: async (data) => db('OAuthList').insert(data),
   deleteSessionByToken: async (token) =>
-    db('oauthlist').where('accesstoken', '=', token).del(),
+    db('OAuthList').where('accessToken', '=', token).del(),
   deleteSessionById: async (profileId) =>
-    db('oauthlist').where('profileid', '=', profileId).del(),
-  activateProfile: async (hash) => db('profile').update({ isActivated: true }).where('activateLink', hash),
+    db('OAuthList').where('profileId', '=', profileId).del(),
+  activateProfile: async (hash) => db('Profile').update({ isActivated: true }).where('activateLink', hash),
   google: {
-    selectProfileByGoogleTokenId: async (profileId, email) => db.select().first().from('profile').where('googleid', profileId)
-      .orWhere('email', email),
+    selectProfileByGoogleTokenId: async (profileId, email) =>
+      db
+        .select()
+        .first()
+        .from('Profile').where('googleId', profileId)
+        .orWhere('email', email),
   },
   facebook: {
     selectProfileByFacebookTokenId: async (profileId) =>
-      db.select().first().from('profile').where('facebookid', '=', profileId),
+      db.select().first().from('Profile').where('facebookId', '=', profileId),
   },
   resetPassword: (hash, password) =>
-    db('profile').update({ password, isActivated: true }).where('activateLink', hash),
+    db('Profile').update({ password, isActivated: true }).where('activateLink', hash),
 };

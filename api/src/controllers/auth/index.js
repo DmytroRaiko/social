@@ -8,13 +8,13 @@ const config = require('../../services/config');
 
 module.exports = {
   getOneUser: async (req, res) => {
-    const { profileid } = req.session;
+    const { profileId } = req.session;
 
-    if (!profileid) {
+    if (!profileId) {
       throw new UnauthorizedException();
     }
 
-    const user = await authServices.getUserById(profileid);
+    const user = await authServices.getUserById(profileId);
 
     if (!user) {
       throw new BadRequestException('Unknown error');
@@ -31,7 +31,7 @@ module.exports = {
 
     const isProfile = await profileServices.getProfileByEmail(email);
 
-    if (isProfile?.profileid) {
+    if (isProfile?.profileId) {
       throw new BadRequestException('User with this email already exist');
     }
 
@@ -53,7 +53,7 @@ module.exports = {
 
     const isProfile = await profileServices.getProfileByEmail(email);
 
-    if (!isProfile?.profileid) {
+    if (!isProfile?.profileId) {
       throw new BadRequestException('User with this email was not found');
     }
 
@@ -133,7 +133,7 @@ module.exports = {
   },
 
   facebook: async (req, res) => {
-    const resultHandleRouter = await handlerRouterAuth(req.user.profileid);
+    const resultHandleRouter = await handlerRouterAuth(req.user.profileId);
 
     if (resultHandleRouter) {
       throw new UnauthorizedException('');
@@ -147,7 +147,7 @@ module.exports = {
   },
 
   google: async (req, res) => {
-    const resultHandleRouter = await handlerRouterAuth(req.user.profileid);
+    const resultHandleRouter = await handlerRouterAuth(req.user.profileId);
 
     if (!resultHandleRouter) {
       throw new UnauthorizedException('');

@@ -9,19 +9,19 @@ const filesControllers = require('../controllers/files');
 // get profile avatar
 
 router.get(
-  '/avatar/:profileid',
+  '/avatar/:profileId',
   middleAsync(async (req, res) => filesControllers.getAvatar(req, res))
 );
 
 // show file
 
-router.get('/images/:profileid/posts/:filename', (req, res) =>
+router.get('/images/:profileId/posts/:fileName', (req, res) =>
   filesControllers.getFile(req, res));
 
 // update profile avatar
 
 router.post(
-  '/:profileid/avatar',
+  '/:profileId/avatar',
   auth,
   middleAcl({ resource: 'files', action: 'create', possession: 'any' }),
   upload.single('avatar'),
@@ -31,14 +31,14 @@ router.post(
 // update profile avatar
 
 router.delete(
-  '/avatar/:profileid',
+  '/avatar/:profileId',
   auth,
   middleAcl({
     resource: 'files',
     action: 'delete',
     possession: 'own',
-    getResource: (req) => profilesServices.getProfileById(req.params.profileid),
-    isOwn: (resource, profileId) => resource.profileid === profileId,
+    getResource: (req) => profilesServices.getProfileById(req.params.profileId),
+    isOwn: (resource, profileId) => resource.profileId === profileId,
   }),
   middleAsync(async (req, res) => filesControllers.deleteAvatar(req, res))
 );

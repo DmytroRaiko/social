@@ -8,18 +8,18 @@ const ROOT_DIR = path.resolve(__dirname, '../../../');
 
 module.exports = {
   getAvatar: async (req, res) => {
-    const { profileid } = req.params;
+    const { profileId } = req.params;
 
-    const avatar = await filesServices.getProfileAvatar(profileid);
+    const avatar = await filesServices.getProfileAvatar(profileId);
 
-    if (avatar && Object.keys(avatar).length && avatar[0].avatarlink) {
+    if (avatar && Object.keys(avatar).length && avatar[0].avatarLink) {
       fs.stat(
-        `./images/${profileid}/avatar${mimetype[avatar[0].avatarlink]}`,
+        `./images/${profileId}/avatar${mimetype[avatar[0].avatarLink]}`,
         (err) => {
           if (err === null) {
             // File exist
             res.sendFile(
-              `./images/${profileid}/avatar${mimetype[avatar[0].avatarlink]}`,
+              `./images/${profileId}/avatar${mimetype[avatar[0].avatarLink]}`,
               {
                 root: ROOT_DIR,
               }
@@ -38,7 +38,7 @@ module.exports = {
   },
 
   getFile: async (req, res) => {
-    const { profileid: profileId, filename: fileName } = req.params;
+    const { profileId, fileName } = req.params;
     const pathFile = `./images/${profileId}/posts/${fileName}`;
 
     fs.stat(pathFile, (err) => {
@@ -56,13 +56,13 @@ module.exports = {
   },
 
   postAvatar: async (req, res) => {
-    const { profileid } = req.params;
+    const { profileId } = req.params;
 
     const fileData = req.file;
 
     if (fileData) {
       const avatarUpdate = await filesServices.updateProfileAvatar(
-        profileid,
+        profileId,
         fileData.mimetype
       );
 
@@ -81,17 +81,17 @@ module.exports = {
   },
 
   deleteAvatar: async (req, res) => {
-    const { profileid } = req.params;
+    const { profileId } = req.params;
 
-    const avatarDelete = await filesServices.deleteProfileAvatar(profileid);
+    const avatarDelete = await filesServices.deleteProfileAvatar(profileId);
 
     if (avatarDelete) {
-      fs.readdir(`./images/${profileid}`, (err, files) => {
+      fs.readdir(`./images/${profileId}`, (err, files) => {
         if (err) {
           throw new Error(err);
         } else {
           files.forEach((file) => {
-            const fileDir = path.join(`./images/${profileid}`, file);
+            const fileDir = path.join(`./images/${profileId}`, file);
 
             if (/^((avatar){1})+(\.png|\.jpeg|\.jpg)$/m.exec(file)) {
               fs.unlinkSync(fileDir);

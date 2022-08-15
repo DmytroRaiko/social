@@ -4,38 +4,38 @@ module.exports = {
   getLikes: async (postId) =>
     db
       .select(
-        'profile.profileid',
-        'profile.name',
-        'profile.avatarlink',
-        'postview.postviewid as postlikeid'
+        'Profile.profileId',
+        'Profile.name',
+        'Profile.avatarLink',
+        'PostView.postViewId as postLikeId'
       )
-      .from('postview')
-      .join('profile', 'profile.profileid', '=', 'postview.profileid')
-      .where('postid', postId)
+      .from('PostView')
+      .join('Profile', 'Profile.profileId', '=', 'PostView.profileId')
+      .where('postId', postId)
       .andWhere('liked', 1)
       .orderBy('timeLike', 'DESC'),
   getMyLike: async (postId, profileId) => db
-    .select('postviewid as postLikeId')
-    .from('postview')
-    .where('postid', postId)
-    .andWhere('profileid', profileId)
+    .select('postViewId as postLikeId')
+    .from('PostView')
+    .where('postId', postId)
+    .andWhere('profileId', profileId)
     .andWhere('liked', 1)
     .first(),
   getLikeInfo: async (profileId, postId) =>
     db
       .select()
       .first()
-      .from('postview')
-      .where('postid', '=', postId)
-      .andWhere('profileid', '=', profileId),
+      .from('PostView')
+      .where('postId', '=', postId)
+      .andWhere('profileId', '=', profileId),
   addLike: async (postId, profileId) =>
-    db('postview')
+    db('PostView')
       .update({ liked: 1, timeLike: new Date() })
-      .where('postid', postId)
-      .andWhere('profileid', profileId),
+      .where('postId', postId)
+      .andWhere('profileId', profileId),
   deleteLike: async (postId, profileId) =>
-    db('postview')
+    db('PostView')
       .update({ liked: 0, timeLike: null })
-      .where('postid', postId)
-      .andWhere('profileid', profileId),
+      .where('postId', postId)
+      .andWhere('profileId', profileId),
 };

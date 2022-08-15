@@ -1,45 +1,45 @@
 const db = require('../db');
 
 module.exports = {
-  getUniversities: async () => db.select().from('university'),
+  getUniversities: async () => db.select().from('University'),
   getProfileUniversities: async (profileId) =>
     db
-      .select('university.name', 'university.universityid')
-      .from('universitylist')
+      .select('University.name', 'University.universityId')
+      .from('UniversityList')
       .join(
-        'university',
-        'university.universityid',
+        'University',
+        'University.universityId',
         '=',
-        'universitylist.universityid'
+        'UniversityList.universityId'
       )
-      .where('profileid', profileId),
+      .where('profileId', profileId),
   getProfileEditUniversities: async (profileId) =>
     db
-      .select('university.universityid', 'university.name')
-      .from('universitylist')
+      .select('University.universityId', 'University.name')
+      .from('UniversityList')
       .join(
-        'university',
-        'university.universityid',
+        'University',
+        'University.universityId',
         '=',
-        'universitylist.universityid'
+        'UniversityList.universityId'
       )
-      .where('profileid', profileId),
-  addUniversity: async (insertData) => db('university').insert(insertData).returning(['university.name', 'university.universityid']),
+      .where('profileId', profileId),
+  addUniversity: async (insertData) => db('University').insert(insertData).returning(['University.name', 'University.universityId']),
   updateUniversity: async (updateData, universityId) =>
-    db('university').insert(updateData).where('universityid', universityId),
+    db('University').insert(updateData).where('universityId', universityId),
   deleteUniversity: async (universityId) =>
-    db.from('university').where('universityid', universityId).delete(),
+    db.from('University').where('universityId', universityId).delete(),
 
   addUniversityList: async (profileId, universityId) =>
-    db('universitylist')
-      .insert({ profileid: profileId, universityid: universityId }),
+    db('UniversityList')
+      .insert({ profileId, universityId }),
 
   deleteUniversityList: async (profileId, universityId) =>
     db
-      .from('universitylist')
+      .from('UniversityList')
       .delete()
-      .where('profileid', profileId)
-      .andWhere('universityid', universityId),
+      .where('profileId', profileId)
+      .andWhere('universityId', universityId),
 
-  isUniqueUniversity: async (name) => (await db.select().first().from('university').where('name', name))?.universityid,
+  isUniqueUniversity: async (name) => (await db.select().first().from('University').where('name', name))?.universityId,
 };

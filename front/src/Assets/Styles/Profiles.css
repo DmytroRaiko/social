@@ -1,0 +1,11 @@
+header.profiles-header {
+    width: 575px;
+    margin-top: 10px;
+    background: white;
+    box-sizing: border-box;
+    box-shadow: 0 5px 11px 1px #e4e4e4;
+    padding: 5px 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

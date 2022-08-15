@@ -1,11 +1,11 @@
 const fs = require('fs');
 const postsServices = require('../store/posts.services');
 
-const deletePostImage = async (postid) => {
-  const deleteLink = await postsServices.getPostImageName(postid);
+const deletePostImage = async (postId) => {
+  const deleteLink = await postsServices.getPostImageName(postId);
 
-  if (deleteLink.imagelink) {
-    fs.unlinkSync(deleteLink.imagelink);
+  if (deleteLink.imageLink) {
+    fs.unlinkSync(deleteLink.imageLink);
   }
 };
 module.exports = deletePostImage;

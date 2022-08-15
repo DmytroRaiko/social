@@ -46,10 +46,12 @@ module.exports = {
     [RESOURCES.POSTS]: adminAllow,
     [RESOURCES.PROFILES]: adminAllow,
     [RESOURCES.FILES]: adminAllow,
+    [RESOURCES.FRIENDS]: adminAllow,
   },
   [ROLES.USER]: {
     [RESOURCES.POSTS]: userAllow,
     [RESOURCES.PROFILES]: userAllow,
     [RESOURCES.FILES]: userAllow,
+    [RESOURCES.FRIENDS]: userAllow,
   },
 };
