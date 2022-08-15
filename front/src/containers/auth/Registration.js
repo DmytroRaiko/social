@@ -9,7 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import RegistrationForm from '../../components/forms/RegistrationForm';
 import { registration, facebookOAuth, googleOAuth } from './api/crud';
 import SocialBtns from '../../components/auth/SocialBtns';
-import useAuth from '../providers/authProvider';
+import useAuth from '../../providers/authProvider';
 
 const Registration = () => {
   const { enqueueSnackbar } = useSnackbar();

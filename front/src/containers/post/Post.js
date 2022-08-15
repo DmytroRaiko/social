@@ -1,15 +1,17 @@
-import './Post.css';
+import React from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { getPost } from './api/crud';
-import PostComponent from './PostComponent';
 import { PostSkeletonLoader } from '../../components/loaders/PostSkeletonLoader';
+import PostComponent from './PostComponent';
+import { getPost } from './api/crud';
+
+import './Post.css';
 
 const Post = () => {
   const params = useParams();
 
-  if (/^[0-9]*$/m.exec(params.id)) {
-    const postId = params.id;
+  if (/^[0-9]*$/m.exec(params.postId)) {
+    const { postId } = params;
 
     const { isFetching, data } = useQuery(`post-${postId}`, () => getPost(postId));
     const post = data?.data.data;

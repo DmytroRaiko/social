@@ -1,22 +1,34 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import settings from '../../settings';
 
 const PostContent = ({
   postId, postText, postImage,
-}) => (
-  <>
-    {postImage
-      && (
-        <div className="post-image">
-          <img src={`${settings.URI}/files/${postImage}`} alt="Post" />
+}) => {
+  const params = useParams();
+  const { postId: paramId } = params;
+
+  return (
+    <>
+      {postImage
+        && (
+          <div className="post-image">
+            <img src={`${settings.URI}/files/${postImage}`} alt="Post" />
+          </div>
+        )}
+      {(paramId
+        && (
+        <div className="post-content">
+          <p className="post-text">{postText}</p>
         </div>
+        )) || (
+        <Link to={`/article/${postId}`} className="post-content">
+          <p className="post-text">{postText}</p>
+        </Link>
       )}
-    <Link to={`/article/${postId}`} className="post-content">
-      <p className="post-text">{postText}</p>
-    </Link>
-  </>
-);
+    </>
+  );
+};
 
 PostContent.propTypes = {
   postId: PropTypes.number.isRequired,

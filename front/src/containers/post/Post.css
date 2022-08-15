@@ -122,7 +122,8 @@
   color: rgba(0, 0, 0, 0.58)
 }
 
-.post-body a {
+.post-body a,
+.post-body .post-content {
   color: #0E0E0E;
   text-decoration: none;
 }
@@ -202,11 +203,12 @@
   justify-content: space-between !important;
 }
 
-.comment .avatar {
+.comment .MuiAvatar-root {
   width: 27px;
   height: 27px;
   font-size: 13px;
   margin-right: 5px;
+  margin-top: 0;
 }
 
 .comment-menu {
@@ -284,4 +286,28 @@
 
 .attached-photo:hover .attached-photo-delete {
   display: flex;
+}
+
+.like-popover .MuiPaper-root {
+  background: none;
+  height: 39px;
+}
+
+.like-popover .MuiAvatarGroup-avatar:last-child {
+  margin-left: 0;
+}
+
+.like-popover .MuiAvatarGroup-avatar .MuiAvatar-root {
+  width: 35px;
+  height: 35px;
+}
+
+.like-popover .MuiAvatarGroup-avatar {
+  margin-left: -8px;
+  width: 35px;
+  height: 35px;
+}
+
+.like-popover .MuiAvatarGroup-avatar .MuiAvatar-root {
+  margin: 0
 }

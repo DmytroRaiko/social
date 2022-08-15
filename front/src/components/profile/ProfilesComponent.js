@@ -1,26 +1,19 @@
 import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Avatar, Button } from '@mui/material';
-import stringAvatar from '../../services/icons/avatarIcon';
-import projectSettings from '../../settings';
+import { Button } from '@mui/material';
+import ProfileAvatar from './ProfileAvatar';
 
 const ProfilesComponent = memo(({ profiles }) => {
   const profilesList = profiles?.map((profile) => (
     <div className="profile-card" key={`profile-${profile.profileid}`}>
       <Link className="profile-card-info" to={`/profile/${profile.profileid}`}>
         <div className="post-img">
-          {(profile.avatarlink
-              && (
-              <img
-                className="avatar"
-                src={`${projectSettings.URI}/files/avatar/${profile.profileid}`}
-                alt="avatar"
-              />
-              )
-          )
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            || <Avatar className="post-img" {...stringAvatar(profile.name)} />}
+          <ProfileAvatar
+            profileId={profile.profileid}
+            name={profile.name}
+            avatarlink={profile.avatarlink}
+          />
         </div>
 
         <div className="profile-list-name">

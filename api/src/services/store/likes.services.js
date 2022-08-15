@@ -12,7 +12,8 @@ module.exports = {
       .from('postview')
       .join('profile', 'profile.profileid', '=', 'postview.profileid')
       .where('postid', postId)
-      .andWhere('liked', 1),
+      .andWhere('liked', 1)
+      .orderBy('timeLike', 'DESC'),
   getMyLike: async (postId, profileId) => db
     .select('postviewid as postLikeId')
     .from('postview')

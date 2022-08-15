@@ -11,7 +11,7 @@ import { useSnackbar } from 'notistack';
 import LoginForm from '../../components/forms/LoginForm';
 import { login, facebookOAuth, googleOAuth } from './api/crud';
 import SocialBtns from '../../components/auth/SocialBtns';
-import useAuth from '../providers/authProvider';
+import useAuth from '../../providers/authProvider';
 
 const Login = () => {
   const { enqueueSnackbar } = useSnackbar();

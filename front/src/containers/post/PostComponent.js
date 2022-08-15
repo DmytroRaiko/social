@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import ErrorBoundary from '../../components/ErrorBoundary';
 import { viewPost } from './api/crud';
 import PostHeader from '../../components/post/PostHeader';
-import PostFooter from '../../components/post/PostFooter';
+import PostFooter from './PostFooter';
 import PostContent from '../../components/post/PostContent';
 
 import './Post.css';

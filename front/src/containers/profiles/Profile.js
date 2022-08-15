@@ -9,8 +9,8 @@ import { PageLoader } from '../../components/loaders/PageLoader';
 const Profile = () => {
   const params = useParams();
 
-  if (/^[0-9]*$/m.exec(params.id)) {
-    const profileId = params.id;
+  if (/^[0-9]*$/m.exec(params.profileId)) {
+    const { profileId } = params;
 
     const {
       isFetching,

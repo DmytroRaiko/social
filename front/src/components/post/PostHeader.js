@@ -2,24 +2,22 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import {
-  Avatar, Button, Divider, IconButton, Menu, MenuItem,
+  Button, Divider, IconButton, Menu, MenuItem,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { useMutation } from 'react-query';
 import TimeAgo from 'react-timeago';
-import stringAvatar from '../../services/icons/avatarIcon';
 import EditPostModal from '../../containers/modals/EditPostModal';
-import settings from '../../settings';
 import { deletePost } from '../../containers/post/api/crud';
-import useAuth from '../../containers/providers/authProvider';
+import useAuth from '../../providers/authProvider';
+import ProfileAvatar from '../profile/ProfileAvatar';
 
 const ITEM_HEIGHT = 48;
 
 const PostHeader = memo(({
   profileId, avatar, postAuthor,
-  postId,
-  postEdit, postTime, changeTime,
+  postId, postEdit, postTime, changeTime,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { user } = useAuth();
@@ -46,17 +44,12 @@ const PostHeader = memo(({
   return (
     <div className="post-header">
       <NavLink to={`/profile/${profileId}`}>
-        {(avatar
-        && (
-        <img
-          className="avatar"
-          src={`${settings.URI}/files/avatar/${profileId}`}
-          alt="avatar"
+        <ProfileAvatar
+          profileId={profileId}
+          name={postAuthor}
+          avatarlink={avatar}
         />
-        )
-        )
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      || <Avatar className="post-img" {...stringAvatar(postAuthor)} />}
+
         <div className="post-header-information">
           <div className="author">{postAuthor}</div>
           <div className="post-footer-time">
@@ -128,7 +121,6 @@ PostHeader.propTypes = {
   profileId: PropTypes.number.isRequired,
   avatar: PropTypes.string,
   postAuthor: PropTypes.string.isRequired,
-  avatarLink: PropTypes.string,
   postId: PropTypes.number.isRequired,
   postEdit: PropTypes.bool,
   changeTime: PropTypes.string,
