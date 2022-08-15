@@ -1,27 +1,16 @@
-import './Profile.css';
-import { useQuery } from 'react-query';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { getProfilePosts } from './api/crud';
-import PostComponent from '../post/PostComponent';
+import InfinityPostScroll from '../post/InfinityPostScroll';
 
-const ProfilePosts = ({ profileId }) => {
-  const {
-    isFetching,
-    refetch,
-    data,
-  } = useQuery(
-    `profile-post-${profileId}`,
-    () => getProfilePosts(profileId),
-  );
-  const posts = data?.data.data;
+import './Profile.css';
 
-  return (
-    <>
-      {isFetching && <div>Loading...</div>}
-      {data && <PostComponent posts={posts} refetch={refetch} />}
-    </>
-  );
-};
+const ProfilePosts = ({ profileId }) => (
+  <InfinityPostScroll
+    query={(page) => getProfilePosts(profileId, page)}
+    dependencies={[profileId]}
+  />
+);
 
 ProfilePosts.propTypes = {
   profileId: PropTypes.number.isRequired,

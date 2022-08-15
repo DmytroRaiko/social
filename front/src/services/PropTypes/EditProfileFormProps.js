@@ -21,10 +21,4 @@ module.exports = {
       label: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  university: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.number.isRequired,
-      label: PropTypes.string.isRequired,
-    }),
-  ),
 };

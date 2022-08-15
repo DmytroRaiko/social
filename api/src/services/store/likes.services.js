@@ -1,24 +1,41 @@
 const db = require('../db');
 
 module.exports = {
-  getLikes: async (postId, offset = 0, limit = 50) =>
+  getLikes: async (postId) =>
     db
       .select(
         'profile.profileid',
         'profile.name',
         'profile.avatarlink',
-        'postlike.postlikeid'
+        'postview.postviewid as postlikeid'
       )
-      .from('postlike')
-      .join('profile', 'profile.profileid', '=', 'postlike.profileid')
+      .from('postview')
+      .join('profile', 'profile.profileid', '=', 'postview.profileid')
       .where('postid', postId)
-      .offset(offset)
-      .limit(limit),
-  addLike: async (insertData) => db('postlike').insert(insertData),
-  deleteLike: async (postId, profileId) =>
+      .andWhere('liked', 1)
+      .orderBy('timeLike', 'DESC'),
+  getMyLike: async (postId, profileId) => db
+    .select('postviewid as postLikeId')
+    .from('postview')
+    .where('postid', postId)
+    .andWhere('profileid', profileId)
+    .andWhere('liked', 1)
+    .first(),
+  getLikeInfo: async (profileId, postId) =>
     db
-      .from('postlike')
+      .select()
+      .first()
+      .from('postview')
+      .where('postid', '=', postId)
+      .andWhere('profileid', '=', profileId),
+  addLike: async (postId, profileId) =>
+    db('postview')
+      .update({ liked: 1, timeLike: new Date() })
       .where('postid', postId)
-      .andWhere('profileid', profileId)
-      .delete(),
+      .andWhere('profileid', profileId),
+  deleteLike: async (postId, profileId) =>
+    db('postview')
+      .update({ liked: 0, timeLike: null })
+      .where('postid', postId)
+      .andWhere('profileid', profileId),
 };

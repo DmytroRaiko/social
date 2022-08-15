@@ -3,14 +3,16 @@ import './Profile.css';
 import { useQuery } from 'react-query';
 import { getProfiles } from './api/crud';
 import ProfilesComponent from '../../components/profile/ProfilesComponent';
+import { ProfilesSkeletonLoader } from '../../components/loaders/ProfilesSkeletonLoader';
 
 const Profiles = () => {
-  const { isFetching, /* refetch, */ data } = useQuery('profiles', () => getProfiles());
+  const { isFetching, data } = useQuery('profiles', () => getProfiles());
   const profiles = data?.data.data;
 
   return (
     <>
-      {isFetching && <div>Loading...</div>}
+      <ProfilesSkeletonLoader show={isFetching} count={5} />
+
       <ProfilesComponent profiles={profiles} />
     </>
   );

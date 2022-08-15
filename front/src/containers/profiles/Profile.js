@@ -4,12 +4,13 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getProfile } from './api/crud';
 import ProfilePageContainer from './ProfilePageContainer';
+import { PageLoader } from '../../components/loaders/PageLoader';
 
 const Profile = () => {
   const params = useParams();
 
-  if (/^[0-9]*$/m.exec(params.id)) {
-    const profileId = params.id;
+  if (/^[0-9]*$/m.exec(params.profileId)) {
+    const { profileId } = params;
 
     const {
       isFetching,
@@ -22,7 +23,7 @@ const Profile = () => {
 
     return (
       <div className="profile-main-page">
-        {isFetching && <div>Loading...</div>}
+        {isFetching && <PageLoader />}
         <ProfilePageContainer profileData={profile} />
       </div>
     );

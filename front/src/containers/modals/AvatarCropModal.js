@@ -1,10 +1,10 @@
+import React, { memo } from 'react';
 import Cropper from 'react-cropper';
 import { Button, Modal } from '@mui/material';
-import React from 'react';
 import PropTypes from 'prop-types';
 import 'cropperjs/dist/cropper.css';
 
-const AvatarCropModal = ({
+const AvatarCropModal = memo(({
   openCroppedModal,
   closeCroppedModalHandle,
   loadedImage,
@@ -37,7 +37,7 @@ const AvatarCropModal = ({
       </div>
     </div>
   </Modal>
-);
+));
 
 AvatarCropModal.propTypes = {
   openCroppedModal: PropTypes.bool,

@@ -1,26 +1,19 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Avatar, Button } from '@mui/material';
-import stringAvatar from '../../services/icons/avatarIcon';
-import projectSettings from '../../settings';
+import { Button } from '@mui/material';
+import ProfileAvatar from './ProfileAvatar';
 
-function ProfilesComponent({ profiles }) {
+const ProfilesComponent = memo(({ profiles }) => {
   const profilesList = profiles?.map((profile) => (
     <div className="profile-card" key={`profile-${profile.profileid}`}>
       <Link className="profile-card-info" to={`/profile/${profile.profileid}`}>
         <div className="post-img">
-          {(profile.avatarlink
-              && (
-              <img
-                className="avatar"
-                src={`${projectSettings.URI}/files/avatar/${profile.profileid}`}
-                alt="avatar"
-              />
-              )
-          )
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            || <Avatar className="post-img" {...stringAvatar(profile.name)} />}
+          <ProfileAvatar
+            profileId={profile.profileid}
+            name={profile.name}
+            avatarlink={profile.avatarlink}
+          />
         </div>
 
         <div className="profile-list-name">
@@ -33,7 +26,7 @@ function ProfilesComponent({ profiles }) {
   ));
 
   return profilesList || <div> no any profile </div>;
-}
+});
 
 ProfilesComponent.propTypes = {
   profiles: PropTypes.arrayOf(

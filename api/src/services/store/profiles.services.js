@@ -1,12 +1,18 @@
 const db = require('../db');
 
 module.exports = {
+  isUniqueEmail: async (email) => (await db.select().first().from('profile').where('email', email))?.profileid,
+
+  getProfileByEmail: async (email) =>
+    db.select().first().from('profile').where('email', email),
+
   getProfiles: async (offset = 0, limit = 30) =>
     db
       .select('profile.profileid', 'profile.avatarlink', 'profile.name')
       .from('profile')
       .offset(offset)
       .limit(limit),
+
   getProfile: async (profileId) =>
     db
       .select(
@@ -60,6 +66,7 @@ module.exports = {
         'a3.availabilityid'
       )
       .where('profile.profileid', profileId),
+
   getEditProfile: async (profileId) =>
     db
       .select(
@@ -102,9 +109,27 @@ module.exports = {
         'a3.availabilityid'
       )
       .where('profile.profileid', profileId),
-  addProfile: async (insertData) => db('profile').insert(insertData),
+  addProfile: async (insertData) => db('profile').insert(insertData).returning(['profileid', 'email', 'name', 'isActivated', 'avatarlink']),
+
   updateProfile: async (updateData, profileId) =>
     db('profile').update(updateData).where('profileid', profileId),
+
+  updateSettings: async (updateData, profileId) =>
+    db('profilesetting').update(updateData).where('profileid', profileId),
+
   deleteProfile: async (profileId) =>
     db.from('profile').where('profileid', profileId).delete(),
+
+  getProfileById: async (id) =>
+    db.select().first().from('profile').where('profileid', '=', id),
+
+  getRole: async (id) =>
+    db.select('role').first().from('profile').where('profileid', '=', id),
+
+  getProfileUniversities: async (profileId) =>
+    db
+      .select('universityid')
+      .from('universitylist')
+      .where('profileid', profileId)
+      .pluck('universityid'),
 };

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Box from '@mui/material/Box';
 import { Button, Modal, MenuItem } from '@mui/material';
 import AddPost from '../post/AddPost';
 
-const AddPostModal = () => {
+const AddPostModal = memo(() => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -16,7 +16,6 @@ const AddPostModal = () => {
         sx={{
           width: '100%',
           textTransform: 'capitalize',
-          borderLeft: 1,
         }}
       >
         Add post
@@ -33,6 +32,6 @@ const AddPostModal = () => {
       </Modal>
     </div>
   );
-};
+});
 
 export default AddPostModal;

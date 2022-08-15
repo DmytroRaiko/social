@@ -1,25 +1,16 @@
-import './Post.css';
-import { useQuery } from 'react-query';
+import React from 'react';
 import { getPosts } from './api/crud';
-import PostComponent from './PostComponent';
+import './Post.css';
+import InfinityPostScroll from './InfinityPostScroll';
 
-const Posts = () => {
-  const {
-    isFetching,
-    refetch,
-    data,
-  } = useQuery(
-    'posts',
-    () => getPosts(),
-  );
-  const posts = data?.data.data;
-
-  return (
-    <>
-      {isFetching && <div>Loading...</div>}
-      {data && <PostComponent posts={posts} refetch={refetch} />}
-    </>
-  );
-};
+const Posts = () => (
+  <div className="post-container">
+    <InfinityPostScroll
+      query={(page) => getPosts(page)}
+      skeletonAmountChilds={3}
+      dependencies={[]}
+    />
+  </div>
+);
 
 export default Posts;

@@ -1,35 +1,28 @@
 const router = require('express').Router();
-const selectServices = require('../services/store/select.services');
 const middleAsync = require('../middlewares/async');
+const selectControllers = require('../controllers/select');
+const bodyValidation = require('../middlewares/bodyValidation');
+const { addUniversity } = require('../services/validation/select.validation');
+const { isUniqueUniversity } = require('../services/store/universities.services');
 const auth = require('../middlewares/auth');
-const NotFoundException = require('../services/errors/NotFoundException');
-
-router.use(auth);
 
 router.get(
   '/availability',
-  middleAsync(async (req, res) => {
-    const availability = await selectServices.getAvailability();
-
-    if (availability && Object.keys(availability).length) {
-      res.send({ message: 'Show posts', data: availability, success: true });
-    } else {
-      throw new NotFoundException('Availability');
-    }
-  })
+  middleAsync(async (req, res) => selectControllers.getAvailability(req, res))
 );
 
 router.get(
   '/universities',
-  middleAsync(async (req, res) => {
-    const universities = await selectServices.getUniversities();
+  middleAsync(async (req, res) => selectControllers.getUniversities(req, res))
+);
 
-    if (universities && Object.keys(universities).length) {
-      res.send({ message: 'Show posts', data: universities, success: true });
-    } else {
-      throw new NotFoundException('Universities');
-    }
-  })
+router.post(
+  '/university',
+  auth,
+  bodyValidation(addUniversity, {
+    name: { unique: (req) => isUniqueUniversity(req?.body?.name) },
+  }),
+  middleAsync(async (req, res) => selectControllers.addUniversity(req, res))
 );
 
 module.exports = router;

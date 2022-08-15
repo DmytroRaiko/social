@@ -23,4 +23,6 @@ export const deleteProfileAvatar = async (id) => apiClient.delete(`/files/avatar
 
 export const getEditProfile = async (id) => apiClient.get(`/profiles/${id}/edit`);
 
-export const getProfilePosts = async (id) => apiClient.get(`/profiles/${id}/posts`);
+export const getProfilePosts = async (id, page) => apiClient.get(`/profiles/${id}/posts?page=${page}`);
+
+export const addUniversities = async (data) => apiClient.post('/select/university', data);
